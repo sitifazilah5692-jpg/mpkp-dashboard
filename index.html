@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Dashboard Peserta - Program Gotong-Royong Medan Selera Changlun</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: linear-gradient(145deg, #ffffff 0%, #f0f4fa 40%, #e8eef8 70%, #dde5f5 100%);
+      min-height: 100vh; padding: 24px 16px;
+    }
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background-image:
+        radial-gradient(ellipse at 20% 20%, rgba(212,168,42,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 80%, rgba(10,35,66,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .wrapper { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+
+    /* ── TOP GOLD BAR ── */
+    .top-bar { background: linear-gradient(90deg,#b8962e,#f0c040,#d4a82a,#f0c040,#b8962e); height: 6px; border-radius: 4px 4px 0 0; }
+
+    /* ── CARD ── */
+    .card {
+      background: linear-gradient(170deg, #ffffff 0%, #fafcff 50%, #f5f8fe 100%);
+      border-radius: 0 0 20px 20px;
+      padding: 32px 36px 36px;
+      box-shadow: 0 8px 40px rgba(10,35,66,0.12), 0 2px 8px rgba(212,168,42,0.15), 0 0 0 1px rgba(212,168,42,0.25),
+                  inset 0 1px 0 rgba(255,255,255,0.9);
+      position: relative; overflow: hidden;
+    }
+    .card::before {
+      content: ''; position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 400px; height: 400px;
+      background: url('https://base44.app/api/apps/6a044032cecb45c0033adc72/files/mp/public/6a044032cecb45c0033adc72/a5e121e13_LOGO-MPKP-transparent.png') center/contain no-repeat;
+      opacity: 0.03; pointer-events: none;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      display: flex; align-items: center; gap: 20px;
+      margin-bottom: 24px; padding-bottom: 20px;
+      border-bottom: 2px solid rgba(212,168,42,0.3);
+    }
+    .logo-circle {
+      width: 82px; height: 82px; border-radius: 50%;
+      background: transparent; border: none; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; padding: 4px;
+      filter: drop-shadow(0 4px 18px rgba(212,168,42,0.28)) drop-shadow(0 8px 24px rgba(0,0,0,0.4));
+    }
+    .logo-circle img { width: 100%; height: 100%; object-fit: contain; }
+    .header-text { flex: 1; }
+    .org-kempen { font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 700; color: #b8962e; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 3px; }
+    .org-mpkp { font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 800; color: #0a2342; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px; padding-bottom: 5px; border-bottom: 1px solid rgba(212,168,42,0.25); }
+    .org-name { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 800; color: #0a2342; line-height: 1.25; margin-bottom: 8px; }
+    .event-info { display: flex; flex-wrap: wrap; gap: 16px; }
+    .event-pill { font-family: 'Lato', sans-serif; font-size: 12px; color: #555; font-weight: 400; }
+    .event-sep { color: #d4a82a; font-weight: 300; }
+
+    /* ── TABS ── */
+    .tabs { display: flex; gap: 6px; margin-bottom: 24px; border-bottom: 2.5px solid #0a2342; touch-action: pan-x; }
+    .tab-btn {
+      padding: 10px 22px; border: none; cursor: pointer;
+      font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700;
+      color: #6b7a99; letter-spacing: 0.5px; border-radius: 8px 8px 0 0;
+      transition: all 0.2s; position: relative; bottom: -2.5px;
+      background: rgba(10,35,66,0.06);
+      border: 1.5px solid transparent; border-bottom: none;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .tab-btn:hover {
+      color: #0a2342;
+      background: linear-gradient(180deg, rgba(212,168,42,0.15) 0%, rgba(212,168,42,0.05) 100%);
+      border-color: rgba(212,168,42,0.35);
+    }
+    .tab-btn.active {
+      color: #ffffff;
+      background: linear-gradient(160deg, #0a2342 0%, #0d3b6e 100%);
+      border-color: #0a2342;
+      border-bottom: 2.5px solid white;
+      box-shadow: 0 -2px 12px rgba(10,35,66,0.18);
+    }
+    .tab-btn.active svg { stroke: #f0c040; }
+    .tab-btn.active::after { content:''; position:absolute; bottom:-2.5px; left:0; right:0; height:2.5px; background:white; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── LIVE CLOCK ── */
+    .live-clock-block {
+      text-align: center; flex-shrink: 0;
+      background: linear-gradient(145deg, #b8962e 0%, #e8c84a 40%, #f0d060 60%, #c9a230 100%);
+      border: none;
+      border-radius: 14px; padding: 12px 20px;
+      box-shadow: 0 4px 20px rgba(184,150,46,0.45), 0 1px 0 rgba(255,255,255,0.4) inset,
+                  0 -1px 0 rgba(0,0,0,0.15) inset;
+      min-width: 140px; position: relative; overflow: hidden;
+    }
+    .live-clock-block::before {
+      content: ''; position: absolute; top: 0; left: -60%; width: 40%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+      transform: skewX(-15deg);
+    }
+    .live-date {
+      font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 700;
+      color: #3d2800; letter-spacing: 1.2px; text-transform: uppercase;
+      margin-bottom: 4px; opacity: 0.85;
+    }
+    .live-time {
+      font-family: 'Montserrat', sans-serif; font-size: 24px; font-weight: 800;
+      color: #1a1000; letter-spacing: 3px; line-height: 1;
+      text-shadow: 0 1px 0 rgba(255,255,255,0.3);
+    }
+
+    /* ── STAT CARDS ── */
+    .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 24px; }
+    .stat-card {
+      background: white; border: 1px solid rgba(212,168,42,0.2);
+      border-radius: 14px; padding: 18px 14px; text-align: center;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.07); position: relative; overflow: hidden;
+    }
+    .stat-card::after { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,#b8962e,#f0c040); }
+    .stat-num { font-family: 'Montserrat', sans-serif; font-size: 30px; font-weight: 800; color: #0a2342; line-height: 1; }
+    .stat-label { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-top: 6px; font-weight: 700; }
+
+    /* ── RANKING ── */
+    .ranking-section { margin-bottom: 24px; }
+    .section-title { font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 800; color: #0a2342; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .section-title::after { content:''; flex:1; height:1px; background:rgba(212,168,42,0.25); }
+    .rank-list { display: flex; flex-direction: column; gap: 8px; }
+    .rank-item { display: flex; align-items: center; gap: 12px; background: white; border-radius: 10px; padding: 10px 14px; border: 1px solid rgba(212,168,42,0.15); box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+    .rank-num { font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 800; color: #b8962e; width: 24px; text-align: center; flex-shrink: 0; }
+    .rank-num.gold { color: #d4a82a; }
+    .rank-num.silver { color: #888; }
+    .rank-num.bronze { color: #a0522d; }
+    .rank-jabatan { flex: 1; font-size: 13px; color: #0a2342; font-weight: 600; }
+    .rank-bar-wrap { width: 120px; background: #f0f0f0; border-radius: 6px; height: 8px; overflow: hidden; }
+    .rank-bar { height: 8px; border-radius: 6px; background: linear-gradient(90deg,#b8962e,#f0c040); }
+    .rank-count { font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 800; color: #0a2342; width: 30px; text-align: right; flex-shrink: 0; }
+
+    /* ── FILTER BAR ── */
+    .filter-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+    .search-wrap { flex: 1; min-width: 200px; position: relative; }
+    .search-wrap input {
+      width: 100%; padding: 9px 14px 9px 36px;
+      border: 1.5px solid #d0d8e8; border-radius: 10px;
+      font-size: 13px; font-family: 'Lato', sans-serif; color: #0a2342;
+      outline: none; background: white;
+    }
+    .search-wrap input:focus { border-color: #b8962e; box-shadow: 0 0 0 3px rgba(184,150,46,0.1); }
+    .search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: #aaa; font-size: 14px; }
+    .filter-count { font-size: 11px; color: #999; white-space: nowrap; }
+
+    /* ── BUTTONS ── */
+    .btn {
+      padding: 9px 16px; border-radius: 10px;
+      font-size: 12px; font-weight: 700; cursor: pointer;
+      font-family: 'Montserrat', sans-serif; letter-spacing: 0.5px;
+      border: none; transition: all 0.2s; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn-refresh { background: linear-gradient(135deg,#0a2342,#0d3b6e); color: #f0c040; border: 1px solid rgba(212,168,42,0.4); box-shadow: 0 4px 12px rgba(10,35,66,0.25); }
+    .btn-refresh:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(10,35,66,0.35); }
+    .btn-refresh:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .btn-excel { background: linear-gradient(135deg,#1b5e20,#2e7d32); color: white; box-shadow: 0 4px 12px rgba(27,94,32,0.3); }
+    .btn-excel:hover { transform: translateY(-1px); }
+    .btn-print { background: linear-gradient(135deg,#b8962e,#d4a82a); color: #0a2342; box-shadow: 0 4px 12px rgba(184,150,46,0.35); }
+    .btn-print:hover { transform: translateY(-1px); }
+
+    /* ── TABLE ── */
+    .table-wrap { border-radius: 12px; overflow: hidden; border: 1px solid rgba(212,168,42,0.2); box-shadow: 0 4px 16px rgba(0,0,0,0.07); }
+    table { width: 100%; border-collapse: collapse; background: white; }
+    thead tr { background: linear-gradient(135deg,#0a2342,#0d3b6e); }
+    thead th { padding: 12px 14px; text-align: left; font-size: 10px; font-weight: 700; color: #f0c040; letter-spacing: 1.5px; text-transform: uppercase; border-bottom: 2px solid #d4a82a; font-family: 'Montserrat', sans-serif; }
+    tbody tr { border-bottom: 1px solid rgba(212,168,42,0.08); transition: background 0.15s; }
+    tbody tr:hover { background: #fffbf0; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody td { padding: 11px 14px; font-size: 13px; color: #0a2342; }
+    .td-num { font-size: 11px; color: #aaa; font-family: 'Montserrat', sans-serif; font-weight: 700; }
+    .td-name { font-weight: 600; }
+    .td-ic { font-family: monospace; font-size: 12px; color: #666; }
+    .td-tel { font-size: 12px; color: #555; }
+    .td-jabatan { font-size: 12px; color: #444; }
+    .badge-cabutan { background: linear-gradient(135deg,#0a2342,#0d3b6e); color: #f0c040; padding: 3px 10px; border-radius: 20px; font-family: monospace; font-size: 11px; font-weight: 700; display: inline-block; }
+    .no-data { text-align: center; padding: 48px; color: #aaa; font-size: 13px; }
+    .no-data span { font-size: 36px; display: block; margin-bottom: 10px; }
+    .loading-row td { text-align: center; padding: 48px; }
+    .spinner { display: inline-block; width: 28px; height: 28px; border: 3px solid rgba(212,168,42,0.25); border-top-color: #d4a82a; border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── FOOTER ── */
+    .card-footer { margin-top: 24px; padding-top: 14px; border-top: 1px solid rgba(212,168,42,0.2); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+    .footer-text { font-family: 'Lato', sans-serif; font-size: 11px; color: #aaa; }
+    .bottom-bar { background: linear-gradient(90deg,#b8962e,#f0c040,#d4a82a,#f0c040,#b8962e); height: 4px; border-radius: 0 0 4px 4px; margin-top: 2px; }
+
+    /* ── RESPONSIVE MOBILE ── */
+    @media (max-width: 768px) {
+      body { padding: 0 !important; background: #f0f4fa; }
+      .wrapper { padding: 0; max-width: 100%; }
+
+      /* Card */
+      .card {
+        padding: 14px 12px 20px;
+        border-radius: 0 0 16px 16px;
+        overflow: visible;
+      }
+
+      /* Header — stack menegak */
+      .header {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+        margin-bottom: 14px;
+        padding-bottom: 14px;
+        align-items: center;
+      }
+      .logo-circle { width: 60px; height: 60px; }
+      .header-text { width: 100%; text-align: center; }
+      .org-kempen { font-size: 9px; letter-spacing: 1px; }
+      .org-mpkp { font-size: 10px; }
+      .org-name { font-size: 15px; line-height: 1.3; }
+      .event-info { justify-content: center; gap: 6px; flex-wrap: wrap; }
+      .event-pill { font-size: 11px; }
+
+      /* Clock — lebar penuh */
+      .live-clock-block {
+        min-width: unset !important;
+        width: 100% !important;
+        padding: 10px 16px;
+        border-radius: 12px;
+      }
+      .live-time { font-size: 30px; letter-spacing: 4px; }
+      .live-date { font-size: 10px; }
+
+      /* Tabs — scroll horizontal tanpa wrap */
+      .tabs {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+        flex-wrap: nowrap !important;
+        gap: 0 !important;
+        border-bottom: 2px solid #0a2342;
+        margin-bottom: 16px;
+        padding-bottom: 0;
+        scrollbar-width: none;
+      }
+      .tabs::-webkit-scrollbar { display: none; }
+      .tab-btn {
+        padding: 9px 12px !important;
+        font-size: 10px !important;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+        border-radius: 6px 6px 0 0 !important;
+        gap: 3px !important;
+        min-width: 80px;
+      }
+      .tab-btn svg { width: 11px !important; height: 11px !important; }
+
+      /* Stat cards — 2x2 */
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+      .stat-card { padding: 14px 8px; border-radius: 10px; }
+      .stat-num { font-size: 26px; }
+      .stat-label { font-size: 9px; letter-spacing: 0.5px; }
+
+      /* Ranking */
+      .rank-bar-wrap { display: none !important; }
+      .rank-item { padding: 8px 10px; gap: 8px; }
+      .rank-jabatan { font-size: 12px; }
+
+      /* Filter bar — stack */
+      .filter-bar {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px;
+      }
+      .search-wrap { min-width: unset !important; width: 100%; }
+      .filter-bar .btn { width: 100% !important; justify-content: center; }
+
+      /* Table — scroll horizontal */
+      .table-wrap {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 10px;
+      }
+      table { min-width: 520px; }
+      thead th { padding: 10px 8px; font-size: 9px; letter-spacing: 1px; }
+      tbody td { padding: 9px 8px; font-size: 12px; }
+      .td-ic { font-size: 10px; letter-spacing: 0; }
+
+      /* FORM PENDAFTARAN — 1 kolum di mobile */
+      #daftarGrid {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+      }
+      #daftarGrid > div {
+        grid-column: auto !important;
+      }
+
+      /* Butang daftar */
+      #daftarBtn { font-size: 13px !important; padding: 12px !important; }
+
+      /* Card footer */
+      .card-footer {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px;
+      }
+      .card-footer .btn { width: 100% !important; justify-content: center !important; }
+
+      /* Section title */
+      .section-title { font-size: 10px; }
+    }
+
+@media print {
+      @page { size: A4 portrait; margin: 15mm 12mm 18mm; }
+
+      body { background: white !important; padding: 0; }
+      body::before { display: none; }
+      .wrapper { max-width: 100%; }
+
+      .top-bar, .bottom-bar, .tabs, .filter-bar,
+      .card-footer, .stats-grid, .ranking-section,
+      #tabCabutan, #tabLaporan, #tabDaftar { display: none !important; }
+
+      .card { box-shadow: none !important; background: white !important; padding: 0; border-radius: 0; overflow: visible; }
+      .card::before { display: none; }
+
+      /* PRINT HEADER */
+      .header {
+        display: flex !important; align-items: center;
+        border-bottom: 2.5px double #0a2342 !important;
+        padding-bottom: 10px !important; margin-bottom: 12px !important;
+      }
+      .logo-circle { width: 65px !important; height: 65px !important; filter: none !important; box-shadow: none !important; }
+      .org-kempen { font-size: 9px !important; }
+      .org-mpkp { font-size: 11px !important; border-bottom: none !important; margin-bottom: 2px !important; padding-bottom: 0 !important; }
+      .org-name { font-size: 15px !important; margin-bottom: 4px !important; }
+      .event-pill { font-size: 10px !important; }
+
+      /* PRINT INFO BLOCK */
+      #printInfoBlock {
+        display: flex !important; gap: 24px;
+        margin-bottom: 10px; font-size: 9px; color: #333;
+        border: 1px solid #ccc; padding: 7px 10px;
+        border-radius: 4px; background: #f9f9f9 !important;
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
+      }
+      #printInfoBlock div { display: flex; flex-direction: column; gap: 3px; }
+
+      /* TABLE PRINT */
+      #tabKehadiran { display: block !important; }
+      .table-wrap { border: 1px solid #0a2342 !important; border-radius: 0 !important; box-shadow: none !important; }
+      table { font-size: 9px; }
+      thead tr { background: #0a2342 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      thead th { padding: 7px 8px !important; font-size: 8px !important; color: #f0c040 !important; border: 1px solid #b8962e !important; }
+      tbody td { padding: 6px 8px !important; font-size: 9px !important; border: 1px solid #ddd !important; color: #000 !important; }
+      tbody tr:hover { background: white !important; }
+      .td-ic { font-size: 8px !important; }
+
+      /* HIDE: live clock & signature dalam print */
+      .live-clock-block { display: none !important; }
+      .sign-area { display: none !important; }
+
+      /* HIDE print-only in screen */
+      .print-only { display: none; }
+    }
+
+    /* Screen: hide print-only elements */
+    @media screen {
+      .print-only { display: none; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="top-bar"></div>
+  <div class="card">
+
+    <!-- WATERMARK -->
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:400px;height:400px;background:url('https://base44.app/api/apps/6a044032cecb45c0033adc72/files/mp/public/6a044032cecb45c0033adc72/a5e121e13_LOGO-MPKP-transparent.png') center/contain no-repeat;opacity:0.03;pointer-events:none;z-index:0;"></div>
+
+    <!-- HEADER -->
+    <div class="header" style="position:relative;z-index:1;">
+      <div class="logo-circle">
+        <img src="https://base44.app/api/apps/6a044032cecb45c0033adc72/files/mp/public/6a044032cecb45c0033adc72/a5e121e13_LOGO-MPKP-transparent.png" alt="Logo MPKP"/>
+      </div>
+      <div class="header-text">
+        <div class="org-kempen">Kempen Kesihatan Persekitaran 2026 : Premis Makanan Bersih</div>
+        <div class="org-mpkp">Majlis Perbandaran Kubang Pasu</div>
+        <div class="org-name">Program Gotong-Royong di Medan Selera Changlun</div>
+        <div class="event-info">
+          <span class="event-pill">20 Mei 2026 (Rabu)</span>
+          <span class="event-sep">|</span>
+          <span class="event-pill">8.00 pagi – 1.00 petang</span>
+          <span class="event-sep">|</span>
+          <span class="event-pill">Medan Selera Changlun</span>
+        </div>
+      </div>
+      <div class="live-clock-block">
+        <div class="live-date" id="liveDate">—</div>
+        <div class="live-time" id="liveTime">—</div>
+      </div>
+    </div>
+
+    <!-- PRINT INFO BLOCK (hidden on screen) -->
+    <div id="printInfoBlock" class="print-only">
+      <div>
+        <span><strong>Program:</strong> Gotong-Royong di Medan Selera Changlun</span>
+        <span><strong>Anjuran:</strong> Jabatan Kesihatan Persekitaran, MPKP</span>
+      </div>
+      <div>
+        <span><strong>Tarikh:</strong> 20 Mei 2026 (Rabu)</span>
+        <span><strong>Masa:</strong> 8.00 pagi – 1.00 petang</span>
+        <span><strong>Tempat:</strong> Medan Selera Changlun</span>
+      </div>
+      <div>
+        <span><strong>Jumlah Peserta:</strong> <span id="printJumlah">—</span></span>
+        <span><strong>Dicetak:</strong> <span id="printMasa">—</span></span>
+      </div>
+    </div>
+
+    <!-- ── TABS ── -->
+    <div class="tabs" style="position:relative;z-index:1;">
+      <button class="tab-btn active" onclick="switchTab('daftar')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>✏️ Pendaftaran
+      </button>
+      <button class="tab-btn" onclick="switchTab('kehadiran')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Kehadiran Peserta
+      </button>
+      <button class="tab-btn" onclick="switchTab('cabutan')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Cabutan Bertuah
+      </button>
+      <button class="tab-btn" onclick="switchTab('laporan')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px;"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>Laporan / Carian
+      </button>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         TAB 1 — KEHADIRAN PESERTA
+    ══════════════════════════════════════════ -->
+    <div id="tabKehadiran" class="tab-panel" style="position:relative;z-index:1;">
+
+      <!-- STAT CARDS -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-num" id="statJumlah">—</div>
+          <div class="stat-label">Jumlah Peserta</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="statHadir" style="color:#2e7d32;">—</div>
+          <div class="stat-label">Hadir</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="statJabatan" style="color:#b8962e;">—</div>
+          <div class="stat-label">Jabatan / Agensi</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="statCabutan" style="color:#0d3b6e;">—</div>
+          <div class="stat-label">No. Cabutan Dijana</div>
+        </div>
+      </div>
+
+      <!-- RANKING -->
+      <div class="ranking-section">
+        <div class="section-title">Ranking Kehadiran Jabatan / Agensi</div>
+        <div class="rank-list" id="rankList">
+          <div style="text-align:center;padding:20px;color:#aaa;font-size:13px;">Memuatkan...</div>
+        </div>
+      </div>
+
+      <!-- FILTER + REFRESH -->
+      <div class="filter-bar">
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="cariKehadiran" placeholder="Cari nama peserta..." oninput="filterKehadiran()"/>
+        </div>
+        <span class="filter-count" id="countKehadiran"></span>
+        <button class="btn btn-refresh" id="btnRefresh" onclick="muatData()">
+          <span id="refreshIcon">🔄</span> Refresh
+        </button>
+      </div>
+
+      <!-- TABLE KEHADIRAN -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Bil.</th>
+              <th>Nama Peserta</th>
+              <th>No. IC</th>
+              <th>No. Telefon</th>
+              <th>Jabatan / Agensi</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyKehadiran">
+            <tr class="loading-row"><td colspan="5"><span class="spinner"></span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         TAB 2 — CABUTAN BERTUAH
+    ══════════════════════════════════════════ -->
+    <div id="tabCabutan" class="tab-panel" style="position:relative;z-index:1;">
+
+      <!-- FILTER -->
+      <div class="filter-bar">
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="cariCabutan" placeholder="Cari nama peserta..." oninput="filterCabutan()"/>
+        </div>
+        <span class="filter-count" id="countCabutan"></span>
+      </div>
+
+      <!-- TABLE CABUTAN -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Bil.</th>
+              <th>No. Cabutan</th>
+              <th>Nama Peserta</th>
+              <th>No. Telefon</th>
+              <th>Jabatan / Agensi</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyCabutan">
+            <tr class="loading-row"><td colspan="5"><span class="spinner"></span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         TAB 3 — LAPORAN / CARIAN
+    ══════════════════════════════════════════ -->
+    <div id="tabLaporan" class="tab-panel" style="position:relative;z-index:1;">
+
+      <!-- BUTANG EXPORT -->
+      <div class="filter-bar" style="margin-bottom:20px;">
+        <button class="btn btn-excel" onclick="exportExcel()">⬇️ Export Excel (.csv)</button>
+        <button class="btn btn-print" onclick="cetakPDF()">🖨️ Cetak / PDF</button>
+        <span class="filter-count" id="countLaporan"></span>
+      </div>
+
+      <!-- FILTER -->
+      <div class="filter-bar">
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="cariLaporan" placeholder="Cari nama peserta..." oninput="filterLaporan()"/>
+        </div>
+      </div>
+
+      <!-- TABLE LAPORAN (IC FULL) -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Bil.</th>
+              <th>Nama Peserta</th>
+              <th>No. IC (Penuh)</th>
+              <th>No. Telefon</th>
+              <th>Jabatan / Agensi</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyLaporan">
+            <tr class="loading-row"><td colspan="5"><span class="spinner"></span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 4: PENDAFTARAN URUSETIA -->
+    <div id="tabDaftar" class="tab-panel active" style="position:relative;z-index:1;">
+
+      <!-- FORM -->
+      <div style="background:white;border:1.5px solid rgba(212,168,42,0.25);border-radius:14px;padding:24px 28px;box-shadow:0 4px 16px rgba(0,0,0,0.06);">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;" id="daftarGrid">
+
+          <div style="grid-column:1/-1;">
+            <label style="display:block;font-size:11px;font-weight:700;color:#0a2342;margin-bottom:6px;letter-spacing:0.5px;text-transform:uppercase;">Nama Penuh <span style="color:#c0392b;">*</span></label>
+            <input type="text" id="dNama" placeholder="Contoh: Ahmad bin Ali"
+              style="width:100%;padding:11px 14px;border:1.5px solid #d0d8e8;border-radius:10px;font-size:14px;font-family:'Lato',sans-serif;color:#0a2342;outline:none;box-shadow:0 2px 4px rgba(0,0,0,0.04);"
+              onfocus="this.style.borderColor='#b8962e';this.style.boxShadow='0 0 0 3px rgba(184,150,46,0.15)'"
+              onblur="this.style.borderColor='#d0d8e8';this.style.boxShadow='0 2px 4px rgba(0,0,0,0.04)'"/>
+          </div>
+
+          <div>
+            <label style="display:block;font-size:11px;font-weight:700;color:#0a2342;margin-bottom:6px;letter-spacing:0.5px;text-transform:uppercase;">No. Kad Pengenalan <span style="color:#c0392b;">*</span></label>
+            <input type="text" id="dNoIc" placeholder="900101-01-1234" maxlength="14"
+              style="width:100%;padding:11px 14px;border:1.5px solid #d0d8e8;border-radius:10px;font-size:14px;font-family:'Lato',sans-serif;color:#0a2342;outline:none;box-shadow:0 2px 4px rgba(0,0,0,0.04);letter-spacing:1px;"
+              oninput="formatNoIc(this)"
+              onfocus="this.style.borderColor='#b8962e';this.style.boxShadow='0 0 0 3px rgba(184,150,46,0.15)'"
+              onblur="this.style.borderColor='#d0d8e8';this.style.boxShadow='0 2px 4px rgba(0,0,0,0.04)'"/>
+          </div>
+
+          <div>
+            <label style="display:block;font-size:11px;font-weight:700;color:#0a2342;margin-bottom:6px;letter-spacing:0.5px;text-transform:uppercase;">No. Telefon <span style="color:#c0392b;">*</span></label>
+            <input type="tel" id="dNoTel" placeholder="019-4248616"
+              style="width:100%;padding:11px 14px;border:1.5px solid #d0d8e8;border-radius:10px;font-size:14px;font-family:'Lato',sans-serif;color:#0a2342;outline:none;box-shadow:0 2px 4px rgba(0,0,0,0.04);letter-spacing:1px;"
+              oninput="formatNoTel(this)"
+              onfocus="this.style.borderColor='#b8962e';this.style.boxShadow='0 0 0 3px rgba(184,150,46,0.15)'"
+              onblur="this.style.borderColor='#d0d8e8';this.style.boxShadow='0 2px 4px rgba(0,0,0,0.04)'"/>
+          </div>
+
+          <div style="grid-column:1/-1;">
+            <label style="display:block;font-size:11px;font-weight:700;color:#0a2342;margin-bottom:6px;letter-spacing:0.5px;text-transform:uppercase;">Jabatan / Agensi <span style="color:#c0392b;">*</span></label>
+            <div style="position:relative;">
+              <select id="dJabatan"
+                style="width:100%;padding:11px 40px 11px 14px;border:1.5px solid #d0d8e8;border-radius:10px;font-size:14px;font-family:'Lato',sans-serif;color:#0a2342;outline:none;appearance:none;-webkit-appearance:none;background:white;cursor:pointer;box-shadow:0 2px 4px rgba(0,0,0,0.04);"
+                onfocus="this.style.borderColor='#b8962e';this.style.boxShadow='0 0 0 3px rgba(184,150,46,0.15)'"
+                onblur="this.style.borderColor='#d0d8e8';this.style.boxShadow='0 2px 4px rgba(0,0,0,0.04)'">
+                <option value="" disabled selected>-- Sila Pilih Jabatan / Agensi --</option>
+                <option value="Majlis Perbandaran Kubang Pasu">Majlis Perbandaran Kubang Pasu</option>
+                <option value="Ahli Majlis, MPKP">Ahli Majlis, MPKP</option>
+                <option value="e-IDAMAN">e-IDAMAN</option>
+                <option value="SWCORP">SWCORP</option>
+                <option value="Jabatan Pengaliran dan Saliran">Jabatan Pengaliran dan Saliran</option>
+                <option value="Peniaga / Wakil Medan Selera Changlun">Peniaga / Wakil Medan Selera Changlun</option>
+                <option value="Penduduk Changlun">Penduduk Changlun</option>
+                <option value="Lain-lain">Lain-lain</option>
+              </select>
+              <span style="position:absolute;right:13px;top:50%;transform:translateY(-50%);pointer-events:none;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#b8962e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <div style="grid-column:1/-1;">
+            <label style="display:block;font-size:11px;font-weight:700;color:#0a2342;margin-bottom:6px;letter-spacing:0.5px;text-transform:uppercase;">Alamat E-mel <span style="font-size:10px;color:#888;font-weight:400;text-transform:none;letter-spacing:0;">(pilihan)</span></label>
+            <input type="email" id="dEmail" placeholder="Contoh: ahmad@email.com"
+              style="width:100%;padding:11px 14px;border:1.5px solid #d0d8e8;border-radius:10px;font-size:14px;font-family:'Lato',sans-serif;color:#0a2342;outline:none;box-shadow:0 2px 4px rgba(0,0,0,0.04);"
+              onfocus="this.style.borderColor='#b8962e';this.style.boxShadow='0 0 0 3px rgba(184,150,46,0.15)'"
+              onblur="this.style.borderColor='#d0d8e8';this.style.boxShadow='0 2px 4px rgba(0,0,0,0.04)'"/>
+          </div>
+        </div>
+
+        <div id="daftarMsg" style="display:none;margin-top:14px;padding:12px 16px;border-radius:10px;font-size:13px;font-weight:600;text-align:center;"></div>
+
+        <button id="daftarBtn" onclick="hantarPendaftaran()"
+          style="width:100%;margin-top:20px;padding:14px;background:linear-gradient(135deg,#0a2342,#0d3b6e);color:#f0c040;border:1px solid rgba(212,168,42,0.5);border-radius:12px;font-size:14px;font-weight:700;font-family:'Montserrat',sans-serif;letter-spacing:1px;text-transform:uppercase;cursor:pointer;box-shadow:0 6px 20px rgba(10,35,66,0.25);display:flex;align-items:center;justify-content:center;gap:8px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f0c040" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Daftar Peserta
+        </button>
+      </div>
+
+      <!-- BERJAYA -->
+      <div id="daftarBerjaya" style="display:none;margin-top:16px;">
+
+        <!-- STATUS BERJAYA -->
+        <div style="background:linear-gradient(135deg,#f0fff4,#e8f5e9);border:1.5px solid #a5d6a7;border-radius:14px;padding:16px 20px;display:flex;align-items:center;gap:14px;margin-bottom:12px;">
+          <div style="width:42px;height:42px;background:linear-gradient(135deg,#2e7d32,#43a047);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(46,125,50,0.3);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div>
+            <div style="font-family:'Montserrat',sans-serif;font-size:14px;font-weight:800;color:#1b5e20;">Pendaftaran Berjaya!</div>
+            <div style="font-size:12px;color:#388e3c;margin-top:2px;" id="daftarBerjayaNama">—</div>
+          </div>
+        </div>
+
+        <!-- SLIP PENGESAHAN -->
+        <div id="slipCetak" style="background:white;border:1.5px solid rgba(212,168,42,0.35);border-radius:14px;overflow:hidden;box-shadow:0 6px 24px rgba(10,35,66,0.1);">
+
+          <!-- Slip: Bar emas atas -->
+          <div style="height:5px;background:linear-gradient(90deg,#b8962e,#f0c040,#d4a82a,#f0c040,#b8962e);"></div>
+
+          <!-- Slip: Header -->
+          <div style="background:linear-gradient(135deg,#0a2342,#0d3b6e);padding:16px 20px;display:flex;align-items:center;gap:14px;">
+            <img src="https://base44.app/api/apps/6a044032cecb45c0033adc72/files/mp/public/6a044032cecb45c0033adc72/a5e121e13_LOGO-MPKP-transparent.png"
+              style="width:50px;height:50px;object-fit:contain;filter:drop-shadow(0 2px 8px rgba(212,168,42,0.4));flex-shrink:0;"/>
+            <div>
+              <div style="font-family:'Montserrat',sans-serif;font-size:11px;font-weight:800;color:#f0c040;letter-spacing:0.5px;">Majlis Perbandaran Kubang Pasu</div>
+              <div style="font-family:'Montserrat',sans-serif;font-size:10px;color:rgba(240,192,64,0.7);margin-top:2px;">Slip Pengesahan Kehadiran — Program Gotong-Royong Medan Selera Changlun 2026</div>
+            </div>
+          </div>
+
+          <!-- Slip: No Cabutan Bertuah -->
+          <div style="background:linear-gradient(135deg,#0a2342,#0d3b6e);padding:18px 20px;text-align:center;border-top:1px solid rgba(212,168,42,0.3);border-bottom:1px solid rgba(212,168,42,0.3);">
+            <div style="font-size:9px;font-weight:700;color:rgba(240,192,64,0.65);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px;">🏆 Nombor Cabutan Bertuah</div>
+            <div id="daftarBerjayaCabutan" style="font-family:'Montserrat',sans-serif;font-size:32px;font-weight:800;color:#f0c040;letter-spacing:6px;text-shadow:0 2px 16px rgba(240,192,64,0.35);">—</div>
+            <div style="font-size:9px;color:rgba(240,192,64,0.55);margin-top:5px;letter-spacing:0.5px;">Wajib hadir semasa cabutan — 12.00 tengah hari</div>
+          </div>
+
+          <!-- Slip: Maklumat peserta -->
+          <div style="padding:16px 20px;background:white;">
+            <table style="width:100%;border-collapse:collapse;font-family:'Lato',sans-serif;font-size:13px;">
+              <tr>
+                <td style="padding:7px 0;border-bottom:1px solid #f0e8cc;color:#888;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;width:130px;">Nama Penuh</td>
+                <td style="padding:7px 0 7px 12px;border-bottom:1px solid #f0e8cc;font-weight:700;color:#0a2342;" id="slipNama">—</td>
+              </tr>
+              <tr>
+                <td style="padding:7px 0;border-bottom:1px solid #f0e8cc;color:#888;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;">No. IC</td>
+                <td style="padding:7px 0 7px 12px;border-bottom:1px solid #f0e8cc;font-weight:600;color:#0a2342;" id="slipIc">—</td>
+              </tr>
+              <tr>
+                <td style="padding:7px 0;border-bottom:1px solid #f0e8cc;color:#888;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;">No. Telefon</td>
+                <td style="padding:7px 0 7px 12px;border-bottom:1px solid #f0e8cc;font-weight:600;color:#0a2342;" id="slipTel">—</td>
+              </tr>
+              <tr>
+                <td style="padding:7px 0;border-bottom:1px solid #f0e8cc;color:#888;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;">Jabatan / Agensi</td>
+                <td style="padding:7px 0 7px 12px;border-bottom:1px solid #f0e8cc;font-weight:600;color:#0a2342;" id="slipJabatan">—</td>
+              </tr>
+              <tr>
+                <td style="padding:7px 0;border-bottom:1px solid #f0e8cc;color:#888;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;">Tarikh Program</td>
+                <td style="padding:7px 0 7px 12px;border-bottom:1px solid #f0e8cc;font-weight:600;color:#0a2342;">20 Mei 2026 (Rabu)</td>
+              </tr>
+              <tr>
+                <td style="padding:7px 0;color:#888;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;">Masa / Tempat</td>
+                <td style="padding:7px 0 7px 12px;font-weight:600;color:#0a2342;">8.00 pagi – 1.00 petang &nbsp;|&nbsp; Medan Selera Changlun</td>
+              </tr>
+            </table>
+          </div>
+
+          <!-- Slip: Footer nota -->
+          <div style="background:#fffbf0;border-top:1px dashed #d4a82a;padding:12px 20px;text-align:center;">
+            <div style="font-size:10px;color:#888;line-height:1.7;">Sila tunjukkan slip ini kepada pegawai semasa pendaftaran fizikal.<br/>
+            <strong style="color:#b8962e;">Cabutan Bertuah</strong> pada 12.00 tengah hari — kehadiran wajib untuk layak menang.</div>
+          </div>
+
+          <!-- Slip: Bar emas bawah -->
+          <div style="height:4px;background:linear-gradient(90deg,#b8962e,#f0c040,#d4a82a,#f0c040,#b8962e);"></div>
+        </div>
+
+        <!-- BUTANG AKSI -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;">
+          <button onclick="cetakSlip()"
+            style="padding:12px;background:linear-gradient(135deg,#0a2342,#0d3b6e);color:#f0c040;border:1px solid rgba(212,168,42,0.4);border-radius:10px;font-size:12px;font-weight:700;font-family:'Montserrat',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;box-shadow:0 4px 12px rgba(10,35,66,0.2);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f0c040" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Print / PDF
+          </button>
+          <button onclick="shareSlip()"
+            style="padding:12px;background:white;color:#0a2342;border:1.5px solid rgba(10,35,66,0.2);border-radius:10px;font-size:12px;font-weight:700;font-family:'Montserrat',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0a2342" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            Kongsi / Share
+          </button>
+        </div>
+
+        <button onclick="resetDaftar()"
+          style="width:100%;margin-top:10px;padding:11px;background:#f8f8f8;color:#666;border:1.5px solid #e0e0e0;border-radius:10px;font-size:13px;font-weight:700;font-family:'Montserrat',sans-serif;cursor:pointer;">
+          ➕&nbsp; Daftar Peserta Lain
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- Signature block removed -->
+
+    <!-- FOOTER -->
+    <div class="card-footer" style="position:relative;z-index:1;">
+      <div class="footer-text">Jabatan Kesihatan Persekitaran, MPKP &nbsp;©&nbsp; 2026</div>
+      <div class="footer-text" id="footerKemaskini"></div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+<script>
+  const APP_ID = '6a044032cecb45c0033adc72';
+  const API_URL = `https://base44.app/api/apps/${APP_ID}/functions/getLaporanPeserta`;
+
+  let allPeserta = [];
+  let filtered = { kehadiran: [], cabutan: [], laporan: [] };
+
+  // ── TAB SWITCH ──────────────────────────────────────────────
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+    event.currentTarget.classList.add('active');
+  }
+
+  // ── MASK IC ──────────────────────────────────────────────────
+  function maskIc(ic) {
+    if (!ic) return '—';
+    const s = ic.replace(/[-\s]/g, '');
+    if (s.length < 12) return ic;
+    return '######-' + s.slice(6,8) + '-####';
+  }
+
+  // ── RANKING ──────────────────────────────────────────────────
+  function renderRanking(data) {
+    const freq = {};
+    data.forEach(p => {
+      const j = (p.jabatan || 'Tidak Dinyatakan').trim();
+      freq[j] = (freq[j] || 0) + 1;
+    });
+    const sorted = Object.entries(freq).sort((a,b) => b[1]-a[1]);
+    const max = sorted[0]?.[1] || 1;
+    const medals = ['gold','silver','bronze'];
+    const rankEl = document.getElementById('rankList');
+    if (!sorted.length) { rankEl.innerHTML = '<div style="text-align:center;padding:16px;color:#aaa;font-size:13px;">Tiada data</div>'; return; }
+    rankEl.innerHTML = sorted.map(([j,c], i) => `
+      <div class="rank-item">
+        <div class="rank-num ${medals[i]||''}">${i+1}</div>
+        <div class="rank-jabatan">${j}</div>
+        <div class="rank-bar-wrap"><div class="rank-bar" style="width:${Math.round(c/max*100)}%"></div></div>
+        <div class="rank-count">${c}</div>
+      </div>`).join('');
+  }
+
+  // ── RENDER TABLES ─────────────────────────────────────────────
+  function renderKehadiran(data) {
+    const tbody = document.getElementById('tbodyKehadiran');
+    if (!data.length) { tbody.innerHTML = '<tr><td colspan="5" class="no-data"><span>📭</span>Tiada rekod ditemui</td></tr>'; return; }
+    tbody.innerHTML = data.map((p,i) => `
+      <tr>
+        <td class="td-num">${i+1}</td>
+        <td class="td-name">${p.nama||'—'}</td>
+        <td class="td-ic">${maskIc(p.noIc||p.no_ic||'')}</td>
+        <td class="td-tel">${p.noTelefon||p.no_telefon||'—'}</td>
+        <td class="td-jabatan">${p.jabatan||'—'}</td>
+      </tr>`).join('');
+    document.getElementById('countKehadiran').textContent = `${data.length} rekod`;
+  }
+
+  function renderCabutan(data) {
+    const tbody = document.getElementById('tbodyCabutan');
+    if (!data.length) { tbody.innerHTML = '<tr><td colspan="5" class="no-data"><span>🎯</span>Tiada rekod ditemui</td></tr>'; return; }
+    tbody.innerHTML = data.map((p,i) => `
+      <tr>
+        <td class="td-num">${i+1}</td>
+        <td><span class="badge-cabutan">${p.noCabutan||p.no_cabutan||'—'}</span></td>
+        <td class="td-name">${p.nama||'—'}</td>
+        <td class="td-tel">${p.noTelefon||p.no_telefon||'—'}</td>
+        <td class="td-jabatan">${p.jabatan||'—'}</td>
+      </tr>`).join('');
+    document.getElementById('countCabutan').textContent = `${data.length} rekod`;
+  }
+
+  function renderLaporan(data) {
+    const tbody = document.getElementById('tbodyLaporan');
+    if (!data.length) { tbody.innerHTML = '<tr><td colspan="5" class="no-data"><span>📊</span>Tiada rekod ditemui</td></tr>'; return; }
+    tbody.innerHTML = data.map((p,i) => `
+      <tr>
+        <td class="td-num">${i+1}</td>
+        <td class="td-name">${p.nama||'—'}</td>
+        <td class="td-ic">${p.noIc||p.no_ic||'—'}</td>
+        <td class="td-tel">${p.noTelefon||p.no_telefon||'—'}</td>
+        <td class="td-jabatan">${p.jabatan||'—'}</td>
+      </tr>`).join('');
+    document.getElementById('countLaporan').textContent = `${data.length} rekod`;
+  }
+
+  // ── STATISTIK ─────────────────────────────────────────────────
+  function kemasStatistik(data) {
+    const jabatanSet = new Set(data.map(p => (p.jabatan||'').trim()).filter(Boolean));
+    const withCabutan = data.filter(p => p.noCabutan||p.no_cabutan).length;
+    document.getElementById('statJumlah').textContent = data.length;
+    document.getElementById('statHadir').textContent = data.length;
+    document.getElementById('statJabatan').textContent = jabatanSet.size;
+    document.getElementById('statCabutan').textContent = withCabutan;
+    const pj = document.getElementById('printJumlah'); if(pj) pj.textContent = data.length + ' orang';
+    const now = new Date();
+    const masa = now.toLocaleString('ms-MY', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+
+    document.getElementById('footerKemaskini').textContent = 'Kemaskini: ' + masa;
+    const pm = document.getElementById('printMasa'); if(pm) pm.textContent = masa;
+  }
+
+  // ── FILTER ────────────────────────────────────────────────────
+  function filterKehadiran() {
+    const q = document.getElementById('cariKehadiran').value.toLowerCase();
+    filtered.kehadiran = allPeserta.filter(p => (p.nama||'').toLowerCase().includes(q));
+    renderKehadiran(filtered.kehadiran);
+  }
+  function filterCabutan() {
+    const q = document.getElementById('cariCabutan').value.toLowerCase();
+    filtered.cabutan = allPeserta.filter(p => (p.nama||'').toLowerCase().includes(q));
+    renderCabutan(filtered.cabutan);
+  }
+  function filterLaporan() {
+    const q = document.getElementById('cariLaporan').value.toLowerCase();
+    filtered.laporan = allPeserta.filter(p => (p.nama||'').toLowerCase().includes(q));
+    renderLaporan(filtered.laporan);
+  }
+
+  // ── MUAT DATA ─────────────────────────────────────────────────
+  async function muatData() {
+    const btn = document.getElementById('btnRefresh');
+    const icon = document.getElementById('refreshIcon');
+    btn.disabled = true;
+    icon.textContent = '⏳';
+
+    ['tbodyKehadiran','tbodyCabutan','tbodyLaporan'].forEach(id => {
+      document.getElementById(id).innerHTML = '<tr class="loading-row"><td colspan="5"><span class="spinner"></span></td></tr>';
+    });
+
+    try {
+      const res = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({}) });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error||'Ralat server');
+      allPeserta = json.peserta || [];
+      filtered.kehadiran = [...allPeserta];
+      filtered.cabutan = [...allPeserta];
+      filtered.laporan = [...allPeserta];
+      kemasStatistik(allPeserta);
+      renderRanking(allPeserta);
+      renderKehadiran(filtered.kehadiran);
+      renderCabutan(filtered.cabutan);
+      renderLaporan(filtered.laporan);
+    } catch(e) {
+      const errHtml = `<tr><td colspan="5" class="no-data"><span>⚠️</span>${e.message}</td></tr>`;
+      ['tbodyKehadiran','tbodyCabutan','tbodyLaporan'].forEach(id => {
+        document.getElementById(id).innerHTML = errHtml;
+      });
+    } finally {
+      btn.disabled = false;
+      icon.textContent = '🔄';
+    }
+  }
+
+  // ── EXPORT EXCEL ──────────────────────────────────────────────
+  function exportExcel() {
+    const bom = '\uFEFF';
+    const tajuk = [
+      ['PROGRAM GOTONG-ROYONG DI MEDAN SELERA CHANGLUN'],
+      ['Kempen Kesihatan Persekitaran 2026 : Premis Makanan Bersih'],
+      ['Anjuran: Jabatan Kesihatan Persekitaran, Majlis Perbandaran Kubang Pasu'],
+      ['Tarikh: 20 Mei 2026 (Rabu)', '', 'Masa: 8.00 pagi – 1.00 petang', '', 'Tempat: Medan Selera Changlun'],
+      ['Jumlah Peserta: ' + allPeserta.length + ' orang'],
+      [],
+      ['Bil.','Nama Peserta','No. IC','No. Telefon','Jabatan / Agensi','No. Cabutan Bertuah'],
+    ];
+    const rows = allPeserta.map((p,i) => [
+      i+1,
+      p.nama||'',
+      p.noIc||p.no_ic||'',
+      p.noTelefon||p.no_telefon||'',
+      p.jabatan||'',
+      p.noCabutan||p.no_cabutan||''
+    ]);
+    const csv = bom + [...tajuk, ...rows].map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8'}));
+    a.download = 'Laporan_Peserta_GotongRoyong_Changlun.csv';
+    a.click();
+  }
+
+  // ── CETAK PDF ─────────────────────────────────────────────────
+  function cetakPDF() {
+    // Pastikan tab kehadiran aktif untuk print
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('tabDaftar').classList.add('active');
+    document.querySelectorAll('.tab-btn')[0].classList.add('active');
+    // Render semula jadual untuk print (IC penuh)
+    const tbody = document.getElementById('tbodyKehadiran');
+    tbody.innerHTML = allPeserta.map((p,i) => `
+      <tr>
+        <td class="td-num">${i+1}</td>
+        <td class="td-name">${p.nama||'—'}</td>
+        <td class="td-ic">${p.noIc||p.no_ic||'—'}</td>
+        <td class="td-tel">${p.noTelefon||p.no_telefon||'—'}</td>
+        <td class="td-jabatan">${p.jabatan||'—'}</td>
+      </tr>`).join('');
+    setTimeout(() => {
+      window.print();
+      // Lepas print, restore IC masked
+      setTimeout(() => renderKehadiran(filtered.kehadiran), 500);
+    }, 100);
+  }
+
+  // ── LIVE CLOCK ──────────────────────────────────────────────────
+  function updateClock() {
+    const dateEl = document.getElementById('liveDate');
+    const timeEl = document.getElementById('liveTime');
+    if (!dateEl || !timeEl) return;
+    const now = new Date();
+    const hari = ['Ahad','Isnin','Selasa','Rabu','Khamis','Jumaat','Sabtu'];
+    const bulan = ['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogs','Sep','Okt','Nov','Dis'];
+    const d = hari[now.getDay()] + ', ' + now.getDate() + ' ' + bulan[now.getMonth()] + ' ' + now.getFullYear();
+    const h = String(now.getHours()).padStart(2,'0');
+    const m = String(now.getMinutes()).padStart(2,'0');
+    const s = String(now.getSeconds()).padStart(2,'0');
+    dateEl.textContent = d;
+    timeEl.textContent = h + ':' + m + ':' + s;
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    updateClock();
+    setInterval(updateClock, 1000);
+  });
+
+  // ── PENDAFTARAN URUSETIA ──────────────────────────────────────
+  function formatNoIc(input) {
+    // Ambil digit sahaja
+    let digits = input.value.replace(/\D/g, '');
+    // Had 12 digit
+    if (digits.length > 12) digits = digits.slice(0, 12);
+    // Format: 6 digit - 2 digit - 4 digit
+    let formatted = '';
+    if (digits.length <= 6) {
+      formatted = digits;
+    } else if (digits.length <= 8) {
+      formatted = digits.slice(0, 6) + '-' + digits.slice(6);
+    } else {
+      formatted = digits.slice(0, 6) + '-' + digits.slice(6, 8) + '-' + digits.slice(8);
+    }
+    input.value = formatted;
+  }
+
+  function formatNoTel(input) {
+    let digits = input.value.replace(/\D/g, '');
+    // Had 11 digit (cth: 01234567890)
+    if (digits.length > 11) digits = digits.slice(0, 11);
+    // Format: 3-4 digit pertama adalah prefix (011, 012, 013, 014, 016, 017, 018, 019, 03-)
+    let formatted = '';
+    if (digits.startsWith('03')) {
+      // Telefon rumah: 03-XXXXXXXX
+      if (digits.length <= 2) formatted = digits;
+      else formatted = digits.slice(0, 2) + '-' + digits.slice(2);
+    } else if (digits.length <= 3) {
+      formatted = digits;
+    } else if (digits.startsWith('011')) {
+      // 011 — 4 digit prefix: 011-XXXXXXXX
+      if (digits.length <= 4) formatted = digits.slice(0, 3) + '-' + digits.slice(3);
+      else formatted = digits.slice(0, 4) + '-' + digits.slice(4);
+    } else {
+      // 010, 012–019: 3 digit prefix: 019-XXXXXXX
+      formatted = digits.slice(0, 3) + '-' + digits.slice(3);
+    }
+    input.value = formatted;
+  }
+
+  async function hantarPendaftaran() {
+    const nama      = document.getElementById('dNama').value.trim();
+    const noIc      = document.getElementById('dNoIc').value.trim();
+    const noTelefon = document.getElementById('dNoTel').value.trim();
+    const jabatan   = document.getElementById('dJabatan').value;
+    const email     = document.getElementById('dEmail').value.trim();
+    const msgEl     = document.getElementById('daftarMsg');
+    const btn       = document.getElementById('daftarBtn');
+    msgEl.style.display = 'none';
+    if (!nama || !noIc || !noTelefon || !jabatan) {
+      msgEl.style.cssText = 'display:block;margin-top:14px;padding:12px 16px;border-radius:10px;font-size:13px;font-weight:600;text-align:center;background:#fff3f3;color:#b71c1c;border:1px solid #ef9a9a;';
+      msgEl.textContent = '⚠️ Sila lengkapkan semua medan bertanda *';
+      return;
+    }
+    btn.disabled = true;
+    btn.innerHTML = '<span style="display:inline-block;width:15px;height:15px;border:2.5px solid #f0c040;border-top-color:transparent;border-radius:50%;animation:spin-reg 0.7s linear infinite;margin-right:8px;vertical-align:middle;"></span>Mendaftar...';
+    try {
+      const res = await fetch(`https://base44.app/api/apps/${APP_ID}/functions/daftarPeserta`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nama, noIc, noTelefon, jabatan, email })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Ralat semasa mendaftar');
+      document.getElementById('daftarBerjayaNama').textContent = nama + '  —  ' + jabatan;
+      document.getElementById('daftarBerjayaCabutan').textContent = data.noCabutan || '—';
+      document.getElementById('slipNama').textContent = nama;
+      document.getElementById('slipIc').textContent = noIc;
+      document.getElementById('slipTel').textContent = noTelefon;
+      document.getElementById('slipJabatan').textContent = jabatan;
+      // Simpan data slip untuk share
+      window._slipData = { nama, noIc, noTelefon, jabatan, noCabutan: data.noCabutan || '—' };
+      document.getElementById('daftarBerjaya').style.display = 'block';
+      document.getElementById('daftarGrid').style.display = 'none';
+      btn.style.display = 'none';
+      muatData();
+    } catch(e) {
+      msgEl.style.cssText = 'display:block;margin-top:14px;padding:12px 16px;border-radius:10px;font-size:13px;font-weight:600;text-align:center;background:#fff3f3;color:#b71c1c;border:1px solid #ef9a9a;';
+      msgEl.textContent = '⚠️ ' + e.message;
+      btn.disabled = false;
+      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f0c040" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Daftar Peserta';
+    }
+  }
+
+  function cetakSlip() {
+    const slip = document.getElementById('slipCetak');
+    const w = window.open('', '_blank', 'width=600,height=800');
+    w.document.write(`<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Slip Pengesahan — ` + (window._slipData?.noCabutan||'') + `</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Lato:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+  @page { size: A5 portrait; margin: 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Lato', sans-serif; background: white; }
+  .bar-gold { height: 6px; background: linear-gradient(90deg,#b8962e,#f0c040,#d4a82a,#f0c040,#b8962e); }
+  .header { background: linear-gradient(135deg,#0a2342,#0d3b6e); padding: 16px 20px; display: flex; align-items: center; gap: 14px; }
+  .header img { width: 52px; height: 52px; object-fit: contain; }
+  .header-text .org { font-family: 'Montserrat',sans-serif; font-size: 12px; font-weight: 800; color: #f0c040; }
+  .header-text .sub { font-size: 9px; color: rgba(240,192,64,0.7); margin-top: 2px; }
+  .cabutan { background: linear-gradient(135deg,#0a2342,#0d3b6e); text-align: center; padding: 18px 20px; border-top: 1.5px solid rgba(212,168,42,0.35); border-bottom: 1.5px solid rgba(212,168,42,0.35); }
+  .cabutan .label { font-size: 9px; font-weight: 700; color: rgba(240,192,64,0.65); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px; }
+  .cabutan .no { font-family: 'Montserrat',sans-serif; font-size: 34px; font-weight: 800; color: #f0c040; letter-spacing: 6px; }
+  .cabutan .nota { font-size: 9px; color: rgba(240,192,64,0.55); margin-top: 5px; }
+  .info { padding: 14px 20px; background: white; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  td { padding: 7px 0; border-bottom: 1px solid #f0e8cc; vertical-align: top; }
+  .td-key { color: #888; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; width: 110px; }
+  .td-val { padding-left: 12px; font-weight: 600; color: #0a2342; }
+  .footer { background: #fffbf0; border-top: 1px dashed #d4a82a; padding: 10px 20px; text-align: center; font-size: 9px; color: #888; line-height: 1.7; }
+  .bar-bot { height: 4px; background: linear-gradient(90deg,#b8962e,#f0c040,#d4a82a,#f0c040,#b8962e); }
+  @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+</style>
+</head>
+<body>
+<div class="bar-gold"></div>
+<div class="header">
+  <img src="https://base44.app/api/apps/6a044032cecb45c0033adc72/files/mp/public/6a044032cecb45c0033adc72/a5e121e13_LOGO-MPKP-transparent.png"/>
+  <div class="header-text">
+    <div class="org">Majlis Perbandaran Kubang Pasu</div>
+    <div class="sub">Slip Pengesahan Kehadiran — Program Gotong-Royong Medan Selera Changlun 2026</div>
+  </div>
+</div>
+<div class="cabutan">
+  <div class="label">🏆 Nombor Cabutan Bertuah</div>
+  <div class="no">` + (window._slipData?.noCabutan||'—') + `</div>
+  <div class="nota">Wajib hadir semasa cabutan — 12.00 tengah hari</div>
+</div>
+<div class="info">
+<table>
+  <tr><td class="td-key">Nama Penuh</td><td class="td-val">` + (window._slipData?.nama||'—') + `</td></tr>
+  <tr><td class="td-key">No. IC</td><td class="td-val">` + (window._slipData?.noIc||'—') + `</td></tr>
+  <tr><td class="td-key">No. Telefon</td><td class="td-val">` + (window._slipData?.noTelefon||'—') + `</td></tr>
+  <tr><td class="td-key">Jabatan / Agensi</td><td class="td-val">` + (window._slipData?.jabatan||'—') + `</td></tr>
+  <tr><td class="td-key">Tarikh</td><td class="td-val">20 Mei 2026 (Rabu)</td></tr>
+  <tr><td class="td-key">Masa / Tempat</td><td class="td-val" style="border-bottom:none;">8.00 pagi – 1.00 petang | Medan Selera Changlun</td></tr>
+</table>
+</div>
+<div class="footer">Sila tunjukkan slip ini kepada pegawai semasa pendaftaran fizikal.<br/>
+<strong style="color:#b8962e;">Cabutan Bertuah</strong> pada 12.00 tengah hari — kehadiran wajib untuk layak menang.</div>
+<div class="bar-bot"></div>
+<script>window.onload = function(){ window.print(); }<\/script>
+</body></html>`);
+    w.document.close();
+  }
+
+  async function shareSlip() {
+    const d = window._slipData || {};
+    const teks = `✅ SLIP PENGESAHAN KEHADIRAN\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━\n` +
+      `🏆 No. Cabutan: ${d.noCabutan||'—'}\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━\n` +
+      `👤 Nama   : ${d.nama||'—'}\n` +
+      `🪪 No. IC : ${d.noIc||'—'}\n` +
+      `📞 Tel    : ${d.noTelefon||'—'}\n` +
+      `🏢 Jabatan: ${d.jabatan||'—'}\n\n` +
+      `📅 Tarikh : 20 Mei 2026 (Rabu)\n` +
+      `🕗 Masa   : 8.00 pagi – 1.00 petang\n` +
+      `📍 Tempat : Medan Selera Changlun\n\n` +
+      `⚠️ Cabutan Bertuah 12.00 tgh — wajib hadir!\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━\n` +
+      `Anjuran: Majlis Perbandaran Kubang Pasu`;
+    if (navigator.share) {
+      try { await navigator.share({ title: 'Slip Pengesahan MPKP', text: teks }); } catch(e) {}
+    } else {
+      await navigator.clipboard.writeText(teks);
+      alert('✅ Teks slip telah disalin! Tampal (Paste) ke WhatsApp, Telegram atau mana-mana aplikasi.');
+    }
+  }
+
+  function resetDaftar() {
+    ['dNama','dNoIc','dNoTel','dEmail'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('dJabatan').value = '';
+    document.getElementById('daftarBerjaya').style.display = 'none';
+    document.getElementById('daftarGrid').style.display = 'grid';
+    const btn = document.getElementById('daftarBtn');
+    btn.style.display = 'flex'; btn.disabled = false;
+    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f0c040" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Daftar Peserta';
+  }
+
+  // ── INIT ──────────────────────────────────────────────────────
+  muatData();
+</script>
+<style>@keyframes spin-reg { to { transform: rotate(360deg); } }</style>
+</body>
+</html>
