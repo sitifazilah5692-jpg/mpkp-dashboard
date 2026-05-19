@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pendaftaran - Program Gotong-Royong Medan Selera Changlun</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse at top left, #0a2342 0%, transparent 60%),
+        radial-gradient(ellipse at bottom right, #0d3b6e 0%, transparent 60%),
+        linear-gradient(160deg, #061428 0%, #0a2d5e 40%, #0e3d7a 70%, #0a2342 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 16px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 40px),
+        repeating-linear-gradient(-45deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 40px);
+      pointer-events: none;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 520px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .top-bar {
+      background: linear-gradient(90deg, #b8962e, #f0c040, #d4a82a, #f0c040, #b8962e);
+      height: 6px;
+      border-radius: 4px 4px 0 0;
+    }
+
+    .card {
+      background: linear-gradient(170deg, #f8f9fc 0%, #eef2f8 60%, #e8edf5 100%);
+      border-radius: 0 0 20px 20px;
+      padding: 36px 40px 40px;
+      box-shadow: 0 25px 70px rgba(0,0,0,0.5), 0 0 0 1px rgba(212,168,42,0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 320px; height: 320px;
+      background: url('https://base44.app/api/apps/6a044032cecb45c0033adc72/files/mp/public/6a044032cecb45c0033adc72/a5e121e13_LOGO-MPKP-transparent.png') center/contain no-repeat;
+      opacity: 0.04;
+      pointer-events: none;
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 120px; height: 120px;
+      background: linear-gradient(225deg, rgba(212,168,42,0.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .header {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      text-align: left;
+      gap: 18px;
+      margin-bottom: 0;
+      padding-bottom: 18px;
+      border-bottom: 2px solid rgba(212,168,42,0.25);
+    }
+    .header-text-block { flex: 1; }
+
+    .logo-circle {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: transparent;
+      border: none;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.35), 0 2px 8px rgba(212,168,42,0.18), 0 0 0 1px rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; padding: 4px; flex-shrink: 0;
+      filter: drop-shadow(0 4px 16px rgba(212,168,42,0.22));
+    }
+
+    .logo-circle img { width: 100%; height: 100%; object-fit: contain; }
+
+    .org-kempen {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px; font-weight: 700;
+      color: #b8962e;
+      letter-spacing: 2px; text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    .org-name {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px; font-weight: 800;
+      color: #0a2342;
+      letter-spacing: 1px; text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    .org-sub { display: none; }
+
+    .divider-gold { display: none; }
+
+    .kempen-badge { display: none; }
+
+    .program-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px; font-weight: 800;
+      color: #0a2342; line-height: 1.35;
+      margin-top: 5px; margin-bottom: 0;
+    }
+
+    .program-title span { color: #b8962e; }
+
+    .program-subtitle { display: none; }
+
+    .info-grid {
+      display: flex; flex-wrap: wrap;
+      justify-content: center; gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .info-pill-sep {
+      font-family: 'Lato', sans-serif;
+      font-size: 16px; color: #d4a82a;
+      font-weight: 300; line-height: 1;
+      align-self: center; margin: 0 2px;
+    }
+
+    .info-pill {
+      background: white;
+      border: 1px solid rgba(212,168,42,0.4);
+      border-radius: 8px; padding: 7px 12px;
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: #0a2342; font-weight: 600;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+    .section-divider {
+      display: flex; align-items: center; gap: 10px;
+      margin: 22px 0 18px;
+    }
+
+    .section-divider::before {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(212,168,42,0.5));
+    }
+
+    .section-divider::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(90deg, rgba(212,168,42,0.5), transparent);
+    }
+
+    .section-label {
+      font-size: 11px; font-weight: 700;
+      color: #0a2342; letter-spacing: 2px;
+      text-transform: uppercase; white-space: nowrap;
+    }
+
+    label {
+      display: block; font-size: 12px; font-weight: 700;
+      color: #0a2342; margin-bottom: 6px; margin-top: 16px;
+      letter-spacing: 0.5px; text-transform: uppercase;
+    }
+
+    input, select {
+      width: 100%; padding: 12px 16px;
+      border: 1.5px solid #d0d8e8; border-radius: 10px;
+      font-size: 14px; font-family: 'Lato', sans-serif;
+      background: white; color: #0a2342;
+      transition: all 0.2s; outline: none;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    }
+
+    input:focus, select:focus {
+      border-color: #b8962e;
+      box-shadow: 0 0 0 3px rgba(184,150,46,0.15), 0 2px 4px rgba(0,0,0,0.04);
+    }
+
+    input::placeholder { color: #aab; font-size: 13px; }
+
+    .select-wrap { position: relative; }
+    .select-wrap select {
+      appearance: none; -webkit-appearance: none;
+      padding-right: 40px; cursor: pointer;
+    }
+    .select-wrap select option[value=""] { color: #aab; }
+    .select-arrow {
+      position: absolute; right: 14px; top: 50%;
+      transform: translateY(-50%); pointer-events: none;
+    }
+
+    button {
+      width: 100%; padding: 15px;
+      background: linear-gradient(135deg, #0a2342 0%, #0d3b6e 50%, #0a2d5e 100%);
+      color: #f0c040;
+      border: 1px solid rgba(212,168,42,0.5);
+      border-radius: 12px;
+      font-size: 15px; font-weight: 700;
+      font-family: 'Lato', sans-serif;
+      letter-spacing: 1px; text-transform: uppercase;
+      cursor: pointer; margin-top: 26px;
+      transition: all 0.2s;
+      box-shadow: 0 6px 20px rgba(10,35,66,0.3);
+      position: relative; overflow: hidden;
+    }
+
+    button::before {
+      content: '';
+      position: absolute; top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(240,192,64,0.1), transparent);
+      transition: left 0.4s;
+    }
+
+    button:hover::before { left: 100%; }
+    button:hover { box-shadow: 0 8px 28px rgba(10,35,66,0.4); transform: translateY(-1px); }
+    button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .loading {
+      display: inline-block; width: 16px; height: 16px;
+      border: 2.5px solid #f0c040; border-top-color: transparent;
+      border-radius: 50%; animation: spin 0.7s linear infinite;
+      vertical-align: middle; margin-right: 8px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .msg {
+      margin-top: 16px; padding: 14px 16px; border-radius: 10px;
+      font-size: 13.5px; text-align: center; display: none; font-weight: 600;
+    }
+
+    .msg.error { background: #fff3f3; color: #b71c1c; border: 1px solid #ef9a9a; }
+
+    /* ===== SLIP PENGESAHAN ===== */
+    #slipSection { display: none; }
+
+    .slip-wrapper {
+      margin-top: 4px;
+    }
+
+    .slip {
+      background: white;
+      border: 2px solid #d4a82a;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(212,168,42,0.2);
+      position: relative;
+    }
+
+    /* Dashed tear line */
+    .slip-tear {
+      border-top: 2.5px dashed #d4a82a;
+      margin: 0 16px;
+      position: relative;
+    }
+
+    .slip-tear::before, .slip-tear::after {
+      content: '';
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      width: 20px; height: 20px;
+      background: linear-gradient(160deg, #061428, #0a2d5e);
+      border-radius: 50%;
+    }
+
+    .slip-tear::before { left: -26px; }
+    .slip-tear::after { right: -26px; }
+
+    .slip-header {
+      background: linear-gradient(135deg, #0a2342, #0d3b6e);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .slip-logo {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: white;
+      border: 2px solid #d4a82a;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; padding: 4px;
+      flex-shrink: 0;
+    }
+
+    .slip-logo img { width: 100%; height: 100%; object-fit: contain; }
+
+    .slip-header-text h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px; font-weight: 700;
+      color: #f0c040; margin-bottom: 2px;
+    }
+
+    .slip-header-text p {
+      font-size: 11px; color: rgba(240,192,64,0.7);
+    }
+
+    .slip-status {
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: linear-gradient(135deg, #f0fff4, #e8f5e9);
+      border-bottom: 1px solid rgba(212,168,42,0.2);
+    }
+
+    .status-icon {
+      width: 48px; height: 48px;
+      background: linear-gradient(135deg, #2e7d32, #43a047);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(46,125,50,0.3);
+    }
+
+    .status-text h4 {
+      font-size: 15px; font-weight: 700;
+      color: #1b5e20; margin-bottom: 2px;
+    }
+
+    .status-text p { font-size: 12px; color: #388e3c; }
+
+    .slip-body { padding: 20px 24px; }
+
+    .slip-row {
+      display: flex;
+      align-items: flex-start;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(212,168,42,0.12);
+    }
+
+    .slip-row:last-child { border-bottom: none; }
+
+    .slip-key {
+      font-size: 11px; font-weight: 700;
+      color: #888; text-transform: uppercase;
+      letter-spacing: 0.8px;
+      width: 110px; flex-shrink: 0;
+      padding-top: 1px;
+    }
+
+    .slip-val {
+      font-size: 14px; font-weight: 600;
+      color: #0a2342; flex: 1;
+    }
+
+    .slip-footer {
+      background: linear-gradient(135deg, #fffbf0, #fff8e1);
+      border-top: 1px dashed #d4a82a;
+      padding: 14px 24px;
+      text-align: center;
+    }
+
+    .slip-footer p {
+      font-size: 11px; color: #888;
+      line-height: 1.6;
+    }
+
+    .slip-footer strong { color: #b8962e; }
+
+
+    /* ===== NOMBOR CABUTAN BERTUAH ===== */
+    .cabutan-box {
+      background: linear-gradient(135deg, #0a2342 0%, #0d3b6e 100%);
+      border: 2px solid #d4a82a;
+      border-radius: 14px;
+      margin: 0 24px 20px;
+      padding: 18px 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(212,168,42,0.25);
+    }
+
+    .cabutan-box::before {
+      content: '🎟️';
+      position: absolute;
+      top: 50%; left: 16px;
+      transform: translateY(-50%);
+      font-size: 28px;
+      opacity: 0.3;
+    }
+
+    .cabutan-box::after {
+      content: '🎟️';
+      position: absolute;
+      top: 50%; right: 16px;
+      transform: translateY(-50%) scaleX(-1);
+      font-size: 28px;
+      opacity: 0.3;
+    }
+
+    .cabutan-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: rgba(240,192,64,0.7);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .cabutan-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: #f0c040;
+      letter-spacing: 4px;
+      text-shadow: 0 2px 12px rgba(240,192,64,0.4);
+      line-height: 1.1;
+    }
+
+    .cabutan-sub {
+      font-size: 10px;
+      color: rgba(240,192,64,0.6);
+      margin-top: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-print {
+      background: transparent;
+      border: 1.5px solid #d4a82a;
+      color: #b8962e;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 10px 20px;
+      cursor: pointer;
+      margin-top: 16px;
+      width: 100%;
+      font-family: 'Lato', sans-serif;
+      letter-spacing: 0.5px;
+      transition: all 0.2s;
+    }
+
+    .btn-print:hover {
+      background: #fffbf0;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .card-footer {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(212,168,42,0.25);
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+
+    .footer-line { width: 30px; height: 1px; background: linear-gradient(90deg, transparent, #b8962e); }
+    .footer-line.right { background: linear-gradient(90deg, #b8962e, transparent); }
+    .footer-text { font-size: 10px; color: #888; letter-spacing: 1.5px; text-transform: uppercase; }
+
+    .bottom-bar {
+      background: linear-gradient(90deg, #b8962e, #f0c040, #d4a82a, #f0c040, #b8962e);
+      height: 4px; border-radius: 0 0 4px 4px; margin-top: -1px;
+    }
+
+    @media print {
+      body { background: white !important; padding: 0; }
+      body::before { display: none; }
+      .wrapper { max-width: 100%; }
+      .top-bar, .bottom-bar { display: none; }
+      .card {
+        box-shadow: none !important;
+        background: white !important;
+        padding: 10px;
+      }
+      .card::before, .card::after { display: none; }
+      .header, #form, .msg, #slipSection .btn-print, .card-footer { display: none !important; }
+      #slipSection { display: block !important; }
+      .slip { border: 1.5px solid #d4a82a; box-shadow: none; }
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 28px 24px 32px; }
+      .program-title { font-size: 17px; }
+      .slip-header { padding: 16px; }
+      .slip-body { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="top-bar"></div>
+    <div class="card">
+
+      <!-- HEADER -->
+      <div class="header">
+        <div class="logo-circle">
+          <img src="https://base44.app/api/apps/6a044032cecb45c0033adc72/files/mp/public/6a044032cecb45c0033adc72/a5e121e13_LOGO-MPKP-transparent.png" alt="Logo MPKP" />
+        </div>
+        <div class="header-text-block">
+          <div class="org-kempen">Kempen Kesihatan Persekitaran 2026 : Premis Makanan Bersih</div>
+          <div class="org-name">Majlis Perbandaran Kubang Pasu</div>
+          <h1 class="program-title">Program Gotong-Royong di <span>Medan Selera Changlun</span></h1>
+        </div>
+        <div class="info-grid" style="display:none;">
+          <div class="info-pill">20 Mei 2026 (Rabu)</div>
+          <div class="info-pill-sep">|</div>
+          <div class="info-pill">8.00 pagi – 1.00 petang</div>
+          <div class="info-pill-sep">|</div>
+          <div class="info-pill">Medan Selera Changlun</div>
+        </div>
+      </div>
+
+      <!-- FORM -->
+      <div id="formSection">
+        <!-- INFO BAR PROGRAM -->
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 4px;">
+          <div style="display:flex;align-items:center;gap:7px;background:white;border:1px solid rgba(212,168,42,0.35);border-radius:8px;padding:7px 12px;box-shadow:0 2px 6px rgba(0,0,0,0.05);">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#b8962e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span style="font-size:12px;color:#0a2342;font-weight:600;">20 Mei 2026 (Rabu)</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:7px;background:white;border:1px solid rgba(212,168,42,0.35);border-radius:8px;padding:7px 12px;box-shadow:0 2px 6px rgba(0,0,0,0.05);">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#b8962e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span style="font-size:12px;color:#0a2342;font-weight:600;">8.00 pagi – 1.00 petang</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:7px;background:white;border:1px solid rgba(212,168,42,0.35);border-radius:8px;padding:7px 12px;box-shadow:0 2px 6px rgba(0,0,0,0.05);">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#b8962e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span style="font-size:12px;color:#0a2342;font-weight:600;">Medan Selera Changlun</span>
+          </div>
+        </div>
+
+        <div class="section-divider" style="margin-top:20px;">
+          <span class="section-label">Borang Pendaftaran Peserta</span>
+        </div>
+
+        <form id="form">
+          <label>Nama Penuh</label>
+          <input type="text" id="nama" placeholder="Contoh: Ahmad bin Ali" required />
+
+          <label>No. Kad Pengenalan</label>
+          <input type="text" id="noIc" placeholder="Contoh: 900101-01-1234" maxlength="14" required />
+
+          <label>No. Telefon</label>
+          <input type="tel" id="noTelefon" placeholder="Contoh: 0123456789" required />
+
+          <label>Jabatan / Agensi</label>
+          <div class="select-wrap">
+            <select id="jabatan" required>
+              <option value="" disabled selected>-- Sila Pilih Jabatan / Agensi --</option>
+              <option value="Majlis Perbandaran Kubang Pasu">Majlis Perbandaran Kubang Pasu</option>
+              <option value="Ahli Majlis, MPKP">Ahli Majlis, MPKP</option>
+              <option value="e-IDAMAN">e-IDAMAN</option>
+              <option value="SWCORP">SWCORP</option>
+              <option value="Jabatan Pengaliran dan Saliran">Jabatan Pengaliran dan Saliran</option>
+              <option value="Peniaga / Wakil Medan Selera Changlun">Peniaga / Wakil Medan Selera Changlun</option>
+              <option value="Penduduk Changlun">Penduduk Changlun</option>
+              <option value="Lain-lain">Lain-lain</option>
+            </select>
+            <span class="select-arrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#b8962e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </span>
+          </div>
+
+          <label>Alamat E-mel <span style="font-size:10px;color:#888;font-weight:400;letter-spacing:0;">(pilihan — untuk terima slip di e-mel)</span></label>
+          <input type="email" id="email" placeholder="Contoh: ahmad@email.com" />
+
+          <button type="submit" id="btn">✦ Daftar Sekarang ✦</button>
+        </form>
+
+        <div class="msg" id="msg"></div>
+      </div>
+
+      <!-- SLIP PENGESAHAN -->
+      <div id="slipSection">
+        <div class="section-divider">
+          <span class="section-label">Slip Pengesahan Kehadiran</span>
+        </div>
+
+        <div class="slip-wrapper">
+          <div class="slip">
+
+            <div class="slip-header">
+              <div class="slip-logo">
+                <img src="https://base44.app/api/apps/6a044032cecb45c0033adc72/files/mp/public/6a044032cecb45c0033adc72/a5e121e13_LOGO-MPKP-transparent.png" alt="Logo MPKP" />
+              </div>
+              <div class="slip-header-text">
+                <h3>Majlis Perbandaran Kubang Pasu</h3>
+                <p>Program Gotong-Royong Medan Selera Changlun 2026</p>
+              </div>
+            </div>
+
+            <div class="slip-status">
+              <div class="status-icon">✅</div>
+              <div class="status-text">
+                <h4>Pendaftaran Berjaya!</h4>
+                <p>Kehadiran anda telah disahkan</p>
+              </div>
+            </div>
+
+            <div class="slip-tear"></div>
+
+            <div class="slip-body">
+              <div class="slip-row">
+                <span class="slip-key">Nama</span>
+                <span class="slip-val" id="slipNama">—</span>
+              </div>
+              <div class="slip-row">
+                <span class="slip-key">No. IC</span>
+                <span class="slip-val" id="slipIc">—</span>
+              </div>
+              <div class="slip-row">
+                <span class="slip-key">No. Telefon</span>
+                <span class="slip-val" id="slipTel">—</span>
+              </div>
+              <div class="slip-row">
+                <span class="slip-key">Jabatan</span>
+                <span class="slip-val" id="slipJabatan">—</span>
+              </div>
+              <div class="slip-row">
+                <span class="slip-key">Tarikh</span>
+                <span class="slip-val">20 Mei 2026 (Rabu)</span>
+              </div>
+              <div class="slip-row">
+                <span class="slip-key">Masa</span>
+                <span class="slip-val">8.00 pagi – 1.00 petang</span>
+              </div>
+              <div class="slip-row">
+                <span class="slip-key">Tempat</span>
+                <span class="slip-val">Medan Selera Changlun</span>
+              </div>
+              <div class="slip-row">
+                <span class="slip-key">Masa Daftar</span>
+                <span class="slip-val" id="slipMasa">—</span>
+              </div>
+            </div>
+
+            <div class="cabutan-box">
+              <div class="cabutan-label">🏆 Nombor Cabutan Bertuah</div>
+              <div class="cabutan-number" id="slipNoCabutan">—</div>
+              <div class="cabutan-sub">Simpan nombor ini • Wajib hadir semasa cabutan</div>
+            </div>
+
+            <div class="slip-footer">
+              <p>Sila tunjukkan slip ini kepada pegawai semasa pendaftaran.<br>
+              <strong>Cabutan Bertuah</strong> akan diadakan pada <strong>12.00 tengah hari</strong>.<br>
+              Kehadiran wajib semasa cabutan untuk layak menang.</p>
+            </div>
+
+          </div>
+
+          <button class="btn-print" onclick="window.print()">🖨️ Cetak / Simpan Slip</button>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="footer-line"></div>
+        <div class="footer-text">Majlis Perbandaran Kubang Pasu &nbsp;©&nbsp; 2026</div>
+        <div class="footer-line right"></div>
+      </div>
+    </div>
+    <div class="bottom-bar"></div>
+  </div>
+
+  <script>
+    const APP_ID = "6a044032cecb45c0033adc72";
+    const API_URL = `https://base44.app/api/apps/${APP_ID}/functions/daftarPeserta`;
+
+    document.getElementById('noIc').addEventListener('input', function(e) {
+      let val = e.target.value.replace(/\D/g, '');
+      if (val.length > 6) val = val.slice(0,6) + '-' + val.slice(6);
+      if (val.length > 9) val = val.slice(0,9) + '-' + val.slice(9);
+      e.target.value = val.slice(0, 14);
+    });
+
+    document.getElementById('form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btn');
+      const msg = document.getElementById('msg');
+
+      btn.disabled = true;
+      btn.innerHTML = '<span class="loading"></span>Sedang mendaftar...';
+      msg.style.display = 'none';
+
+      const nama = document.getElementById('nama').value.trim();
+      const noIc = document.getElementById('noIc').value.trim();
+      const noTelefon = document.getElementById('noTelefon').value.trim();
+      const jabatan = document.getElementById('jabatan').value.trim();
+      const email = document.getElementById('email').value.trim();
+
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nama, noIc, noTelefon, jabatan, email })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          // Populate slip
+          document.getElementById('slipNama').textContent = nama;
+          document.getElementById('slipIc').textContent = noIc;
+          document.getElementById('slipTel').textContent = noTelefon;
+          document.getElementById('slipJabatan').textContent = jabatan;
+          document.getElementById('slipMasa').textContent = new Date().toLocaleString('ms-MY', {
+            timeZone: 'Asia/Kuala_Lumpur',
+            day: 'numeric', month: 'long', year: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+          });
+          document.getElementById('slipNoCabutan').textContent = data.noCabutan || '—';
+
+          // Notifikasi email
+          if (data.emailSent) {
+            const emailNotif = document.createElement('div');
+            emailNotif.style.cssText = 'background:#f0fff4;border:1px solid #a5d6a7;border-radius:8px;padding:10px 14px;margin-top:12px;font-size:12px;color:#2e7d32;text-align:center;';
+            emailNotif.innerHTML = '📧 Slip telah dihantar ke e-mel anda.';
+            document.querySelector('.slip-wrapper').appendChild(emailNotif);
+          }
+
+          // Hide form, show slip
+          document.getElementById('formSection').style.display = 'none';
+          document.getElementById('slipSection').style.display = 'block';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          msg.className = 'msg error';
+          msg.innerHTML = '❌ ' + (data.error || 'Ralat berlaku. Sila cuba semula.');
+          msg.style.display = 'block';
+          btn.disabled = false;
+          btn.innerHTML = '✦ Daftar Sekarang ✦';
+        }
+      } catch (err) {
+        msg.className = 'msg error';
+        msg.innerHTML = '❌ Gagal sambung ke pelayan. Sila cuba semula.';
+        msg.style.display = 'block';
+        btn.disabled = false;
+        btn.innerHTML = '✦ Daftar Sekarang ✦';
+      }
+    });
+  </script>
+</body>
+</html>
