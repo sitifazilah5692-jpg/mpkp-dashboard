@@ -549,7 +549,7 @@
 
         <form id="form">
           <label>Nama Penuh</label>
-          <input type="text" id="nama" placeholder="Contoh: Ahmad bin Ali" required />
+          <input type="text" id="nama" placeholder="Contoh: Ahmad bin Ali" required style="text-transform:uppercase;" />
 
           <label>No. Kad Pengenalan</label>
           <input type="text" id="noIc" placeholder="Contoh: 900101-01-1234" maxlength="14" required />
@@ -576,7 +576,7 @@
           </div>
 
           <label>Alamat E-mel <span style="font-size:10px;color:#888;font-weight:400;letter-spacing:0;">(pilihan — untuk terima slip di e-mel)</span></label>
-          <input type="email" id="email" placeholder="Contoh: ahmad@email.com" />
+          <input type="email" id="email" placeholder="Contoh: ahmad@email.com" style="text-transform:lowercase;" />
 
           <button type="submit" id="btn">✦ Daftar Sekarang ✦</button>
         </form>
@@ -679,11 +679,28 @@
     const APP_ID = "6a044032cecb45c0033adc72";
     const API_URL = `https://base44.app/api/apps/${APP_ID}/functions/daftarPeserta`;
 
+    // Auto-format No. IC
     document.getElementById('noIc').addEventListener('input', function(e) {
       let val = e.target.value.replace(/\D/g, '');
       if (val.length > 6) val = val.slice(0,6) + '-' + val.slice(6);
       if (val.length > 9) val = val.slice(0,9) + '-' + val.slice(9);
       e.target.value = val.slice(0, 14);
+    });
+
+    // Auto-UPPERCASE untuk Nama
+    document.getElementById('nama').addEventListener('input', function(e) {
+      const start = e.target.selectionStart;
+      const end = e.target.selectionEnd;
+      e.target.value = e.target.value.toUpperCase();
+      e.target.setSelectionRange(start, end);
+    });
+
+    // Auto-lowercase untuk Email
+    document.getElementById('email').addEventListener('input', function(e) {
+      const start = e.target.selectionStart;
+      const end = e.target.selectionEnd;
+      e.target.value = e.target.value.toLowerCase();
+      e.target.setSelectionRange(start, end);
     });
 
     document.getElementById('form').addEventListener('submit', async function(e) {
@@ -695,11 +712,11 @@
       btn.innerHTML = '<span class="loading"></span>Sedang mendaftar...';
       msg.style.display = 'none';
 
-      const nama = document.getElementById('nama').value.trim();
+      const nama = document.getElementById('nama').value.trim().toUpperCase();
       const noIc = document.getElementById('noIc').value.trim();
       const noTelefon = document.getElementById('noTelefon').value.trim();
       const jabatan = document.getElementById('jabatan').value.trim();
-      const email = document.getElementById('email').value.trim();
+      const email = document.getElementById('email').value.trim().toLowerCase();
 
       try {
         const res = await fetch(API_URL, {
