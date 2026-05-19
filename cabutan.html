@@ -134,7 +134,7 @@ body{font-family:'Lato',sans-serif;background:#050e1f;position:relative;}
     </div>
     <div class="stat-badge">
       <div class="num" id="statHadir">—</div>
-      <div class="lbl">Hadir</div>
+      <div class="lbl">Daftar</div>
     </div>
   </div>
 
@@ -214,7 +214,7 @@ async function loadPeserta() {
     const res  = await fetch(LAPORAN_URL);
     const data = await res.json();
     const rows = data.data || [];
-    semuaPeserta = rows.filter(r => (r.status||'').toLowerCase().includes('hadir'));
+    semuaPeserta = rows; // Semua yang daftar layak untuk cabutan
     document.getElementById('statHadir').textContent = semuaPeserta.length || '?';
   } catch(e) {
     document.getElementById('statHadir').textContent = '?';
