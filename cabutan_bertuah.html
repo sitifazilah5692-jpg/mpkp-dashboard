@@ -30,11 +30,11 @@ canvas.konfeti{position:fixed;inset:0;pointer-events:none;z-index:999;}
   position:relative;z-index:1;
   width:100%;max-width:1100px;
   height:100vh;
-  display:grid;
-  grid-template-rows:auto 1fr auto;
-  grid-template-columns:1fr;
-  padding:16px 20px 12px;
-  gap:10px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:12px 20px 8px;
+  gap:8px;
 }
 
 /* ── TOP BAR ── */
@@ -66,7 +66,9 @@ canvas.konfeti{position:fixed;inset:0;pointer-events:none;z-index:999;}
 /* ── MIDDLE: 3 BUTTONS + CIRCLE ── */
 .middle{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:16px;
+  gap:12px;
+  flex:1;
+  width:100%;
 }
 
 /* Kupon buttons */
@@ -217,18 +219,18 @@ canvas.konfeti{position:fixed;inset:0;pointer-events:none;z-index:999;}
 }
 
 /* Landscape tablet */
-@media (orientation:landscape) and (min-width:700px){
-  .page{
-    grid-template-rows:auto 1fr auto;
-    padding:12px 24px 8px;
-  }
-  .circle-wrap{width:280px;height:280px;}
+@media (orientation:landscape){
+  .page{ padding:8px 20px 6px; gap:6px; }
+  .circle-wrap{width:260px;height:260px;}
   .circ-name{font-size:24px;}
-  .kupon-btn{width:140px;min-height:64px;}
+  .kupon-btn{width:130px;min-height:58px;}
+  .kupon-row{gap:8px;}
+  .top-bar{width:100%;}
 }
 @media (orientation:landscape) and (min-width:1000px){
-  .circle-wrap{width:320px;height:320px;}
-  .circ-name{font-size:30px;}
+  .circle-wrap{width:300px;height:300px;}
+  .circ-name{font-size:28px;}
+  .kupon-btn{width:150px;min-height:64px;}
 }
 </style>
 </head>
