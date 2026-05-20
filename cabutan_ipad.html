@@ -374,14 +374,16 @@ async function mulaCabutan(){
     c++;if(c>10){clearInterval(slow);paparPemenang(winner);}
   },200);
 }
-function paparPemenang(p){
+async function paparPemenang(p){
   const nama=p.nama||'???';
+  const jabatan=p.jabatan||'';
+  const noCabutan=p.noCabutan||p.no_cabutan||'';
+  const ic=p.noIc||p.ic||p.no_ic||'';
   document.getElementById('circName').className='circ-name';
   document.getElementById('circName').textContent=nama;
   document.getElementById('circLbl').textContent='🎊 PEMENANG '+hadiahAktif.nama.toUpperCase();
-  document.getElementById('circCb').textContent=(p.noCabutan||p.no_cabutan)?'🎫 '+(p.noCabutan||p.no_cabutan):'';
-  document.getElementById('circJab').textContent=p.jabatan||'';
-  const ic=p.noIc||p.ic||p.no_ic;
+  document.getElementById('circCb').textContent=noCabutan?'🎫 '+noCabutan:'';
+  document.getElementById('circJab').textContent=jabatan;
   if(ic) sudahMenang.push(ic);
   pemenangList.push({...p,hadiah:hadiahAktif.nama,kat:hadiahAktif.kat});
   document.getElementById('statPemenang').textContent=pemenangList.length;
@@ -389,6 +391,14 @@ function paparPemenang(p){
   document.getElementById('pemenangRow').innerHTML=pemenangList.map(w=>`<div class="pchip ${w.kat}">${w.hadiah}: ${w.nama}</div>`).join('');
   launchKonfeti();
   try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance('Tahniah kepada '+nama);u.lang='ms-MY';u.rate=0.85;speechSynthesis.speak(u);}catch(e){}
+  // Simpan ke Google Sheets supaya viewer HP boleh nampak
+  try{
+    await fetch('https://base44.app/api/apps/6a044032cecb45c0033adc72/functions/simpanPemenang',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({nama,jabatan,noCabutan,noIc:ic,hadiah:hadiahAktif.nama,kat:hadiahAktif.kat})
+    });
+  }catch(e){console.warn('Simpan gagal:',e);}
   sedangCabut=false;setAllButtons(true);
   document.getElementById('btnReset').style.display='inline-block';
 }
