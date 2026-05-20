@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<title>Cabutan Bertuah MPKP</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{
+  width:100%;height:100%;
+  overflow:hidden;
+  background:#040d1a;
+  -webkit-text-size-adjust:none;
+  touch-action:manipulation;
+}
+body{
+  font-family:'Montserrat',sans-serif;
+  background:linear-gradient(145deg,#040d1a 0%,#0a1f3d 50%,#071830 100%);
+}
+canvas.konfeti{position:fixed;inset:0;pointer-events:none;z-index:999;}
+
+/* ─────────────────────────────────
+   LAYOUT: 3 kolum landscape iPad
+   ───────────────────────────────── */
+.page{
+  width:100vw;
+  height:100vh;
+  display:grid;
+  grid-template-columns:260px 1fr 210px;
+  grid-template-rows:1fr 28px;
+  position:relative;z-index:1;
+}
+
+/* ── KIRI ── */
+.panel-left{
+  grid-column:1;grid-row:1;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:24px 20px;
+  border-right:1px solid rgba(240,192,64,0.12);
+  gap:16px;
+}
+.logo-circle{
+  width:90px;height:90px;border-radius:50%;
+  background:rgba(255,255,255,0.05);
+  border:2.5px solid rgba(240,192,64,0.5);
+  overflow:hidden;
+}
+.logo-circle img{width:100%;height:100%;object-fit:cover;}
+.prog-kempen{
+  font-size:10px;letter-spacing:1.5px;font-weight:700;
+  color:rgba(240,192,64,0.8);text-align:center;
+  text-transform:uppercase;line-height:1.6;
+}
+.prog-title{
+  font-family:'Playfair Display',serif;
+  font-size:18px;font-weight:800;color:#fff;
+  text-align:center;line-height:1.35;
+}
+.prog-title span{color:#f0c040;}
+.prog-pills{display:flex;flex-direction:column;gap:5px;align-items:center;}
+.pill{
+  font-size:11px;color:rgba(255,255,255,0.6);
+  background:rgba(255,255,255,0.07);
+  border-radius:12px;padding:5px 14px;
+}
+.stats-wrap{display:flex;gap:12px;margin-top:4px;}
+.stat-box{
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(240,192,64,0.25);
+  border-radius:16px;padding:12px 18px;text-align:center;
+}
+.stat-num{font-size:36px;font-weight:900;color:#f0c040;line-height:1;}
+.stat-lbl{font-size:10px;color:rgba(255,255,255,0.4);letter-spacing:1px;margin-top:4px;}
+
+/* ── TENGAH ── */
+.panel-center{
+  grid-column:2;grid-row:1;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:16px;padding:20px 8px;
+}
+
+.circle-wrap{
+  position:relative;
+  width:min(70vh, 460px);
+  height:min(70vh, 460px);
+}
+.ring-glow{
+  position:absolute;inset:-8px;border-radius:50%;
+  background:conic-gradient(from 0deg,#f0c040,#e06830,#f48ab8,#ffe55a,#f0c040);
+  animation:spinRing 5s linear infinite;
+  pointer-events:none;
+}
+@keyframes spinRing{to{transform:rotate(360deg);}}
+.ring-mask{
+  position:absolute;inset:5px;border-radius:50%;
+  background:#040d1a;pointer-events:none;
+}
+.circle-inner{
+  position:absolute;inset:12px;border-radius:50%;
+  background:linear-gradient(145deg,#0d2850,#071428);
+  border:2px solid rgba(240,192,64,0.2);
+  box-shadow:inset 0 0 70px rgba(0,0,0,0.6);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;padding:32px;
+  overflow:hidden;
+}
+.circ-lbl{
+  font-size:11px;font-weight:700;letter-spacing:3px;
+  color:rgba(240,192,64,0.7);margin-bottom:14px;
+  text-transform:uppercase;
+}
+.circ-name{
+  font-family:'Playfair Display',serif;
+  font-size:min(7vh, 44px);font-weight:800;
+  color:#fff;line-height:1.2;
+  word-break:break-word;
+  min-height:100px;
+  display:flex;align-items:center;justify-content:center;
+}
+.circ-name.idle{
+  font-family:'Montserrat',sans-serif;
+  font-size:16px;font-weight:500;
+  color:rgba(255,255,255,0.3);
+}
+.circ-name.rolling{
+  color:#f0c040;
+  font-size:min(6vh,38px);
+  animation:flicker 0.1s infinite;
+}
+@keyframes flicker{0%{opacity:1;}50%{opacity:0.55;}100%{opacity:1;}}
+.circ-cb{font-size:15px;font-weight:800;color:#f0c040;margin-top:10px;letter-spacing:2px;}
+.circ-jab{font-size:12px;color:rgba(255,255,255,0.45);margin-top:6px;line-height:1.4;}
+
+.btn-reset{
+  background:rgba(240,192,64,0.13);
+  border:2px solid rgba(240,192,64,0.5);
+  color:#f0c040;
+  border-radius:28px;padding:10px 32px;
+  font-size:14px;font-weight:700;
+  font-family:'Montserrat',sans-serif;
+  cursor:pointer;display:none;letter-spacing:1px;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn-reset:active{background:rgba(240,192,64,0.3);}
+
+.pemenang-row{
+  display:flex;gap:7px;flex-wrap:wrap;
+  justify-content:center;max-height:54px;overflow:hidden;
+}
+.pchip{
+  border-radius:20px;padding:4px 14px;
+  font-size:12px;font-weight:700;color:#fff;
+  white-space:nowrap;
+}
+.pchip.kat1{background:linear-gradient(90deg,#c85020,#f4a06a);}
+.pchip.kat2{background:linear-gradient(90deg,#a07800,#ffe55a);color:#3a2800;}
+.pchip.kat3{background:linear-gradient(90deg,#b82068,#f48ab8);}
+
+/* ── KANAN ── */
+.panel-right{
+  grid-column:3;grid-row:1;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:24px 16px;
+  border-left:1px solid rgba(240,192,64,0.12);
+  gap:18px;
+}
+.kupon-btn{
+  width:180px;min-height:96px;
+  border-radius:22px;border:3px solid transparent;
+  cursor:pointer;font-family:'Montserrat',sans-serif;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:12px 10px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.4);
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+  transition:transform 0.15s,box-shadow 0.15s,border-color 0.15s;
+  z-index:10;
+}
+.kupon-btn:active{transform:scale(0.93);}
+.kupon-btn.active{transform:translateY(-5px);}
+.kb-icon{font-size:28px;margin-bottom:5px;}
+.kb-nama{font-size:18px;font-weight:900;letter-spacing:0.5px;}
+.kb-sub{font-size:10px;opacity:0.85;margin-top:3px;text-align:center;line-height:1.4;}
+.kb-count{
+  font-size:11px;font-weight:800;
+  background:rgba(0,0,0,0.2);border-radius:20px;
+  padding:3px 10px;margin-top:6px;
+}
+.kb-peach{background:linear-gradient(135deg,#f4a06a,#d05020);color:#fff;}
+.kb-peach.active{border-color:rgba(255,255,255,0.8);box-shadow:0 0 35px rgba(240,100,40,0.75);}
+.kb-kuning{background:linear-gradient(135deg,#ffe55a,#d8a800);color:#3a2800;}
+.kb-kuning.active{border-color:rgba(255,255,255,0.8);box-shadow:0 0 35px rgba(240,200,0,0.75);}
+.kb-pink{background:linear-gradient(135deg,#f48ab8,#c02070);color:#fff;}
+.kb-pink.active{border-color:rgba(255,255,255,0.8);box-shadow:0 0 35px rgba(220,50,120,0.75);}
+
+/* ── FOOTER ── */
+.footer{
+  grid-column:1/span 3;grid-row:2;
+  text-align:center;
+  font-size:9px;color:rgba(255,255,255,0.18);letter-spacing:2px;
+  border-top:1px solid rgba(255,255,255,0.05);
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* Fullscreen btn */
+.btn-fs{
+  position:fixed;bottom:16px;right:16px;z-index:200;
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(240,192,64,0.15);
+  border:1.5px solid rgba(240,192,64,0.4);
+  color:#f0c040;font-size:20px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  touch-action:manipulation;
+}
+</style>
+</head>
+<body>
+<canvas class="konfeti" id="konfeti"></canvas>
+
+<div class="page">
+
+  <!-- KIRI -->
+  <div class="panel-left">
+    <div class="logo-circle">
+      <img src="https://base44.app/api/apps/6a044032cecb45c0033adc72/files/mp/public/6a044032cecb45c0033adc72/a5e121e13_LOGO-MPKP-transparent.png" alt="MPKP"/>
+    </div>
+    <div class="prog-kempen">Kempen Kesihatan<br>Persekitaran 2026</div>
+    <div class="prog-title">Program <span>Gotong-Royong</span><br>Medan Selera Changlun</div>
+    <div class="prog-pills">
+      <span class="pill">📅 20 Mei 2026</span>
+      <span class="pill">🕗 8.00 Pagi</span>
+      <span class="pill">📍 Medan Selera Changlun</span>
+    </div>
+    <div class="stats-wrap">
+      <div class="stat-box">
+        <div class="stat-num" id="statPeserta">—</div>
+        <div class="stat-lbl">PESERTA</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="statPemenang">0</div>
+        <div class="stat-lbl">MENANG</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TENGAH -->
+  <div class="panel-center">
+    <div class="circle-wrap">
+      <div class="ring-glow"></div>
+      <div class="ring-mask"></div>
+      <div class="circle-inner">
+        <div class="circ-lbl" id="circLbl">SEDIA UNTUK CABUTAN</div>
+        <div class="circ-name idle" id="circName">Tekan butang kupon untuk mula</div>
+        <div class="circ-cb" id="circCb"></div>
+        <div class="circ-jab" id="circJab"></div>
+      </div>
+    </div>
+    <button class="btn-reset" id="btnReset" onclick="resetCabutan()">↺ Cabutan Baharu</button>
+    <div class="pemenang-row" id="pemenangRow"></div>
+  </div>
+
+  <!-- KANAN -->
+  <div class="panel-right">
+    <button class="kupon-btn kb-peach active" id="btnKat1" onclick="pilihDanCabut(this,'Kupon 1','kat1')">
+      <span class="kb-icon">🏛️</span>
+      <div class="kb-nama">KUPON 1</div>
+      <div class="kb-sub">MPKP &amp; Ahli Majlis</div>
+      <div class="kb-count" id="countKat1">—</div>
+    </button>
+    <button class="kupon-btn kb-kuning" id="btnKat2" onclick="pilihDanCabut(this,'Kupon 2','kat2')">
+      <span class="kb-icon">🏢</span>
+      <div class="kb-nama">KUPON 2</div>
+      <div class="kb-sub">Agensi / e-IDAMAN</div>
+      <div class="kb-count" id="countKat2">—</div>
+    </button>
+    <button class="kupon-btn kb-pink" id="btnKat3" onclick="pilihDanCabut(this,'Kupon 3','kat3')">
+      <span class="kb-icon">🏪</span>
+      <div class="kb-nama">KUPON 3</div>
+      <div class="kb-sub">Peniaga &amp; Penduduk</div>
+      <div class="kb-count" id="countKat3">—</div>
+    </button>
+  </div>
+
+  <div class="footer">MAJLIS PERBANDARAN KUBANG PASU · MPKP · 2026</div>
+</div>
+
+<button class="btn-fs" id="btnFs" onclick="toggleFs()">⛶</button>
+
+<script>
+const SHEETS_URL='https://base44.app/api/apps/6a044032cecb45c0033adc72/functions/getLaporanPeserta';
+let semuaPeserta=[],sudahMenang=[],pemenangList=[];
+let hadiahAktif={nama:'Kupon 1',kat:'kat1'};
+let sedangCabut=false,drumInterval=null;
+
+const KATEGORI_MAP={
+  kat1:{label:'MPKP & Ahli Majlis',jabatan:['Majlis Perbandaran Kubang Pasu','Ahli Majlis, MPKP','MPKP']},
+  kat2:{label:'Agensi',jabatan:['e-IDAMAN','SWCORP','Jabatan Pengairan dan Saliran','JPS','e-Idaman','SWCorp']},
+  kat3:{label:'Peniaga & Penduduk',jabatan:['Peniaga / Wakil Medan Selera Changlun','Peniaga','Wakil Peniaga','Penduduk Changlun','Penduduk','Lain-lain']}
+};
+
+function getPesertaKategori(kat){
+  const k=KATEGORI_MAP[kat];
+  if(!k) return semuaPeserta;
+  return semuaPeserta.filter(p=>k.jabatan.some(kj=>(p.jabatan||'').toLowerCase().includes(kj.toLowerCase())));
+}
+function updateCounts(){
+  ['kat1','kat2','kat3'].forEach((k,i)=>{
+    const t=getPesertaKategori(k).length;
+    const m=pemenangList.filter(p=>p.kat===k).length;
+    const el=document.getElementById('countKat'+(i+1));
+    if(el) el.textContent=(t-m)+' layak';
+  });
+}
+async function loadPeserta(){
+  try{
+    const res=await fetch(SHEETS_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})});
+    const data=await res.json();
+    const rows=data.data||data.peserta||[];
+    semuaPeserta=rows.filter(r=>r.nama&&r.nama.trim()!=='');
+    document.getElementById('statPeserta').textContent=semuaPeserta.length;
+    updateCounts();
+  }catch(e){document.getElementById('statPeserta').textContent='!';}
+}
+function setAllButtons(on){
+  document.querySelectorAll('.kupon-btn').forEach(b=>{b.disabled=!on;b.style.opacity=on?'':'0.5';});
+}
+function pilihDanCabut(el,nama,kat){
+  if(sedangCabut) return;
+  document.querySelectorAll('.kupon-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  hadiahAktif={nama,kat};
+  mulaCabutan();
+}
+function mulaDrum(){
+  const pool=getPesertaKategori(hadiahAktif.kat);
+  const src=pool.length>0?pool:semuaPeserta;
+  const nameEl=document.getElementById('circName');
+  nameEl.className='circ-name rolling';
+  document.getElementById('circLbl').textContent='🎰 SEDANG MENCABUT...';
+  document.getElementById('circCb').textContent='';
+  document.getElementById('circJab').textContent='';
+  drumInterval=setInterval(()=>{nameEl.textContent=src[Math.floor(Math.random()*src.length)]?.nama||'...';},80);
+}
+async function mulaCabutan(){
+  if(sedangCabut) return;
+  const katP=getPesertaKategori(hadiahAktif.kat);
+  const layak=katP.filter(p=>!sudahMenang.includes(p.noIc||p.ic||p.no_ic));
+  if(katP.length>0&&layak.length===0){
+    document.getElementById('circName').className='circ-name';
+    document.getElementById('circName').textContent='Semua dah menang!';
+    document.getElementById('circLbl').textContent='⚠️ TIADA LAYAK';
+    return;
+  }
+  sedangCabut=true;setAllButtons(false);
+  document.getElementById('btnReset').style.display='none';
+  mulaDrum();
+  await new Promise(r=>setTimeout(r,3500));
+  clearInterval(drumInterval);
+  const pool=layak.length>0?layak:(katP.length>0?katP:semuaPeserta);
+  const winner=pool[Math.floor(Math.random()*pool.length)];
+  let c=0;
+  const slow=setInterval(()=>{
+    document.getElementById('circName').textContent=pool[Math.floor(Math.random()*pool.length)]?.nama||'...';
+    c++;if(c>10){clearInterval(slow);paparPemenang(winner);}
+  },200);
+}
+function paparPemenang(p){
+  const nama=p.nama||'???';
+  document.getElementById('circName').className='circ-name';
+  document.getElementById('circName').textContent=nama;
+  document.getElementById('circLbl').textContent='🎊 PEMENANG '+hadiahAktif.nama.toUpperCase();
+  document.getElementById('circCb').textContent=(p.noCabutan||p.no_cabutan)?'🎫 '+(p.noCabutan||p.no_cabutan):'';
+  document.getElementById('circJab').textContent=p.jabatan||'';
+  const ic=p.noIc||p.ic||p.no_ic;
+  if(ic) sudahMenang.push(ic);
+  pemenangList.push({...p,hadiah:hadiahAktif.nama,kat:hadiahAktif.kat});
+  document.getElementById('statPemenang').textContent=pemenangList.length;
+  updateCounts();
+  document.getElementById('pemenangRow').innerHTML=pemenangList.map(w=>`<div class="pchip ${w.kat}">${w.hadiah}: ${w.nama}</div>`).join('');
+  launchKonfeti();
+  try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance('Tahniah kepada '+nama);u.lang='ms-MY';u.rate=0.85;speechSynthesis.speak(u);}catch(e){}
+  sedangCabut=false;setAllButtons(true);
+  document.getElementById('btnReset').style.display='inline-block';
+}
+function resetCabutan(){
+  if(drumInterval){clearInterval(drumInterval);drumInterval=null;}
+  document.getElementById('circName').className='circ-name idle';
+  document.getElementById('circName').textContent='Tekan butang kupon untuk mula';
+  document.getElementById('circLbl').textContent='SEDIA UNTUK CABUTAN';
+  document.getElementById('circCb').textContent='';
+  document.getElementById('circJab').textContent='';
+  document.getElementById('btnReset').style.display='none';
+  sedangCabut=false;setAllButtons(true);
+}
+function launchKonfeti(){
+  const cv=document.getElementById('konfeti');const ctx=cv.getContext('2d');
+  cv.width=window.innerWidth;cv.height=window.innerHeight;
+  const colors=['#f0c040','#e06830','#f48ab8','#fff','#ffe55a','#a0f0c0'];
+  let pts=Array.from({length:160},()=>({x:Math.random()*cv.width,y:-20,vx:(Math.random()-0.5)*5,vy:Math.random()*6+2,color:colors[Math.floor(Math.random()*colors.length)],size:Math.random()*9+3,rot:Math.random()*360,rotV:(Math.random()-0.5)*8,alpha:1}));
+  let fr=0;
+  function draw(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    pts.forEach(p=>{ctx.save();ctx.globalAlpha=p.alpha;ctx.fillStyle=p.color;ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);ctx.fillRect(-p.size/2,-p.size/4,p.size,p.size/2);ctx.restore();p.x+=p.vx;p.y+=p.vy;p.rot+=p.rotV;if(fr>60)p.alpha-=0.015;});
+    pts=pts.filter(p=>p.alpha>0);fr++;
+    if(pts.length>0)requestAnimationFrame(draw);else ctx.clearRect(0,0,cv.width,cv.height);
+  }
+  draw();
+}
+function toggleFs(){
+  if(!document.fullscreenElement)document.documentElement.requestFullscreen().catch(()=>{});
+  else document.exitFullscreen();
+}
+// Auto fullscreen bila load
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    try{document.documentElement.requestFullscreen().catch(()=>{});}catch(e){}
+  },1000);
+});
+document.addEventListener('DOMContentLoaded',loadPeserta);
+if(document.readyState==='complete'||document.readyState==='interactive') loadPeserta();
+</script>
+</body>
+</html>
