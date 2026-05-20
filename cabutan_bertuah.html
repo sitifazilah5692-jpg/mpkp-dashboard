@@ -2,239 +2,231 @@
 <html lang="ms">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
 <title>Cabutan Bertuah - MPKP 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Montserrat:wght@400;600;700;800;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-html,body{width:100%;height:100%;overflow:hidden;}
+html,body{
+  width:100%;height:100%;
+  overflow:hidden;
+  background:#040d1a;
+}
 body{
   font-family:'Montserrat',sans-serif;
-  background:linear-gradient(145deg,#040d1a 0%,#0a1f3d 40%,#0d2850 100%);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:linear-gradient(145deg,#040d1a 0%,#0a1f3d 50%,#071830 100%);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
   min-height:100vh;
-  position:relative;
 }
-
-/* BG watermark */
-body::before{
-  content:'';position:fixed;inset:0;
-  background:url('https://base44.app/api/apps/6a044032cecb45c0033adc72/files/mp/public/6a044032cecb45c0033adc72/a5e121e13_LOGO-MPKP-transparent.png') center/35% no-repeat;
-  opacity:0.04;pointer-events:none;z-index:0;
-}
-
 canvas.konfeti{position:fixed;inset:0;pointer-events:none;z-index:999;}
 
-/* ── LAYOUT ── */
+/* ══════════════════════════════
+   LAYOUT UTAMA — landscape
+   Kiri: header+stats | Tengah: bulatan | Kanan: kupon buttons
+   ══════════════════════════════ */
 .page{
+  width:100vw;height:100vh;
+  display:grid;
+  grid-template-columns:220px 1fr 180px;
+  grid-template-rows:1fr auto;
+  gap:0;
   position:relative;z-index:1;
-  width:100%;max-width:1100px;
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  padding:12px 20px 8px;
-  gap:8px;
 }
 
-/* ── TOP BAR ── */
-.top-bar{
-  display:flex;align-items:center;justify-content:space-between;
+/* ── KIRI: info program ── */
+.panel-left{
+  grid-column:1;grid-row:1;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:20px 16px;
+  border-right:1px solid rgba(240,192,64,0.1);
   gap:12px;
 }
-.top-left{display:flex;align-items:center;gap:12px;}
-.top-logo{width:52px;height:52px;border-radius:50%;
-  background:rgba(255,255,255,0.08);
-  border:2px solid rgba(240,192,64,0.5);
-  display:flex;align-items:center;justify-content:center;
-  overflow:hidden;flex-shrink:0;
+.logo-circle{
+  width:72px;height:72px;border-radius:50%;
+  background:rgba(255,255,255,0.05);
+  border:2px solid rgba(240,192,64,0.4);
+  overflow:hidden;display:flex;align-items:center;justify-content:center;
 }
-.top-logo img{width:100%;height:100%;object-fit:cover;}
-.top-info .prog-title{font-family:'Playfair Display',serif;font-size:15px;color:#fff;font-weight:700;line-height:1.2;}
-.top-info .prog-title span{color:#f0c040;}
-.top-info .prog-sub{font-size:10px;color:rgba(240,192,64,0.8);letter-spacing:1px;font-weight:600;margin-bottom:2px;}
-
-.top-stats{display:flex;gap:8px;}
-.stat-pill{
-  background:rgba(255,255,255,0.07);
-  border:1px solid rgba(240,192,64,0.25);
-  border-radius:12px;padding:6px 14px;text-align:center;min-width:80px;
+.logo-circle img{width:100%;height:100%;object-fit:cover;}
+.prog-kempen{
+  font-size:8px;letter-spacing:1.5px;font-weight:700;
+  color:rgba(240,192,64,0.7);text-align:center;text-transform:uppercase;
 }
-.stat-pill .sp-num{font-size:22px;font-weight:900;color:#f0c040;line-height:1;}
-.stat-pill .sp-lbl{font-size:8px;color:rgba(255,255,255,0.5);letter-spacing:0.8px;margin-top:2px;}
-
-/* ── MIDDLE: 3 BUTTONS + CIRCLE ── */
-.middle{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:12px;
-  flex:1;
-  width:100%;
+.prog-title{
+  font-family:'Playfair Display',serif;
+  font-size:14px;font-weight:800;color:#fff;
+  text-align:center;line-height:1.3;
 }
-
-/* Kupon buttons */
-.kupon-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
-
-.kupon-btn{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  width:160px;min-height:72px;
-  border-radius:18px;border:3px solid transparent;
-  cursor:pointer;transition:all 0.25s;
-  font-family:'Montserrat',sans-serif;
-  position:relative;overflow:hidden;
-  box-shadow:0 4px 15px rgba(0,0,0,0.3);
-  user-select:none;
-  z-index:10;
-  pointer-events:auto;
-  -webkit-tap-highlight-color:rgba(255,255,255,0.2);
-  touch-action:manipulation;
+.prog-title span{color:#f0c040;}
+.prog-pills{display:flex;flex-direction:column;gap:4px;align-items:center;}
+.pill{
+  font-size:9px;color:rgba(255,255,255,0.55);
+  background:rgba(255,255,255,0.06);
+  border-radius:10px;padding:3px 10px;
 }
-.kupon-btn:hover{transform:translateY(-3px);box-shadow:0 8px 25px rgba(0,0,0,0.4);}
-.kupon-btn.active{transform:translateY(-4px);}
-.kupon-btn .kb-icon{font-size:24px;margin-bottom:4px;}
-.kupon-btn .kb-nama{font-size:13px;font-weight:900;letter-spacing:0.5px;}
-.kupon-btn .kb-sub{font-size:9px;opacity:0.85;margin-top:2px;text-align:center;line-height:1.3;}
-.kupon-btn .kb-count{
-  position:absolute;top:6px;right:8px;
-  font-size:9px;font-weight:800;
-  background:rgba(0,0,0,0.25);border-radius:20px;padding:1px 6px;
+.stats-wrap{display:flex;gap:8px;margin-top:4px;}
+.stat-box{
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(240,192,64,0.2);
+  border-radius:12px;padding:8px 12px;text-align:center;
+}
+.stat-num{font-size:26px;font-weight:900;color:#f0c040;line-height:1;}
+.stat-lbl{font-size:8px;color:rgba(255,255,255,0.4);letter-spacing:0.8px;margin-top:2px;}
+
+/* ── TENGAH: bulatan ── */
+.panel-center{
+  grid-column:2;grid-row:1;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:10px;
+  padding:16px 0;
 }
 
-/* Kupon 1 — Peach */
-.kb-peach{background:linear-gradient(135deg,#f4a06a,#e06830);border-color:#e06830;color:#fff;}
-.kb-peach.active{background:linear-gradient(135deg,#f4a06a,#c85020);border-color:#fff8f0;box-shadow:0 0 25px rgba(240,120,60,0.6);}
-/* Kupon 2 — Kuning */
-.kb-kuning{background:linear-gradient(135deg,#ffe55a,#e8c000);border-color:#e8c000;color:#3a2800;}
-.kb-kuning.active{background:linear-gradient(135deg,#ffe55a,#c8a000);border-color:#fffde0;box-shadow:0 0 25px rgba(240,200,0,0.6);}
-/* Kupon 3 — Pink */
-.kb-pink{background:linear-gradient(135deg,#f48ab8,#d83880);border-color:#d83880;color:#fff;}
-.kb-pink.active{background:linear-gradient(135deg,#f48ab8,#b82068);border-color:#ffe0f0;box-shadow:0 0 25px rgba(220,60,130,0.6);}
-
-/* ── BULATAN PREMIUM ── */
+/* bulatan */
 .circle-wrap{
   position:relative;
-  width:320px;height:320px;
+  width:min(55vh, 380px);
+  height:min(55vh, 380px);
   flex-shrink:0;
 }
-/* Glow ring luar */
-.circle-wrap::before{
-  content:'';position:absolute;inset:-8px;border-radius:50%;
-  background:conic-gradient(from 0deg, #f0c040, #e06830, #f48ab8, #ffe55a, #f0c040);
-  animation:spinRing 4s linear infinite;
-  opacity:0.5;
+.ring-glow{
+  position:absolute;inset:-6px;border-radius:50%;
+  background:conic-gradient(from 0deg,#f0c040,#e06830,#f48ab8,#ffe55a,#f0c040);
+  animation:spinRing 5s linear infinite;
   pointer-events:none;
-  z-index:0;
 }
 @keyframes spinRing{to{transform:rotate(360deg);}}
-
-.circle-outer{
-  position:absolute;inset:4px;border-radius:50%;
-  background:linear-gradient(145deg,#0d2850,#071428);
-  border:3px solid rgba(240,192,64,0.3);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  text-align:center;padding:28px;
-  box-shadow:inset 0 0 40px rgba(0,0,0,0.5);
-  cursor:pointer;
-  transition:all 0.2s;
-  overflow:hidden;
-  z-index:1;
-  position:relative;
+.ring-mask{
+  position:absolute;inset:3px;border-radius:50%;
+  background:#040d1a;
+  pointer-events:none;
 }
-.circle-outer:hover{border-color:rgba(240,192,64,0.6);}
-
+.circle-inner{
+  position:absolute;inset:8px;border-radius:50%;
+  background:linear-gradient(145deg,#0d2850,#071428);
+  border:2px solid rgba(240,192,64,0.25);
+  box-shadow:inset 0 0 50px rgba(0,0,0,0.6),0 0 40px rgba(10,31,61,0.8);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;padding:24px;
+  overflow:hidden;
+}
 .circ-lbl{
-  font-size:10px;font-weight:700;letter-spacing:2px;
-  color:rgba(240,192,64,0.7);margin-bottom:10px;
+  font-size:9px;font-weight:700;letter-spacing:2px;
+  color:rgba(240,192,64,0.6);margin-bottom:12px;
+  text-transform:uppercase;
 }
 .circ-name{
   font-family:'Playfair Display',serif;
-  font-size:28px;font-weight:800;
-  color:#fff;line-height:1.15;
+  font-size:min(5vh,32px);font-weight:800;
+  color:#fff;line-height:1.2;
   word-break:break-word;
-  transition:all 0.1s;
-  min-height:70px;display:flex;align-items:center;justify-content:center;
+  min-height:80px;
+  display:flex;align-items:center;justify-content:center;
+  transition:color 0.2s;
 }
 .circ-name.idle{
   font-family:'Montserrat',sans-serif;
-  font-size:14px;font-weight:600;
-  color:rgba(255,255,255,0.4);
-  min-height:70px;
+  font-size:13px;font-weight:500;
+  color:rgba(255,255,255,0.3);
+  min-height:80px;
 }
 .circ-name.rolling{
-  font-size:22px;
   color:#f0c040;
-  animation:flicker 0.08s infinite;
+  font-size:min(4.5vh,28px);
+  animation:flicker 0.1s infinite;
 }
-@keyframes flicker{0%{opacity:1;}50%{opacity:0.7;}100%{opacity:1;}}
+@keyframes flicker{0%{opacity:1;}50%{opacity:0.6;}100%{opacity:1;}}
+.circ-cb{font-size:12px;font-weight:700;color:#f0c040;margin-top:8px;letter-spacing:1px;}
+.circ-jab{font-size:10px;color:rgba(255,255,255,0.45);margin-top:4px;line-height:1.3;}
 
-.circ-cb{font-size:13px;font-weight:700;color:#f0c040;margin-top:8px;letter-spacing:1px;}
-.circ-jab{font-size:10px;color:rgba(255,255,255,0.5);margin-top:4px;line-height:1.3;}
-
-/* Instruction text bawah bulatan */
-.circ-hint{
-  font-size:11px;color:rgba(255,255,255,0.35);
-  letter-spacing:1px;margin-top:10px;text-align:center;
-}
-
-/* ── SENARAI PEMENANG ── */
-.pemenang-row{
-  display:flex;gap:8px;flex-wrap:wrap;justify-content:center;
-  max-height:80px;overflow-y:auto;
-  padding:0 10px;
-}
-.pemenang-chip{
-  display:flex;align-items:center;gap:6px;
-  border-radius:20px;padding:4px 12px 4px 8px;
-  font-size:11px;font-weight:700;color:#fff;
-  box-shadow:0 2px 8px rgba(0,0,0,0.3);
-}
-.pemenang-chip.kat1{background:linear-gradient(90deg,#e06830,#f4a06a);}
-.pemenang-chip.kat2{background:linear-gradient(90deg,#c8a000,#ffe55a);color:#3a2800;}
-.pemenang-chip.kat3{background:linear-gradient(90deg,#d83880,#f48ab8);}
-
-/* ── BOTTOM BAR ── */
-.bottom-bar{
-  text-align:center;
-  font-size:9px;color:rgba(255,255,255,0.2);
-  letter-spacing:1.5px;
-}
-
-/* ── RESET BUTTON ── */
-.btn-reset-small{
-  background:rgba(240,192,64,0.15);
-  border:2px solid rgba(240,192,64,0.5);
+/* reset button */
+.btn-reset{
+  background:rgba(240,192,64,0.12);
+  border:1.5px solid rgba(240,192,64,0.45);
   color:#f0c040;
-  border-radius:20px;padding:8px 24px;
-  font-size:12px;font-weight:700;font-family:'Montserrat',sans-serif;
-  cursor:pointer;display:none;margin-top:6px;
+  border-radius:20px;padding:7px 22px;
+  font-size:11px;font-weight:700;font-family:'Montserrat',sans-serif;
+  cursor:pointer;display:none;
   letter-spacing:1px;
   touch-action:manipulation;
+}
+.btn-reset:active{background:rgba(240,192,64,0.3);}
+
+/* pemenang chips */
+.pemenang-row{
+  display:flex;gap:6px;flex-wrap:wrap;justify-content:center;
+  max-height:52px;overflow:hidden;padding:0 8px;
+}
+.pchip{
+  border-radius:20px;padding:3px 10px;
+  font-size:10px;font-weight:700;color:#fff;
+  box-shadow:0 2px 6px rgba(0,0,0,0.3);white-space:nowrap;
+}
+.pchip.kat1{background:linear-gradient(90deg,#c85020,#f4a06a);}
+.pchip.kat2{background:linear-gradient(90deg,#a07800,#ffe55a);color:#3a2800;}
+.pchip.kat3{background:linear-gradient(90deg,#b82068,#f48ab8);}
+
+/* ── KANAN: kupon buttons ── */
+.panel-right{
+  grid-column:3;grid-row:1;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:20px 12px;
+  border-left:1px solid rgba(240,192,64,0.1);
+  gap:12px;
+}
+.kupon-btn{
+  width:150px;min-height:78px;
+  border-radius:18px;border:3px solid transparent;
+  cursor:pointer;
+  font-family:'Montserrat',sans-serif;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:10px 8px;
+  position:relative;overflow:hidden;
+  box-shadow:0 4px 15px rgba(0,0,0,0.35);
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+  transition:transform 0.15s,box-shadow 0.15s;
   z-index:10;
-  -webkit-tap-highlight-color:rgba(240,192,64,0.2);
 }
-.btn-reset-small:hover{background:rgba(240,192,64,0.3);color:#fff;}
+.kupon-btn:active{transform:scale(0.95);}
+.kupon-btn.active{transform:translateY(-3px);border-color:rgba(255,255,255,0.7);}
+.kb-icon{font-size:22px;margin-bottom:4px;}
+.kb-nama{font-size:14px;font-weight:900;letter-spacing:0.5px;}
+.kb-sub{font-size:8.5px;opacity:0.85;margin-top:2px;text-align:center;line-height:1.3;}
+.kb-count{
+  font-size:9px;font-weight:800;
+  background:rgba(0,0,0,0.2);border-radius:20px;
+  padding:2px 7px;margin-top:4px;
+}
+.kb-peach{background:linear-gradient(135deg,#f4a06a,#d05020);color:#fff;}
+.kb-peach.active{box-shadow:0 0 25px rgba(240,100,40,0.7);}
+.kb-kuning{background:linear-gradient(135deg,#ffe55a,#d8a800);color:#3a2800;}
+.kb-kuning.active{box-shadow:0 0 25px rgba(240,200,0,0.7);}
+.kb-pink{background:linear-gradient(135deg,#f48ab8,#c02070);color:#fff;}
+.kb-pink.active{box-shadow:0 0 25px rgba(220,50,120,0.7);}
 
-/* FULLSCREEN BTN */
+/* ── FOOTER ── */
+.footer{
+  grid-column:1/span 3;grid-row:2;
+  text-align:center;padding:6px;
+  font-size:8px;color:rgba(255,255,255,0.18);letter-spacing:2px;
+  border-top:1px solid rgba(255,255,255,0.04);
+}
+
+/* fullscreen btn */
 .btn-fs{
-  position:fixed;bottom:16px;right:16px;z-index:100;
-  width:40px;height:40px;border-radius:50%;
-  background:rgba(240,192,64,0.15);border:1px solid rgba(240,192,64,0.4);
-  color:#f0c040;font-size:18px;cursor:pointer;
+  position:fixed;bottom:12px;right:12px;z-index:200;
+  width:36px;height:36px;border-radius:50%;
+  background:rgba(240,192,64,0.12);
+  border:1px solid rgba(240,192,64,0.35);
+  color:#f0c040;font-size:16px;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
-}
-
-/* Landscape tablet */
-@media (orientation:landscape){
-  .page{ padding:8px 20px 6px; gap:6px; }
-  .circle-wrap{width:260px;height:260px;}
-  .circ-name{font-size:24px;}
-  .kupon-btn{width:130px;min-height:58px;}
-  .kupon-row{gap:8px;}
-  .top-bar{width:100%;}
-}
-@media (orientation:landscape) and (min-width:1000px){
-  .circle-wrap{width:300px;height:300px;}
-  .circ-name{font-size:28px;}
-  .kupon-btn{width:150px;min-height:64px;}
+  touch-action:manipulation;
 }
 </style>
 </head>
@@ -243,75 +235,72 @@ canvas.konfeti{position:fixed;inset:0;pointer-events:none;z-index:999;}
 
 <div class="page">
 
-  <!-- TOP BAR -->
-  <div class="top-bar">
-    <div class="top-left">
-      <div class="top-logo">
-        <img src="https://base44.app/api/apps/6a044032cecb45c0033adc72/files/mp/public/6a044032cecb45c0033adc72/a5e121e13_LOGO-MPKP-transparent.png" alt="MPKP"/>
-      </div>
-      <div class="top-info">
-        <div class="prog-sub">KEMPEN KESIHATAN PERSEKITARAN 2026</div>
-        <div class="prog-title">Program <span>Gotong-Royong</span> Medan Selera Changlun</div>
-      </div>
+  <!-- KIRI -->
+  <div class="panel-left">
+    <div class="logo-circle">
+      <img src="https://base44.app/api/apps/6a044032cecb45c0033adc72/files/mp/public/6a044032cecb45c0033adc72/a5e121e13_LOGO-MPKP-transparent.png" alt="MPKP"/>
     </div>
-    <div class="top-stats">
-      <div class="stat-pill">
-        <div class="sp-num" id="statPeserta">—</div>
-        <div class="sp-lbl">PESERTA</div>
+    <div class="prog-kempen">Kempen Kesihatan Persekitaran 2026</div>
+    <div class="prog-title">Program <span>Gotong-Royong</span><br>Medan Selera Changlun</div>
+    <div class="prog-pills">
+      <span class="pill">📅 20 Mei 2026</span>
+      <span class="pill">🕗 8.00 Pagi</span>
+      <span class="pill">📍 Medan Selera Changlun</span>
+    </div>
+    <div class="stats-wrap">
+      <div class="stat-box">
+        <div class="stat-num" id="statPeserta">—</div>
+        <div class="stat-lbl">PESERTA</div>
       </div>
-      <div class="stat-pill">
-        <div class="sp-num" id="statPemenang">0</div>
-        <div class="sp-lbl">PEMENANG</div>
+      <div class="stat-box">
+        <div class="stat-num" id="statPemenang">0</div>
+        <div class="stat-lbl">MENANG</div>
       </div>
     </div>
   </div>
 
-  <!-- MIDDLE -->
-  <div class="middle">
-
-    <!-- 3 KUPON BUTTONS -->
-    <div class="kupon-row">
-      <button class="kupon-btn kb-peach active" id="btnKat1" onclick="pilihDanCabut(this,'Kupon 1','kat1')">
-        <span class="kb-icon">🏛️</span>
-        <div class="kb-nama">KUPON 1</div>
-        <div class="kb-sub">MPKP &amp; Ahli Majlis</div>
-        <div class="kb-count" id="countKat1">—</div>
-      </button>
-      <button class="kupon-btn kb-kuning" id="btnKat2" onclick="pilihDanCabut(this,'Kupon 2','kat2')">
-        <span class="kb-icon">🏢</span>
-        <div class="kb-nama">KUPON 2</div>
-        <div class="kb-sub">Agensi / e-IDAMAN</div>
-        <div class="kb-count" id="countKat2">—</div>
-      </button>
-      <button class="kupon-btn kb-pink" id="btnKat3" onclick="pilihDanCabut(this,'Kupon 3','kat3')">
-        <span class="kb-icon">🏪</span>
-        <div class="kb-nama">KUPON 3</div>
-        <div class="kb-sub">Peniaga &amp; Penduduk</div>
-        <div class="kb-count" id="countKat3">—</div>
-      </button>
-    </div>
-
-    <!-- BULATAN PREMIUM -->
-    <div class="circle-wrap" id="circleWrap">
-      <div class="circle-outer" id="circleOuter">
+  <!-- TENGAH: BULATAN -->
+  <div class="panel-center">
+    <div class="circle-wrap">
+      <div class="ring-glow"></div>
+      <div class="ring-mask"></div>
+      <div class="circle-inner">
         <div class="circ-lbl" id="circLbl">SEDIA UNTUK CABUTAN</div>
-        <div class="circ-name idle" id="circName">Tekan butang untuk mula</div>
+        <div class="circ-name idle" id="circName">Tekan butang kupon untuk mula</div>
         <div class="circ-cb" id="circCb"></div>
         <div class="circ-jab" id="circJab"></div>
       </div>
     </div>
-
-    <button class="btn-reset-small" id="btnReset" onclick="resetCabutan()">↺ Cabutan Baharu</button>
-
-    <!-- SENARAI PEMENANG -->
+    <button class="btn-reset" id="btnReset" onclick="resetCabutan()">↺ Cabutan Baharu</button>
     <div class="pemenang-row" id="pemenangRow"></div>
   </div>
 
-  <!-- BOTTOM -->
-  <div class="bottom-bar">MAJLIS PERBANDARAN KUBANG PASU · MPKP · 2026</div>
+  <!-- KANAN: KUPON BUTTONS -->
+  <div class="panel-right">
+    <button class="kupon-btn kb-peach active" id="btnKat1" onclick="pilihDanCabut(this,'Kupon 1','kat1')">
+      <span class="kb-icon">🏛️</span>
+      <div class="kb-nama">KUPON 1</div>
+      <div class="kb-sub">MPKP &amp; Ahli Majlis</div>
+      <div class="kb-count" id="countKat1">—</div>
+    </button>
+    <button class="kupon-btn kb-kuning" id="btnKat2" onclick="pilihDanCabut(this,'Kupon 2','kat2')">
+      <span class="kb-icon">🏢</span>
+      <div class="kb-nama">KUPON 2</div>
+      <div class="kb-sub">Agensi / e-IDAMAN</div>
+      <div class="kb-count" id="countKat2">—</div>
+    </button>
+    <button class="kupon-btn kb-pink" id="btnKat3" onclick="pilihDanCabut(this,'Kupon 3','kat3')">
+      <span class="kb-icon">🏪</span>
+      <div class="kb-nama">KUPON 3</div>
+      <div class="kb-sub">Peniaga &amp; Penduduk</div>
+      <div class="kb-count" id="countKat3">—</div>
+    </button>
+  </div>
+
+  <div class="footer">MAJLIS PERBANDARAN KUBANG PASU · MPKP · 2026</div>
 </div>
 
-<button class="btn-fs" onclick="toggleFs()" title="Fullscreen">⛶</button>
+<button class="btn-fs" onclick="toggleFs()">⛶</button>
 
 <script>
 const BACKEND = 'https://base44.app/api/apps/6a044032cecb45c0033adc72/functions/cabutanBertuah';
@@ -325,8 +314,8 @@ let drumInterval = null;
 let pemenangList = [];
 
 const KATEGORI_MAP = {
-  kat1:{ label:'MPKP & Ahli Majlis', jabatan:['Majlis Perbandaran Kubang Pasu','Ahli Majlis, MPKP','MPKP'] },
-  kat2:{ label:'Agensi', jabatan:['e-IDAMAN','SWCORP','Jabatan Pengairan dan Saliran','JPS','e-Idaman','SWCorp'] },
+  kat1:{ label:'MPKP & Ahli Majlis', jabatan:['Majlis Perbandaran Kubang Pasu','Ahli Majlis, MPKP','MPKP','Majlis Perbandaran'] },
+  kat2:{ label:'Agensi', jabatan:['e-IDAMAN','SWCORP','Jabatan Pengairan dan Saliran','JPS','e-Idaman','SWCorp','Jabatan Pengairan'] },
   kat3:{ label:'Peniaga & Penduduk', jabatan:['Peniaga / Wakil Medan Selera Changlun','Peniaga','Wakil Peniaga','Penduduk Changlun','Penduduk','Lain-lain'] }
 };
 
@@ -341,220 +330,192 @@ function getPesertaKategori(kat){
 
 function updateCounts(){
   ['kat1','kat2','kat3'].forEach((k,i)=>{
-    const total=getPesertaKategori(k).length;
-    const menang=pemenangList.filter(p=>p.kat===k).length;
-    const el=document.getElementById('countKat'+(i+1));
-    if(el) el.textContent=(total-menang)+' layak';
+    const total = getPesertaKategori(k).length;
+    const menang = pemenangList.filter(p=>p.kat===k).length;
+    const layak = total - menang;
+    const el = document.getElementById('countKat'+(i+1));
+    if(el) el.textContent = layak + ' layak';
   });
 }
 
-// ── LOAD PESERTA ──
 async function loadPeserta(){
   try{
-    const res=await fetch(SHEETS_URL,{
+    const res = await fetch(SHEETS_URL,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({})
     });
     if(!res.ok) throw new Error('HTTP '+res.status);
-    const data=await res.json();
-    const rows=data.data||data.peserta||[];
-    semuaPeserta=rows.filter(r=>r.nama&&r.nama.trim()!=='');
-    document.getElementById('statPeserta').textContent=semuaPeserta.length;
+    const data = await res.json();
+    const rows = data.data || data.peserta || [];
+    semuaPeserta = rows.filter(r=>r.nama && r.nama.trim()!=='');
+    document.getElementById('statPeserta').textContent = semuaPeserta.length;
     updateCounts();
-    console.log('✅ Loaded:',semuaPeserta.length,'peserta');
+    console.log('✅ Loaded:', semuaPeserta.length, 'peserta');
   }catch(e){
     console.error('❌',e);
-    document.getElementById('statPeserta').textContent='!';
+    document.getElementById('statPeserta').textContent = '!';
   }
 }
 
-// ── PILIH KATEGORI & TERUS CABUT ──
+function setAllButtons(enabled){
+  document.querySelectorAll('.kupon-btn').forEach(b=>{
+    b.disabled = !enabled;
+    b.style.opacity = enabled ? '' : '0.5';
+  });
+}
+
 function pilihDanCabut(el, nama, kat){
-  // Set aktif
+  if(sedangCabut) return;
   document.querySelectorAll('.kupon-btn').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
-  hadiahAktif={nama, kat};
-  // Terus mula cabutan
+  hadiahAktif = { nama, kat };
   mulaCabutan();
 }
 
-// ── DRUM ROLL ──
 function mulaDrum(){
-  const katPeserta=getPesertaKategori(hadiahAktif.kat);
-  const nameEl=document.getElementById('circName');
-  nameEl.className='circ-name rolling';
-  document.getElementById('circLbl').textContent='🎰 SEDANG MENCABUT...';
-  document.getElementById('circCb').textContent='';
-  document.getElementById('circJab').textContent='';
-  drumInterval=setInterval(()=>{
-    const idx=Math.floor(Math.random()*katPeserta.length);
-    nameEl.textContent=katPeserta[idx]?.nama||'...';
-  },80);
+  const katPeserta = getPesertaKategori(hadiahAktif.kat);
+  const nameEl = document.getElementById('circName');
+  nameEl.className = 'circ-name rolling';
+  document.getElementById('circLbl').textContent = '🎰 SEDANG MENCABUT...';
+  document.getElementById('circCb').textContent = '';
+  document.getElementById('circJab').textContent = '';
+  const pool = katPeserta.length > 0 ? katPeserta : semuaPeserta;
+  drumInterval = setInterval(()=>{
+    const idx = Math.floor(Math.random()*pool.length);
+    nameEl.textContent = pool[idx]?.nama || '...';
+  }, 80);
 }
 
-// ── MULA CABUTAN ──
 async function mulaCabutan(){
   if(sedangCabut) return;
 
-  const katPeserta=getPesertaKategori(hadiahAktif.kat);
-  const layak=katPeserta.filter(p=>!sudahMenang.includes(p.noIc||p.ic||p.no_ic));
-  if(katPeserta.length>0 && layak.length===0){
-    const nameEl=document.getElementById('circName');
-    nameEl.className='circ-name';
-    nameEl.textContent='Tiada peserta layak!';
-    document.getElementById('circLbl').textContent='⚠️ HABIS';
+  const katPeserta = getPesertaKategori(hadiahAktif.kat);
+  const layak = katPeserta.filter(p=>!sudahMenang.includes(p.noIc||p.ic||p.no_ic));
+
+  if(katPeserta.length > 0 && layak.length === 0){
+    document.getElementById('circName').className = 'circ-name';
+    document.getElementById('circName').textContent = 'Semua dah menang!';
+    document.getElementById('circLbl').textContent = '⚠️ TIADA LAYAK';
     return;
   }
 
-  sedangCabut=true;
-  // Disable semua button
-  document.querySelectorAll('.kupon-btn').forEach(b=>b.style.pointerEvents='none');
-  document.getElementById('btnReset').style.display='none';
+  sedangCabut = true;
+  setAllButtons(false);
+  document.getElementById('btnReset').style.display = 'none';
   mulaDrum();
 
-  try{
-    const res=await fetch(BACKEND,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({jumlahPemenang:1, kategori: hadiahAktif.kat, sudahMenang})
-    });
-    const data=await res.json();
+  // Pilih pemenang secara lokal dari data yang ada
+  await new Promise(r=>setTimeout(r, 3500));
+  clearInterval(drumInterval);
 
-    await new Promise(r=>setTimeout(r,3000));
-    clearInterval(drumInterval);
+  const pool = layak.length > 0 ? layak : (katPeserta.length > 0 ? katPeserta : semuaPeserta);
+  const winner = pool[Math.floor(Math.random()*pool.length)];
 
-    if(data.error) throw new Error(data.error);
-
-    const pemenang=data.pemenang?.[0];
-    if(!pemenang) throw new Error('Tiada pemenang dikembalikan');
-
-    // Slow down
-    let count=0;
-    const slow=setInterval(()=>{
-      const arr=layak.length>0?layak:katPeserta;
-      document.getElementById('circName').textContent=arr[Math.floor(Math.random()*arr.length)]?.nama||'...';
-      count++;
-      if(count>8){ clearInterval(slow); paparPemenang(pemenang); }
-    },200);
-
-  }catch(err){
-    clearInterval(drumInterval);
-    const nameEl=document.getElementById('circName');
-    // Pilih secara lokal jika backend gagal
-    if(layak.length>0){
-      const winner=layak[Math.floor(Math.random()*layak.length)];
-      let count=0;
-      const slow=setInterval(()=>{
-        document.getElementById('circName').textContent=layak[Math.floor(Math.random()*layak.length)]?.nama||'...';
-        count++;
-        if(count>8){ clearInterval(slow); paparPemenang(winner); }
-      },200);
-    } else {
-      nameEl.className='circ-name';
-      nameEl.textContent='Ralat: '+err.message;
-      sedangCabut=false;
-      document.querySelectorAll('.kupon-btn').forEach(b=>b.style.pointerEvents='');
-    }
-  }
+  // Slow down ke nama pemenang
+  let count = 0;
+  const slow = setInterval(()=>{
+    document.getElementById('circName').textContent = pool[Math.floor(Math.random()*pool.length)]?.nama || '...';
+    count++;
+    if(count > 10){ clearInterval(slow); paparPemenang(winner); }
+  }, 200);
 }
 
-// ── PAPAR PEMENANG ──
 function paparPemenang(p){
-  const nama=p.nama||p.name||'???';
-  const jabatan=p.jabatan||'';
-  const noCabutan=p.noCabutan||p.no_cabutan||'';
+  const nama = p.nama || '???';
+  const jabatan = p.jabatan || '';
+  const noCabutan = p.noCabutan || p.no_cabutan || '';
 
-  const nameEl=document.getElementById('circName');
-  nameEl.className='circ-name';
-  nameEl.textContent=nama;
-  document.getElementById('circLbl').textContent='🎊 PEMENANG '+hadiahAktif.nama.toUpperCase();
-  document.getElementById('circCb').textContent=noCabutan?'🎫 '+noCabutan:'';
-  document.getElementById('circJab').textContent=jabatan;
+  const nameEl = document.getElementById('circName');
+  nameEl.className = 'circ-name';
+  nameEl.textContent = nama;
+  document.getElementById('circLbl').textContent = '🎊 PEMENANG ' + hadiahAktif.nama.toUpperCase();
+  document.getElementById('circCb').textContent = noCabutan ? '🎫 ' + noCabutan : '';
+  document.getElementById('circJab').textContent = jabatan;
 
-  if(p.noIc||p.ic) sudahMenang.push(p.noIc||p.ic);
-  pemenangList.push({...p,hadiah:hadiahAktif.nama,kat:hadiahAktif.kat});
-  document.getElementById('statPemenang').textContent=pemenangList.length;
+  const ic = p.noIc || p.ic || p.no_ic;
+  if(ic) sudahMenang.push(ic);
+
+  pemenangList.push({...p, hadiah:hadiahAktif.nama, kat:hadiahAktif.kat});
+  document.getElementById('statPemenang').textContent = pemenangList.length;
   updateCounts();
   renderPemenang();
   launchKonfeti();
 
   // Sebut nama
   try{
-    const u=new SpeechSynthesisUtterance('Tahniah kepada '+nama);
-    u.lang='ms-MY';u.rate=0.85;
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance('Tahniah kepada ' + nama);
+    u.lang = 'ms-MY'; u.rate = 0.85;
     speechSynthesis.speak(u);
   }catch(e){}
 
-  sedangCabut=false;
-  document.querySelectorAll('.kupon-btn').forEach(b=>b.style.pointerEvents='');
-  document.getElementById('btnReset').style.display='inline-block';
+  sedangCabut = false;
+  setAllButtons(true);
+  document.getElementById('btnReset').style.display = 'inline-block';
 }
 
 function renderPemenang(){
-  const row=document.getElementById('pemenangRow');
-  row.innerHTML=pemenangList.map(p=>`
-    <div class="pemenang-chip ${p.kat}">
-      ${p.hadiah}: ${p.nama}
-    </div>`).join('');
+  const row = document.getElementById('pemenangRow');
+  row.innerHTML = pemenangList.map(p=>`
+    <div class="pchip ${p.kat}">${p.hadiah}: ${p.nama}</div>
+  `).join('');
 }
 
 function resetCabutan(){
-  document.getElementById('circName').className='circ-name idle';
-  document.getElementById('circName').textContent='Tekan butang untuk mula';
-  document.getElementById('circLbl').textContent='SEDIA UNTUK CABUTAN';
-  document.getElementById('circCb').textContent='';
-  document.getElementById('circJab').textContent='';
-  document.getElementById('btnReset').style.display='none';
-  sedangCabut=false;
-  // Enable semua kupon button semula
-  document.querySelectorAll('.kupon-btn').forEach(b=>{
-    b.style.pointerEvents='';
-    b.disabled=false;
-  });
-  // Clear drum interval kalau ada
-  if(drumInterval){ clearInterval(drumInterval); drumInterval=null; }
+  if(drumInterval){ clearInterval(drumInterval); drumInterval = null; }
+  document.getElementById('circName').className = 'circ-name idle';
+  document.getElementById('circName').textContent = 'Tekan butang kupon untuk mula';
+  document.getElementById('circLbl').textContent = 'SEDIA UNTUK CABUTAN';
+  document.getElementById('circCb').textContent = '';
+  document.getElementById('circJab').textContent = '';
+  document.getElementById('btnReset').style.display = 'none';
+  sedangCabut = false;
+  setAllButtons(true);
 }
 
-// ── KONFETI ──
 function launchKonfeti(){
-  const canvas=document.getElementById('konfeti');
-  const ctx=canvas.getContext('2d');
-  canvas.width=window.innerWidth;
-  canvas.height=window.innerHeight;
-  const colors=['#f0c040','#e06830','#f48ab8','#fff','#ffe55a','#7cf0c0'];
-  let particles=Array.from({length:120},()=>({
-    x:Math.random()*canvas.width,y:-20,
-    vx:(Math.random()-0.5)*4,vy:Math.random()*5+2,
+  const canvas = document.getElementById('konfeti');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const colors = ['#f0c040','#e06830','#f48ab8','#fff','#ffe55a','#a0f0c0','#60c0ff'];
+  let particles = Array.from({length:150},()=>({
+    x:Math.random()*canvas.width, y:-20,
+    vx:(Math.random()-0.5)*5, vy:Math.random()*6+2,
     color:colors[Math.floor(Math.random()*colors.length)],
-    size:Math.random()*8+3,rot:Math.random()*360,
-    rotV:(Math.random()-0.5)*6,alpha:1
+    size:Math.random()*8+3,
+    rot:Math.random()*360, rotV:(Math.random()-0.5)*8,
+    alpha:1
   }));
-  let frame=0;
+  let frame = 0;
   function draw(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
     particles.forEach(p=>{
-      ctx.save();ctx.globalAlpha=p.alpha;ctx.fillStyle=p.color;
-      ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);
-      ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size/2);
+      ctx.save();
+      ctx.globalAlpha = p.alpha;
+      ctx.fillStyle = p.color;
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot*Math.PI/180);
+      ctx.fillRect(-p.size/2,-p.size/4,p.size,p.size/2);
       ctx.restore();
-      p.x+=p.vx;p.y+=p.vy;p.rot+=p.rotV;
-      if(frame>60) p.alpha-=0.012;
+      p.x += p.vx; p.y += p.vy;
+      p.rot += p.rotV;
+      if(frame > 60) p.alpha -= 0.015;
     });
-    particles=particles.filter(p=>p.alpha>0);
+    particles = particles.filter(p=>p.alpha>0);
     frame++;
-    if(particles.length>0) requestAnimationFrame(draw);
+    if(particles.length > 0) requestAnimationFrame(draw);
     else ctx.clearRect(0,0,canvas.width,canvas.height);
   }
   draw();
 }
 
 function toggleFs(){
-  if(!document.fullscreenElement) document.documentElement.requestFullscreen();
+  if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{});
   else document.exitFullscreen();
 }
 
-// ── INIT ──
 document.addEventListener('DOMContentLoaded', loadPeserta);
 if(document.readyState==='complete'||document.readyState==='interactive') loadPeserta();
 </script>
