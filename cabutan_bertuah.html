@@ -327,15 +327,21 @@ function updateKatInfo() {
 // ── LOAD DATA PESERTA ──
 async function loadPeserta() {
   try {
-    const res = await fetch(SHEETS_URL);
+    const res = await fetch(SHEETS_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({})
+    });
     const data = await res.json();
-    const rows = data.data || [];
+    const rows = data.data || data.peserta || [];
     // Semua peserta layak tanpa perlu status Hadir
     semuaPeserta = rows.filter(r => r.nama && r.nama.trim() !== '');
     const kat1 = getPesertaKategori('kat1').length;
-    document.getElementById('statPeserta').textContent = kat1;
+    document.getElementById('statPeserta').textContent = semuaPeserta.length;
     updateKatInfo();
+    console.log('Loaded:', semuaPeserta.length, 'peserta');
   } catch(e) {
+    console.error('loadPeserta error:', e);
     document.getElementById('statPeserta').textContent = '?';
   }
 }
