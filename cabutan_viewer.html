@@ -15,16 +15,8 @@ body{
   padding:20px 16px 40px;
   min-height:100vh;
 }
-
-/* Header */
-.hdr{
-  display:flex;flex-direction:column;align-items:center;
-  gap:10px;margin-bottom:24px;text-align:center;
-}
-.logo{width:70px;height:70px;border-radius:50%;
-  border:2px solid rgba(240,192,64,0.5);overflow:hidden;
-  background:rgba(255,255,255,0.05);
-}
+.hdr{display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:20px;text-align:center;}
+.logo{width:68px;height:68px;border-radius:50%;border:2px solid rgba(240,192,64,0.5);overflow:hidden;background:rgba(255,255,255,0.05);}
 .logo img{width:100%;height:100%;object-fit:cover;}
 .kempen{font-size:9px;letter-spacing:2px;color:rgba(240,192,64,0.7);text-transform:uppercase;margin-top:4px;}
 .prog{font-family:'Playfair Display',serif;font-size:20px;font-weight:800;color:#fff;line-height:1.3;}
@@ -32,84 +24,41 @@ body{
 .pills{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:6px;}
 .pill{font-size:10px;color:rgba(255,255,255,0.55);background:rgba(255,255,255,0.07);border-radius:10px;padding:4px 12px;}
 
-/* Status */
-.status-bar{
-  display:flex;gap:12px;margin-bottom:24px;
-}
-.stat{
-  background:rgba(255,255,255,0.07);border:1px solid rgba(240,192,64,0.25);
-  border-radius:14px;padding:12px 20px;text-align:center;flex:1;
-}
-.stat-n{font-size:32px;font-weight:900;color:#f0c040;line-height:1;}
+.status-bar{display:flex;gap:12px;margin-bottom:20px;width:100%;max-width:380px;}
+.stat{background:rgba(255,255,255,0.07);border:1px solid rgba(240,192,64,0.25);border-radius:14px;padding:12px 20px;text-align:center;flex:1;}
+.stat-n{font-size:30px;font-weight:900;color:#f0c040;line-height:1;}
 .stat-l{font-size:9px;color:rgba(255,255,255,0.4);letter-spacing:1px;margin-top:3px;}
 
-/* Bulatan */
-.circle-wrap{
-  position:relative;
-  width:min(80vw,320px);height:min(80vw,320px);
-  margin-bottom:20px;
-}
-.ring-glow{
-  position:absolute;inset:-6px;border-radius:50%;
-  background:conic-gradient(from 0deg,#f0c040,#e06830,#f48ab8,#ffe55a,#f0c040);
-  animation:spin 5s linear infinite;pointer-events:none;
-}
+.live-badge{display:flex;align-items:center;gap:6px;background:rgba(255,60,60,0.12);border:1px solid rgba(255,60,60,0.35);border-radius:20px;padding:5px 14px;margin-bottom:18px;font-size:11px;font-weight:700;color:#ff6060;letter-spacing:1px;}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#ff4040;animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.2;}}
+
+.circle-wrap{position:relative;width:min(78vw,300px);height:min(78vw,300px);margin-bottom:20px;}
+.ring-glow{position:absolute;inset:-6px;border-radius:50%;background:conic-gradient(from 0deg,#f0c040,#e06830,#f48ab8,#ffe55a,#f0c040);animation:spin 5s linear infinite;pointer-events:none;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .ring-mask{position:absolute;inset:4px;border-radius:50%;background:#040d1a;pointer-events:none;}
-.circle-inner{
-  position:absolute;inset:10px;border-radius:50%;
-  background:linear-gradient(145deg,#0d2850,#071428);
-  border:2px solid rgba(240,192,64,0.2);
-  box-shadow:inset 0 0 50px rgba(0,0,0,0.6);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  text-align:center;padding:24px;overflow:hidden;
-}
+.circle-inner{position:absolute;inset:10px;border-radius:50%;background:linear-gradient(145deg,#0d2850,#071428);border:2px solid rgba(240,192,64,0.2);box-shadow:inset 0 0 50px rgba(0,0,0,0.6);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:22px;overflow:hidden;}
 .circ-lbl{font-size:9px;font-weight:700;letter-spacing:2px;color:rgba(240,192,64,0.65);margin-bottom:10px;text-transform:uppercase;}
-.circ-name{
-  font-family:'Playfair Display',serif;
-  font-size:26px;font-weight:800;color:#fff;line-height:1.2;
-  word-break:break-word;
-  min-height:70px;display:flex;align-items:center;justify-content:center;
-}
+.circ-name{font-family:'Playfair Display',serif;font-size:24px;font-weight:800;color:#fff;line-height:1.2;word-break:break-word;min-height:65px;display:flex;align-items:center;justify-content:center;}
 .circ-name.idle{font-family:'Montserrat',sans-serif;font-size:13px;font-weight:500;color:rgba(255,255,255,0.3);}
 .circ-name.rolling{color:#f0c040;animation:flicker 0.12s infinite;}
 @keyframes flicker{0%{opacity:1;}50%{opacity:0.5;}100%{opacity:1;}}
-.circ-cb{font-size:13px;font-weight:800;color:#f0c040;margin-top:8px;letter-spacing:1.5px;}
-.circ-jab{font-size:10px;color:rgba(255,255,255,0.4);margin-top:5px;}
+.circ-cb{font-size:12px;font-weight:800;color:#f0c040;margin-top:8px;letter-spacing:1.5px;}
+.circ-jab{font-size:10px;color:rgba(255,255,255,0.4);margin-top:4px;}
 
-/* Live badge */
-.live-badge{
-  display:flex;align-items:center;gap:6px;
-  background:rgba(255,60,60,0.15);border:1px solid rgba(255,60,60,0.4);
-  border-radius:20px;padding:5px 14px;margin-bottom:18px;
-  font-size:11px;font-weight:700;color:#ff6060;letter-spacing:1px;
-}
-.live-dot{width:8px;height:8px;border-radius:50%;background:#ff4040;animation:pulse 1s infinite;}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
-
-/* Senarai pemenang */
 .pemenang-section{width:100%;max-width:400px;}
-.pemenang-title{
-  font-size:12px;font-weight:700;letter-spacing:2px;
-  color:rgba(240,192,64,0.7);text-transform:uppercase;
-  margin-bottom:10px;text-align:center;
-}
-.pchip{
-  display:flex;align-items:center;gap:8px;
-  border-radius:12px;padding:8px 14px;
-  margin-bottom:6px;
-  font-size:13px;font-weight:700;color:#fff;
-}
+.pemenang-title{font-size:11px;font-weight:700;letter-spacing:2px;color:rgba(240,192,64,0.7);text-transform:uppercase;margin-bottom:10px;text-align:center;}
+.pchip{display:flex;align-items:center;gap:8px;border-radius:12px;padding:9px 14px;margin-bottom:7px;font-size:13px;font-weight:700;color:#fff;}
 .pchip.kat1{background:linear-gradient(90deg,#c85020,#f4a06a);}
 .pchip.kat2{background:linear-gradient(90deg,#a07800,#ffe55a);color:#3a2800;}
 .pchip.kat3{background:linear-gradient(90deg,#b82068,#f48ab8);}
-.pchip-num{font-size:10px;opacity:0.7;}
+.pchip-num{font-size:10px;opacity:0.7;min-width:20px;}
+.pchip-jab{font-size:9px;opacity:0.7;font-weight:400;}
 
-.no-winner{font-size:13px;color:rgba(255,255,255,0.3);text-align:center;padding:20px;}
-
-/* Footer */
-.footer-txt{margin-top:30px;font-size:9px;color:rgba(255,255,255,0.15);letter-spacing:2px;text-align:center;}
-.refresh-note{font-size:10px;color:rgba(255,255,255,0.25);text-align:center;margin-top:8px;}
+.no-winner{font-size:13px;color:rgba(255,255,255,0.3);text-align:center;padding:24px;}
+.footer-txt{margin-top:28px;font-size:9px;color:rgba(255,255,255,0.15);letter-spacing:2px;text-align:center;}
+.refresh-note{font-size:10px;color:rgba(255,255,255,0.22);text-align:center;margin-top:6px;}
+.last-update{font-size:9px;color:rgba(240,192,64,0.4);text-align:center;margin-top:4px;}
 </style>
 </head>
 <body>
@@ -159,72 +108,76 @@ body{
 </div>
 
 <div class="footer-txt">MAJLIS PERBANDARAN KUBANG PASU · MPKP · 2026</div>
-<div class="refresh-note">Halaman ini dikemaskini setiap 10 saat</div>
+<div class="refresh-note">Auto-refresh setiap 8 saat</div>
+<div class="last-update" id="lastUpdate"></div>
 
 <script>
-const SHEETS_URL='https://base44.app/api/apps/6a044032cecb45c0033adc72/functions/getLaporanPeserta';
+const BACKEND = 'https://base44.app/api/apps/6a044032cecb45c0033adc72/functions/cabutanBertuah';
+const SHEETS_URL = 'https://base44.app/api/apps/6a044032cecb45c0033adc72/functions/getLaporanPeserta';
 
-// Simpan state tempatan
-let lastPemenang=[];
-let semuaPeserta=[];
+const KAT_MAP = [
+  {kat:'kat1', words:['Majlis Perbandaran Kubang Pasu','Ahli Majlis, MPKP','MPKP']},
+  {kat:'kat2', words:['e-IDAMAN','e-Idaman','SWCORP','SWCorp','Jabatan Pengairan dan Saliran','JPS']},
+  {kat:'kat3', words:['Peniaga / Wakil Medan Selera Changlun','Peniaga','Penduduk Changlun','Penduduk','Lain-lain']}
+];
+
+function getKat(jab){
+  for(const k of KAT_MAP){
+    if(k.words.some(w=>(jab||'').toLowerCase().includes(w.toLowerCase()))) return k.kat;
+  }
+  return 'kat1';
+}
 
 async function loadData(){
   try{
-    const res=await fetch(SHEETS_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})});
-    const data=await res.json();
-    const rows=(data.data||data.peserta||[]).filter(r=>r.nama&&r.nama.trim()!=='');
-    semuaPeserta=rows;
-    document.getElementById('statPeserta').textContent=rows.length;
+    const res = await fetch(SHEETS_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})});
+    const data = await res.json();
+    const rows = (data.data||data.peserta||[]).filter(r=>r.nama&&r.nama.trim()!=='');
 
-    // Cari pemenang — baris dengan status menang atau ada hadiah
-    const winners=rows.filter(r=>r.hadiah||r.status==='Menang'||r.pemenang==='Ya'||r.menang==='Ya');
-    
-    document.getElementById('statPemenang').textContent=winners.length;
+    document.getElementById('statPeserta').textContent = rows.length;
 
-    if(winners.length>0){
-      renderPemenang(winners);
-      // Tunjuk pemenang terkini dalam bulatan
-      const latest=winners[winners.length-1];
-      paparPemenang(latest);
+    // Cari pemenang — status === "Menang" dalam kolum status
+    const winners = rows.filter(r=>{
+      return (r.status||'').trim() === 'Menang';
+    });
+
+    document.getElementById('statPemenang').textContent = winners.length;
+    document.getElementById('lastUpdate').textContent = 'Dikemaskini: ' + new Date().toLocaleTimeString('ms-MY');
+
+    if(winners.length > 0){
+      // Papar pemenang terkini dalam bulatan
+      const latest = winners[winners.length-1];
+      document.getElementById('circLbl').textContent = '🎊 PEMENANG TERKINI';
+      document.getElementById('circName').className = 'circ-name';
+      document.getElementById('circName').textContent = latest.nama;
+      document.getElementById('circCb').textContent = latest.noCabutan ? '🎫 '+latest.noCabutan : '';
+      document.getElementById('circJab').textContent = latest.jabatan||'';
+
+      // Render senarai
+      document.getElementById('pemenangList').innerHTML = winners.map((p,i)=>`
+        <div class="pchip ${getKat(p.jabatan)}">
+          <span class="pchip-num">#${i+1}</span>
+          <div>
+            <div>${p.nama}</div>
+            <div class="pchip-jab">${p.jabatan||''} ${p.hadiah?'· '+p.hadiah:''}</div>
+          </div>
+        </div>
+      `).join('');
+    } else {
+      // Tunjuk stats sahaja, bulatan tetap idle
+      document.getElementById('circLbl').textContent = 'MENUNGGU CABUTAN';
+      document.getElementById('circName').className = 'circ-name idle';
+      document.getElementById('circName').textContent = 'Menunggu penganjur...';
+      document.getElementById('pemenangList').innerHTML = '<div class="no-winner">Belum ada pemenang lagi</div>';
     }
-  }catch(e){console.error(e);}
-}
-
-function paparPemenang(p){
-  document.getElementById('circLbl').textContent='🎊 PEMENANG TERKINI';
-  document.getElementById('circName').className='circ-name';
-  document.getElementById('circName').textContent=p.nama||'???';
-  document.getElementById('circCb').textContent=(p.noCabutan||p.no_cabutan)?'🎫 '+(p.noCabutan||p.no_cabutan):'';
-  document.getElementById('circJab').textContent=p.jabatan||'';
-}
-
-function renderPemenang(winners){
-  const KAT_MAP={
-    'Majlis Perbandaran Kubang Pasu':'kat1','Ahli Majlis, MPKP':'kat1','MPKP':'kat1',
-    'e-IDAMAN':'kat2','e-Idaman':'kat2','SWCORP':'kat2','SWCorp':'kat2','Jabatan Pengairan dan Saliran':'kat2',
-    'Peniaga / Wakil Medan Selera Changlun':'kat3','Peniaga':'kat3','Penduduk Changlun':'kat3','Penduduk':'kat3'
-  };
-  function getKat(jab){
-    for(const [k,v] of Object.entries(KAT_MAP)){
-      if((jab||'').toLowerCase().includes(k.toLowerCase())) return v;
-    }
-    return 'kat1';
+  }catch(e){
+    console.error(e);
+    document.getElementById('lastUpdate').textContent = 'Ralat sambungan — cuba semula...';
   }
-  if(winners.length===0){
-    document.getElementById('pemenangList').innerHTML='<div class="no-winner">Belum ada pemenang lagi</div>';
-    return;
-  }
-  document.getElementById('pemenangList').innerHTML=winners.map((p,i)=>`
-    <div class="pchip ${getKat(p.jabatan)}">
-      <span class="pchip-num">#${i+1}</span>
-      ${p.nama} ${p.noCabutan||p.no_cabutan?'· 🎫'+(p.noCabutan||p.no_cabutan):''}
-    </div>
-  `).join('');
 }
 
-// Load terus & setiap 10 saat
 loadData();
-setInterval(loadData,10000);
+setInterval(loadData, 8000);
 </script>
 </body>
 </html>
