@@ -330,8 +330,8 @@ async function loadPeserta() {
     const res = await fetch(SHEETS_URL);
     const data = await res.json();
     const rows = data.data || [];
-    // Tapis hanya peserta hadir
-    semuaPeserta = rows.filter(r => (r.status||'').toLowerCase().includes('hadir') || r.status === 'Hadir');
+    // Semua peserta layak tanpa perlu status Hadir
+    semuaPeserta = rows.filter(r => r.nama && r.nama.trim() !== '');
     const kat1 = getPesertaKategori('kat1').length;
     document.getElementById('statPeserta').textContent = kat1;
     updateKatInfo();
