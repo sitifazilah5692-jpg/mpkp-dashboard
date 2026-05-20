@@ -200,14 +200,18 @@ canvas.konfeti{position:fixed;inset:0;pointer-events:none;z-index:999;}
 
 /* ── RESET BUTTON ── */
 .btn-reset-small{
-  background:rgba(255,255,255,0.06);
-  border:1px solid rgba(255,255,255,0.15);
-  color:rgba(255,255,255,0.4);
-  border-radius:8px;padding:5px 14px;
-  font-size:10px;font-family:'Montserrat',sans-serif;
-  cursor:pointer;display:none;margin-top:4px;
+  background:rgba(240,192,64,0.15);
+  border:2px solid rgba(240,192,64,0.5);
+  color:#f0c040;
+  border-radius:20px;padding:8px 24px;
+  font-size:12px;font-weight:700;font-family:'Montserrat',sans-serif;
+  cursor:pointer;display:none;margin-top:6px;
+  letter-spacing:1px;
+  touch-action:manipulation;
+  z-index:10;
+  -webkit-tap-highlight-color:rgba(240,192,64,0.2);
 }
-.btn-reset-small:hover{background:rgba(255,255,255,0.12);color:#fff;}
+.btn-reset-small:hover{background:rgba(240,192,64,0.3);color:#fff;}
 
 /* FULLSCREEN BTN */
 .btn-fs{
@@ -503,6 +507,13 @@ function resetCabutan(){
   document.getElementById('circJab').textContent='';
   document.getElementById('btnReset').style.display='none';
   sedangCabut=false;
+  // Enable semua kupon button semula
+  document.querySelectorAll('.kupon-btn').forEach(b=>{
+    b.style.pointerEvents='';
+    b.disabled=false;
+  });
+  // Clear drum interval kalau ada
+  if(drumInterval){ clearInterval(drumInterval); drumInterval=null; }
 }
 
 // ── KONFETI ──
