@@ -40,14 +40,38 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 
 /* HADIAH SELECTOR */
 .hadiah-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px;}
-.hadiah-btn{padding:12px 8px;border:2px solid rgba(10,35,66,0.15);border-radius:12px;background:white;cursor:pointer;text-align:center;transition:all 0.2s;font-family:'Montserrat',sans-serif;}
-.hadiah-btn:hover{border-color:#b8962e;background:#fffbf0;}
-.hadiah-btn.active{border-color:#0a2342;background:linear-gradient(135deg,#0a2342,#0d3b6e);color:white;}
-.hadiah-btn .trophy-icon{font-size:22px;display:block;margin-bottom:4px;}
-.hadiah-btn .hadiah-nama{font-size:11px;font-weight:700;color:#0a2342;letter-spacing:0.5px;}
-.hadiah-btn.active .hadiah-nama{color:#f0c040;}
-.hadiah-btn .hadiah-sub{font-size:9px;color:#999;margin-top:2px;}
-.hadiah-btn.active .hadiah-sub{color:rgba(240,192,64,0.7);}
+.hadiah-btn{padding:12px 8px;border:3px solid rgba(10,35,66,0.12);border-radius:14px;background:white;cursor:pointer;text-align:center;transition:all 0.25s;font-family:'Montserrat',sans-serif;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+.hadiah-btn:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,0.15);}
+.hadiah-btn .trophy-icon{font-size:26px;display:block;margin-bottom:6px;}
+.hadiah-btn .hadiah-nama{font-size:12px;font-weight:800;letter-spacing:0.5px;}
+.hadiah-btn .hadiah-sub{font-size:9px;color:#888;margin-top:3px;line-height:1.3;}
+
+/* KAT 1 - Peach */
+.hadiah-btn.kat1-btn{background:linear-gradient(135deg,#fff0e8,#ffe4d0);border-color:#e8a87c;}
+.hadiah-btn.kat1-btn .hadiah-nama{color:#a0522d;}
+.hadiah-btn.kat1-btn:hover{border-color:#c0663a;background:linear-gradient(135deg,#ffe4d0,#ffd0b0);}
+.hadiah-btn.kat1-btn.active{background:linear-gradient(135deg,#e8845a,#c0562a);border-color:#a0422a;box-shadow:0 6px 20px rgba(192,86,42,0.4);}
+.hadiah-btn.kat1-btn.active .hadiah-nama{color:#fff8f5;}
+.hadiah-btn.kat1-btn.active .hadiah-sub{color:rgba(255,240,230,0.8);}
+.hadiah-btn.kat1-btn.active .trophy-icon{filter:drop-shadow(0 2px 6px rgba(255,200,160,0.8));}
+
+/* KAT 2 - Kuning */
+.hadiah-btn.kat2-btn{background:linear-gradient(135deg,#fffde8,#fff8c0);border-color:#e8d44a;}
+.hadiah-btn.kat2-btn .hadiah-nama{color:#8a7000;}
+.hadiah-btn.kat2-btn:hover{border-color:#c0a800;background:linear-gradient(135deg,#fff8c0,#ffee80);}
+.hadiah-btn.kat2-btn.active{background:linear-gradient(135deg,#f0c800,#c8a000);border-color:#a08000;box-shadow:0 6px 20px rgba(200,160,0,0.45);}
+.hadiah-btn.kat2-btn.active .hadiah-nama{color:#3a2800;}
+.hadiah-btn.kat2-btn.active .hadiah-sub{color:rgba(60,40,0,0.7);}
+.hadiah-btn.kat2-btn.active .trophy-icon{filter:drop-shadow(0 2px 6px rgba(255,230,100,0.9));}
+
+/* KAT 3 - Pink */
+.hadiah-btn.kat3-btn{background:linear-gradient(135deg,#fff0f5,#ffd6e8);border-color:#e87aaa;}
+.hadiah-btn.kat3-btn .hadiah-nama{color:#8a1a4a;}
+.hadiah-btn.kat3-btn:hover{border-color:#c04080;background:linear-gradient(135deg,#ffd6e8,#ffb8d8);}
+.hadiah-btn.kat3-btn.active{background:linear-gradient(135deg,#e05090,#b82868);border-color:#901848;box-shadow:0 6px 20px rgba(180,40,100,0.4);}
+.hadiah-btn.kat3-btn.active .hadiah-nama{color:#fff0f5;}
+.hadiah-btn.kat3-btn.active .hadiah-sub{color:rgba(255,220,235,0.8);}
+.hadiah-btn.kat3-btn.active .trophy-icon{filter:drop-shadow(0 2px 6px rgba(255,150,200,0.8));}
 
 /* DRUM ROLL DISPLAY */
 .drum-wrap{background:linear-gradient(135deg,#0a2342,#0d3b6e);border-radius:16px;padding:28px 20px;text-align:center;margin-bottom:20px;border:2px solid rgba(212,168,42,0.3);box-shadow:0 8px 30px rgba(10,35,66,0.25);min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;}
@@ -205,20 +229,20 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
     <!-- PILIH KATEGORI -->
     <div class="sec-label">🏷️ Pilih Kategori Cabutan</div>
     <div class="hadiah-grid" style="grid-template-columns:1fr 1fr 1fr;">
-      <div class="hadiah-btn active" onclick="pilihHadiah(this,'Kat 1','🏛️','kat1')">
+      <div class="hadiah-btn kat1-btn active" onclick="pilihHadiah(this,'Kat 1','🏛️','kat1')">
         <span class="trophy-icon">🏛️</span>
         <div class="hadiah-nama">KAT 1</div>
-        <div class="hadiah-sub">MPKP & Ahli Majlis</div>
+        <div class="hadiah-sub">MPKP &amp; Ahli Majlis</div>
       </div>
-      <div class="hadiah-btn" onclick="pilihHadiah(this,'Kat 2','🏢','kat2')">
+      <div class="hadiah-btn kat2-btn" onclick="pilihHadiah(this,'Kat 2','🏢','kat2')">
         <span class="trophy-icon">🏢</span>
         <div class="hadiah-nama">KAT 2</div>
-        <div class="hadiah-sub">Agensi</div>
+        <div class="hadiah-sub">Agensi / e-IDAMAN</div>
       </div>
-      <div class="hadiah-btn" onclick="pilihHadiah(this,'Kat 3','🏪','kat3')">
+      <div class="hadiah-btn kat3-btn" onclick="pilihHadiah(this,'Kat 3','🏪','kat3')">
         <span class="trophy-icon">🏪</span>
         <div class="hadiah-nama">KAT 3</div>
-        <div class="hadiah-sub">Peniaga & Penduduk</div>
+        <div class="hadiah-sub">Peniaga &amp; Penduduk</div>
       </div>
     </div>
     <!-- Info kiraan kategori -->
@@ -321,6 +345,18 @@ function pilihHadiah(el, nama, trophy, kat) {
   document.querySelectorAll('.hadiah-btn').forEach(b => b.classList.remove('active'));
   el.classList.add('active');
   hadiahAktif = { nama, trophy, kat };
+  // Warna drum-wrap ikut kategori
+  const drumWrap = document.querySelector('.drum-wrap');
+  const katGrad = {
+    kat1: 'linear-gradient(135deg,#8a3018,#c0562a)',
+    kat2: 'linear-gradient(135deg,#7a6000,#c0a000)',
+    kat3: 'linear-gradient(135deg,#7a1040,#b82868)'
+  };
+  const katBorder = { kat1:'rgba(232,132,90,0.5)', kat2:'rgba(240,200,0,0.5)', kat3:'rgba(224,80,144,0.5)' };
+  if (drumWrap) {
+    drumWrap.style.background = katGrad[kat] || 'linear-gradient(135deg,#0a2342,#0d3b6e)';
+    drumWrap.style.borderColor = katBorder[kat] || 'rgba(212,168,42,0.3)';
+  }
   // Reset drum display
   document.getElementById('drumName').innerHTML = '<span class="drum-idle">Tekan butang untuk mula</span>';
   document.getElementById('drumCb').textContent = '';
