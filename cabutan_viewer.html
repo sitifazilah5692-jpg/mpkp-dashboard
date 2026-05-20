@@ -145,29 +145,51 @@ async function loadData(){
     document.getElementById('lastUpdate').textContent = 'Dikemaskini: ' + new Date().toLocaleTimeString('ms-MY');
 
     if(winners.length > 0){
-      // Papar pemenang terkini dalam bulatan
+      // Papar pemenang TERKINI (last) dalam bulatan — animate kalau nama bertukar
       const latest = winners[winners.length-1];
-      document.getElementById('circLbl').textContent = '🎊 PEMENANG TERKINI';
-      document.getElementById('circName').className = 'circ-name';
-      document.getElementById('circName').textContent = latest.nama;
-      document.getElementById('circCb').textContent = latest.noCabutan ? '🎫 '+latest.noCabutan : '';
-      document.getElementById('circJab').textContent = latest.jabatan||'';
+      const nameEl = document.getElementById('circName');
+      const currentName = nameEl.textContent;
+      
+      if(currentName !== latest.nama){
+        // Ada pemenang baru — animate masuk
+        nameEl.style.opacity = '0';
+        nameEl.style.transition = 'opacity 0.4s';
+        setTimeout(()=>{
+          nameEl.className = 'circ-name';
+          nameEl.textContent = latest.nama;
+          nameEl.style.opacity = '1';
+        }, 400);
+        document.getElementById('circCb').style.opacity = '0';
+        setTimeout(()=>{
+          document.getElementById('circCb').textContent = latest.noCabutan ? '🎫 '+latest.noCabutan : '';
+          document.getElementById('circJab').textContent = latest.jabatan||'';
+          document.getElementById('circCb').style.opacity = '1';
+        }, 400);
+      } else {
+        nameEl.className = 'circ-name';
+        nameEl.textContent = latest.nama;
+        document.getElementById('circCb').textContent = latest.noCabutan ? '🎫 '+latest.noCabutan : '';
+        document.getElementById('circJab').textContent = latest.jabatan||'';
+      }
+      
+      document.getElementById('circLbl').textContent = '🎊 PEMENANG TERKINI (#'+winners.length+')';
 
-      // Render senarai
-      document.getElementById('pemenangList').innerHTML = winners.map((p,i)=>`
+      // Render senarai — terkini di atas
+      document.getElementById('pemenangList').innerHTML = [...winners].reverse().map((p,i)=>`
         <div class="pchip ${getKat(p.jabatan)}">
-          <span class="pchip-num">#${i+1}</span>
+          <span class="pchip-num">#${winners.length - i}</span>
           <div>
             <div>${p.nama}</div>
-            <div class="pchip-jab">${p.jabatan||''} ${p.hadiah?'· '+p.hadiah:''}</div>
+            <div class="pchip-jab">${p.jabatan||''}</div>
           </div>
         </div>
       `).join('');
     } else {
-      // Tunjuk stats sahaja, bulatan tetap idle
       document.getElementById('circLbl').textContent = 'MENUNGGU CABUTAN';
       document.getElementById('circName').className = 'circ-name idle';
       document.getElementById('circName').textContent = 'Menunggu penganjur...';
+      document.getElementById('circCb').textContent = '';
+      document.getElementById('circJab').textContent = '';
       document.getElementById('pemenangList').innerHTML = '<div class="no-winner">Belum ada pemenang lagi</div>';
     }
   }catch(e){
