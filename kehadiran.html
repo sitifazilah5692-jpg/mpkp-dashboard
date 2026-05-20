@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Kehadiran Mengikut Jabatan – MPKP</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Lato:wght@300;400;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Lato',sans-serif;background:#f0f4fa;min-height:100vh;}
+
+/* HEADER */
+.page-header{
+  background:linear-gradient(135deg,#0d2a52 0%,#1a3f7a 100%);
+  padding:16px 20px 14px;
+  display:flex;align-items:center;gap:14px;
+  border-bottom:3px solid #c8a030;
+}
+.page-header img{width:48px;height:48px;object-fit:contain;filter:drop-shadow(0 2px 8px rgba(240,192,64,0.5));}
+.page-header-text h1{font-family:'Montserrat',sans-serif;font-size:15px;font-weight:800;color:#f0c040;letter-spacing:1px;}
+.page-header-text p{font-size:11px;color:rgba(255,255,255,0.5);margin-top:2px;}
+.total-badge{margin-left:auto;background:rgba(240,192,64,0.15);border:1.5px solid rgba(240,192,64,0.4);border-radius:10px;padding:8px 14px;text-align:center;}
+.total-badge .num{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:900;color:#f0c040;line-height:1;}
+.total-badge .lbl{font-size:8px;color:rgba(255,255,255,0.4);letter-spacing:1px;text-transform:uppercase;}
+
+/* MAIN */
+.container{max-width:680px;margin:0 auto;padding:16px;}
+
+/* JABATAN CARDS */
+.jab-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:16px;}
+
+.jab-card{
+  background:white;border-radius:14px;overflow:hidden;
+  box-shadow:0 2px 12px rgba(13,42,82,0.08);
+  border:1.5px solid transparent;
+  transition:all 0.2s;
+}
+.jab-card.active{border-color:#c8a030;box-shadow:0 4px 20px rgba(200,160,48,0.2);}
+
+.jab-btn{
+  width:100%;padding:14px 18px;
+  display:flex;align-items:center;gap:14px;
+  background:white;border:none;cursor:pointer;
+  text-align:left;transition:background 0.2s;
+}
+.jab-btn:hover{background:#f8f6f0;}
+.jab-card.active .jab-btn{background:linear-gradient(135deg,#fdfaf0,#fffde8);}
+
+.jab-icon{
+  width:46px;height:46px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+}
+.jab-info{flex:1;}
+.jab-nama{font-family:'Montserrat',sans-serif;font-size:12px;font-weight:800;color:#0d2a52;margin-bottom:2px;}
+.jab-count{font-size:11px;color:#7a8fa8;}
+.jab-right{display:flex;align-items:center;gap:10px;}
+.count-pill{
+  background:#0d2a52;color:#f0c040;
+  font-family:'Montserrat',sans-serif;font-size:14px;font-weight:900;
+  padding:6px 14px;border-radius:20px;min-width:42px;text-align:center;
+}
+.jab-card.active .count-pill{background:#c8a030;color:white;}
+.chevron{font-size:14px;color:#c0c8d8;transition:transform 0.3s;}
+.jab-card.active .chevron{transform:rotate(180deg);color:#c8a030;}
+
+/* PESERTA PANEL */
+.peserta-panel{
+  display:none;border-top:1px solid #e8edf5;
+  background:#fafbfd;
+}
+.jab-card.active .peserta-panel{display:block;}
+
+.panel-toolbar{
+  padding:10px 16px;display:flex;align-items:center;gap:10px;
+  border-bottom:1px solid #e8edf5;background:white;
+}
+.search-box{
+  flex:1;padding:8px 12px;border:1.5px solid #dde3ee;border-radius:8px;
+  font-size:12px;font-family:'Lato',sans-serif;color:#0d2a52;
+  outline:none;transition:border 0.2s;
+}
+.search-box:focus{border-color:#c8a030;}
+.btn-print{
+  padding:8px 14px;background:#0d2a52;color:#f0c040;
+  border:none;border-radius:8px;font-size:11px;font-weight:700;
+  font-family:'Montserrat',sans-serif;cursor:pointer;white-space:nowrap;
+  letter-spacing:0.5px;transition:all 0.2s;
+}
+.btn-print:hover{background:#1a3f7a;}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+thead tr{background:#0d2a52;}
+thead th{
+  padding:10px 12px;font-family:'Montserrat',sans-serif;
+  font-size:9px;font-weight:800;color:#f0c040;
+  text-transform:uppercase;letter-spacing:1px;text-align:left;
+  white-space:nowrap;
+}
+thead th:first-child{width:44px;text-align:center;}
+tbody tr{border-bottom:1px solid #eef1f7;transition:background 0.15s;}
+tbody tr:hover{background:#f5f8ff;}
+tbody tr:nth-child(even){background:#fafbfd;}
+tbody tr:nth-child(even):hover{background:#f0f4ff;}
+tbody td{padding:10px 12px;font-size:12px;color:#2c3e6b;vertical-align:middle;}
+tbody td:first-child{text-align:center;font-weight:700;color:#7a8fa8;font-size:11px;}
+.nama-cell{font-weight:700;color:#0d2a52;}
+.cabutan-badge{
+  display:inline-block;background:rgba(200,160,48,0.12);color:#8a6a10;
+  font-family:'Montserrat',sans-serif;font-size:9px;font-weight:800;
+  padding:2px 8px;border-radius:10px;border:1px solid rgba(200,160,48,0.3);
+  letter-spacing:0.5px;
+}
+.status-hadir{
+  display:inline-block;background:rgba(46,160,67,0.1);color:#1a6b3a;
+  font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;
+  border:1px solid rgba(46,160,67,0.25);font-family:'Montserrat',sans-serif;
+}
+
+/* NO RESULT */
+.no-result{text-align:center;padding:24px;color:#aab;font-size:13px;}
+
+/* PRINT */
+@media print{
+  .page-header,.jab-grid .jab-card:not(.active),.panel-toolbar{display:none!important;}
+  .jab-card.active{border:none!important;box-shadow:none!important;}
+  .peserta-panel{display:block!important;}
+  body{background:white;}
+}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <img src="https://base44.app/api/apps/6a044032cecb45c0033adc72/files/mp/public/6a044032cecb45c0033adc72/a5e121e13_LOGO-MPKP-transparent.png" alt="MPKP">
+  <div class="page-header-text">
+    <h1>KEHADIRAN MENGIKUT JABATAN</h1>
+    <p>Program Gotong-Royong Medan Selera Changlun · 20 Mei 2026</p>
+  </div>
+  <div class="total-badge">
+    <div class="num" id="totalKeseluruhan">—</div>
+    <div class="lbl">Jumlah Hadir</div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="jab-grid" id="jabGrid">
+    <div style="text-align:center;padding:30px;color:#aab;">Memuatkan data...</div>
+  </div>
+</div>
+
+<script>
+const JABATAN_ICONS = {
+  'Majlis Perbandaran Kubang Pasu': {icon:'🏛️', bg:'#e8f0fc'},
+  'Peniaga / Wakil Medan Selera Changlun': {icon:'🏪', bg:'#fff3e0'},
+  'e-IDAMAN': {icon:'💻', bg:'#e8f5e9'},
+  'Ahli Majlis, MPKP': {icon:'⭐', bg:'#fce4ec'},
+  'Penduduk Changlun': {icon:'🏠', bg:'#f3e5f5'},
+};
+
+const DEFAULT_ICON = {icon:'👥', bg:'#e8edf5'};
+
+let allData = {};
+let activeJab = null;
+
+async function loadData() {
+  try {
+    const res = await fetch('https://base44.app/api/apps/6a044032cecb45c0033adc72/functions/getLaporanPeserta');
+    const json = await res.json();
+    const rows = json.data || json.peserta || [];
+
+    // Kumpul ikut jabatan
+    const jDict = {};
+    rows.forEach((p, i) => {
+      const jab = (p.jabatan || p['jabatan/agensi'] || p.Jabatan || 'Tidak Diisi').trim();
+      if (!jDict[jab]) jDict[jab] = [];
+      jDict[jab].push({...p, _bil: i+1});
+    });
+
+    allData = jDict;
+    renderJabatan();
+    document.getElementById('totalKeseluruhan').textContent = rows.length;
+  } catch(e) {
+    document.getElementById('jabGrid').innerHTML = '<div style="text-align:center;padding:30px;color:#e55">Ralat memuatkan data. Cuba refresh.</div>';
+  }
+}
+
+function renderJabatan() {
+  const grid = document.getElementById('jabGrid');
+  const sorted = Object.entries(allData).sort((a,b) => b[1].length - a[1].length);
+
+  grid.innerHTML = sorted.map(([jab, members], idx) => {
+    const {icon, bg} = JABATAN_ICONS[jab] || DEFAULT_ICON;
+    return `
+    <div class="jab-card" id="card_${idx}">
+      <button class="jab-btn" onclick="toggleJabatan(${idx}, '${jab.replace(/'/g,"\\'")}')">
+        <div class="jab-icon" style="background:${bg}">${icon}</div>
+        <div class="jab-info">
+          <div class="jab-nama">${jab}</div>
+          <div class="jab-count">Tekan untuk lihat senarai peserta</div>
+        </div>
+        <div class="jab-right">
+          <div class="count-pill">${members.length}</div>
+          <span class="chevron">▼</span>
+        </div>
+      </button>
+      <div class="peserta-panel" id="panel_${idx}">
+        <div class="panel-toolbar">
+          <input class="search-box" type="text" placeholder="🔍 Cari nama peserta..."
+            oninput="filterTable('tbl_${idx}', this.value)">
+          <button class="btn-print" onclick="cetakJabatan('${jab.replace(/'/g,"\\'")}', ${idx})">🖨 CETAK</button>
+        </div>
+        <div class="table-wrap">
+          <table id="tbl_${idx}">
+            <thead>
+              <tr>
+                <th>BIL.</th>
+                <th>NAMA PESERTA</th>
+                <th>NO. TELEFON</th>
+                <th>NO. CABUTAN</th>
+                <th>STATUS</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${members.map((p,i) => `
+                <tr>
+                  <td>${i+1}</td>
+                  <td class="nama-cell">${p.nama || p.Nama || '-'}</td>
+                  <td>${p.noTelefon || p.telefon || p['No. Telefon'] || '-'}</td>
+                  <td><span class="cabutan-badge">${p.noCabutan || p.cabutan || p['No. Cabutan Bertuah'] || '-'}</span></td>
+                  <td><span class="status-hadir">✓ Hadir</span></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleJabatan(idx, jabNama) {
+  const card = document.getElementById('card_' + idx);
+  const isActive = card.classList.contains('active');
+  // Tutup semua
+  document.querySelectorAll('.jab-card').forEach(c => c.classList.remove('active'));
+  // Buka yang dipilih (jika tidak active sebelum ini)
+  if (!isActive) {
+    card.classList.add('active');
+    activeJab = idx;
+    // Scroll ke card
+    setTimeout(() => card.scrollIntoView({behavior:'smooth', block:'nearest'}), 100);
+  } else {
+    activeJab = null;
+  }
+}
+
+function filterTable(tblId, query) {
+  const tbl = document.getElementById(tblId);
+  const rows = tbl.querySelectorAll('tbody tr');
+  const q = query.toLowerCase();
+  let found = 0;
+  rows.forEach(r => {
+    const txt = r.textContent.toLowerCase();
+    const show = txt.includes(q);
+    r.style.display = show ? '' : 'none';
+    if (show) found++;
+  });
+  // No result msg
+  const noRes = tbl.parentElement.querySelector('.no-result');
+  if (!q || found > 0) {
+    if (noRes) noRes.remove();
+  } else {
+    if (!noRes) {
+      const div = document.createElement('div');
+      div.className = 'no-result';
+      div.textContent = 'Tiada rekod dijumpai.';
+      tbl.parentElement.appendChild(div);
+    }
+  }
+}
+
+function cetakJabatan(jabNama, idx) {
+  const tbl = document.getElementById('tbl_' + idx);
+  const win = window.open('','_blank');
+  win.document.write(`
+    <html><head><title>Kehadiran - ${jabNama}</title>
+    <style>
+      body{font-family:Arial,sans-serif;padding:20px;color:#0d2a52;}
+      h2{font-size:16px;margin-bottom:4px;}
+      p{font-size:11px;color:#666;margin-bottom:16px;}
+      table{width:100%;border-collapse:collapse;}
+      th{background:#0d2a52;color:#f0c040;padding:8px;font-size:10px;text-align:left;}
+      td{padding:7px 8px;font-size:11px;border-bottom:1px solid #ddd;}
+      tr:nth-child(even){background:#f8f8f8;}
+    </style></head><body>
+    <h2>SENARAI KEHADIRAN — ${jabNama.toUpperCase()}</h2>
+    <p>Program Gotong-Royong Medan Selera Changlun · 20 Mei 2026</p>
+    ${tbl.outerHTML}
+    </body></html>
+  `);
+  win.document.close();
+  win.print();
+}
+
+loadData();
+</script>
+</body>
+</html>
