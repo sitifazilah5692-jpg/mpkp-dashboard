@@ -202,25 +202,27 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
     <!-- ERROR -->
     <div class="err-box" id="errBox"></div>
 
-    <!-- PILIH HADIAH -->
-    <div class="sec-label">🏆 Pilih Hadiah</div>
-    <div class="hadiah-grid">
-      <div class="hadiah-btn active" onclick="pilihHadiah(this,'Hadiah Utama','🥇')" data-hadiah="Hadiah Utama" data-trophy="🥇">
-        <span class="trophy-icon">🥇</span>
-        <div class="hadiah-nama">HADIAH 1</div>
-        <div class="hadiah-sub">Hadiah Utama</div>
+    <!-- PILIH KATEGORI -->
+    <div class="sec-label">🏷️ Pilih Kategori Cabutan</div>
+    <div class="hadiah-grid" style="grid-template-columns:1fr 1fr 1fr;">
+      <div class="hadiah-btn active" onclick="pilihHadiah(this,'Kat 1','🏛️','kat1')">
+        <span class="trophy-icon">🏛️</span>
+        <div class="hadiah-nama">KAT 1</div>
+        <div class="hadiah-sub">MPKP & Ahli Majlis</div>
       </div>
-      <div class="hadiah-btn" onclick="pilihHadiah(this,'Hadiah Kedua','🥈')" data-hadiah="Hadiah Kedua" data-trophy="🥈">
-        <span class="trophy-icon">🥈</span>
-        <div class="hadiah-nama">HADIAH 2</div>
-        <div class="hadiah-sub">Hadiah Kedua</div>
+      <div class="hadiah-btn" onclick="pilihHadiah(this,'Kat 2','🏢','kat2')">
+        <span class="trophy-icon">🏢</span>
+        <div class="hadiah-nama">KAT 2</div>
+        <div class="hadiah-sub">Agensi</div>
       </div>
-      <div class="hadiah-btn" onclick="pilihHadiah(this,'Hadiah Ketiga','🥉')" data-hadiah="Hadiah Ketiga" data-trophy="🥉">
-        <span class="trophy-icon">🥉</span>
-        <div class="hadiah-nama">HADIAH 3</div>
-        <div class="hadiah-sub">Hadiah Ketiga</div>
+      <div class="hadiah-btn" onclick="pilihHadiah(this,'Kat 3','🏪','kat3')">
+        <span class="trophy-icon">🏪</span>
+        <div class="hadiah-nama">KAT 3</div>
+        <div class="hadiah-sub">Peniaga & Penduduk</div>
       </div>
     </div>
+    <!-- Info kiraan kategori -->
+    <div id="katInfo" style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;"></div>
 
     <!-- DRUM ROLL DISPLAY -->
     <div class="sec-label">🎰 Cabutan</div>
@@ -253,10 +255,50 @@ const SHEETS_URL = `https://base44.app/api/apps/6a044032cecb45c0033adc72/functio
 
 let semuaPeserta = [];
 let sudahMenang = []; // track IC yang dah menang
-let hadiahAktif = { nama: 'Hadiah Utama', trophy: '🥇' };
+let hadiahAktif = { nama: 'Kat 1', trophy: '🏛️', kat: 'kat1' };
 let sedangCabut = false;
 let drumInterval = null;
 let pemenangList = [];
+
+// ── DEFINISI KATEGORI ──
+const KATEGORI_MAP = {
+  kat1: {
+    label: 'MPKP & Ahli Majlis',
+    jabatan: ['Majlis Perbandaran Kubang Pasu', 'Ahli Majlis, MPKP', 'MPKP']
+  },
+  kat2: {
+    label: 'Agensi',
+    jabatan: ['e-IDAMAN', 'SWCORP', 'Jabatan Pengairan dan Saliran', 'JPS', 'e-Idaman']
+  },
+  kat3: {
+    label: 'Peniaga & Penduduk',
+    jabatan: ['Peniaga / Wakil Medan Selera Changlun', 'Peniaga', 'Wakil Peniaga', 'Penduduk Changlun', 'Penduduk', 'Lain-lain']
+  }
+};
+
+function getPesertaKategori(kat) {
+  const katDef = KATEGORI_MAP[kat];
+  if (!katDef) return semuaPeserta;
+  return semuaPeserta.filter(p => {
+    const jab = (p.jabatan || p.Jabatan || '').trim();
+    return katDef.jabatan.some(k => jab.toLowerCase().includes(k.toLowerCase()));
+  });
+}
+
+function updateKatInfo() {
+  const div = document.getElementById('katInfo');
+  if (!div) return;
+  const colors = {kat1:'#0a2342', kat2:'#1a6b3a', kat3:'#8a4000'};
+  div.innerHTML = Object.entries(KATEGORI_MAP).map(([k,v]) => {
+    const total = getPesertaKategori(k).length;
+    const menang = pemenangList.filter(p => p.kat === k).length;
+    const bg = k === hadiahAktif.kat ? colors[k] : 'rgba(0,0,0,0.06)';
+    const clr = k === hadiahAktif.kat ? '#f0c040' : '#555';
+    return \`<div style="background:\${bg};color:\${clr};border-radius:8px;padding:5px 10px;font-size:10px;font-weight:700;font-family:'Montserrat',sans-serif;">
+      \${v.label}: \${total - menang} layak
+    </div>\`;
+  }).join('');
+}
 
 // ── LOAD DATA PESERTA ──
 async function loadPeserta() {
@@ -266,24 +308,37 @@ async function loadPeserta() {
     const rows = data.data || [];
     // Tapis hanya peserta hadir
     semuaPeserta = rows.filter(r => (r.status||'').toLowerCase().includes('hadir') || r.status === 'Hadir');
-    document.getElementById('statPeserta').textContent = semuaPeserta.length;
+    const kat1 = getPesertaKategori('kat1').length;
+    document.getElementById('statPeserta').textContent = kat1;
+    updateKatInfo();
   } catch(e) {
-    // Cuba ambil terus dari cabutanBertuah endpoint untuk check
     document.getElementById('statPeserta').textContent = '?';
   }
 }
 
-// ── PILIH HADIAH ──
-function pilihHadiah(el, nama, trophy) {
+// ── PILIH KATEGORI ──
+function pilihHadiah(el, nama, trophy, kat) {
   document.querySelectorAll('.hadiah-btn').forEach(b => b.classList.remove('active'));
   el.classList.add('active');
-  hadiahAktif = { nama, trophy };
+  hadiahAktif = { nama, trophy, kat };
+  // Reset drum display
+  document.getElementById('drumName').innerHTML = '<span class="drum-idle">Tekan butang untuk mula</span>';
+  document.getElementById('drumCb').textContent = '';
+  document.getElementById('drumJabatan').textContent = '';
+  document.getElementById('drumLbl').textContent = 'SEDIA UNTUK CABUTAN';
+  updateKatInfo();
+  // Update stat peserta ikut kategori
+  const katPeserta = getPesertaKategori(kat);
+  const sudahKat = pemenangList.filter(p => p.kat === kat).map(p => p.noIc);
+  const layak = katPeserta.filter(p => !sudahKat.includes(p.noIc || p.ic || p.no_ic)).length;
+  document.getElementById('statPeserta').textContent = layak;
 }
 
 // ── DRUM ROLL ANIMATION ──
 function mulaDrum() {
-  const names = semuaPeserta.length > 0
-    ? semuaPeserta.filter(p => !sudahMenang.includes(p.noIc || p.ic))
+  const katPeserta = getPesertaKategori(hadiahAktif.kat);
+  const names = katPeserta.length > 0
+    ? katPeserta.filter(p => !sudahMenang.includes(p.noIc || p.ic || p.no_ic))
     : ['AHMAD BIN ALI','SITI BINTI OMAR','HASSAN BIN KASSIM','FATIMAH BINTI RAHIM'];
 
   let i = 0;
@@ -305,9 +360,10 @@ async function mulaCabutan() {
   errBox.style.display = 'none';
 
   // Semak ada peserta
-  const layak = semuaPeserta.filter(p => !sudahMenang.includes(p.noIc || p.ic || p.no_ic));
-  if (semuaPeserta.length > 0 && layak.length === 0) {
-    errBox.textContent = '⚠️ Semua peserta sudah dipilih sebagai pemenang!';
+  const katPeserta = getPesertaKategori(hadiahAktif.kat);
+  const layak = katPeserta.filter(p => !sudahMenang.includes(p.noIc || p.ic || p.no_ic));
+  if (katPeserta.length > 0 && layak.length === 0) {
+    errBox.textContent = '⚠️ Semua peserta dalam ' + (KATEGORI_MAP[hadiahAktif.kat]?.label || hadiahAktif.nama) + ' sudah dipilih!';
     errBox.style.display = 'block';
     return;
   }
@@ -385,7 +441,8 @@ function paparPemenang(pemenang) {
   }
 
   // Tambah ke senarai pemenang
-  pemenangList.push({ ...pemenang, hadiah: hadiahAktif.nama, trophy: hadiahAktif.trophy });
+  pemenangList.push({ ...pemenang, hadiah: hadiahAktif.nama, trophy: hadiahAktif.trophy, kat: hadiahAktif.kat });
+  updateKatInfo();
   renderPemenangList();
 
   // Update counter
