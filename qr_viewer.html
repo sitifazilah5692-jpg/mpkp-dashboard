@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>QR Viewer Cabutan MPKP</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Montserrat',sans-serif;
+  background:linear-gradient(145deg,#040d1a,#0a1f3d);
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:20px;
+}
+.card{
+  background:rgba(255,255,255,0.97);
+  border-radius:24px;padding:32px 28px;
+  max-width:360px;width:100%;
+  text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5);
+}
+.logo{width:60px;height:60px;border-radius:50%;border:2px solid #0a1f3d;overflow:hidden;margin:0 auto 12px;}
+.logo img{width:100%;height:100%;object-fit:cover;}
+.kempen{font-size:9px;letter-spacing:2px;color:#a07800;text-transform:uppercase;margin-bottom:4px;}
+.title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#0a1f3d;line-height:1.3;margin-bottom:6px;}
+.title span{color:#c85020;}
+.subtitle{font-size:10px;color:#666;margin-bottom:20px;}
+.qr-wrap{
+  background:#f8f8f8;border-radius:16px;padding:16px;
+  margin-bottom:20px;border:2px solid #e8e0d0;
+}
+.qr-wrap img{width:100%;max-width:240px;border-radius:8px;}
+.scan-txt{font-size:13px;font-weight:700;color:#0a1f3d;margin-bottom:4px;}
+.scan-sub{font-size:10px;color:#888;margin-bottom:16px;}
+.link-box{
+  background:#0a1f3d;border-radius:10px;
+  padding:10px 14px;
+  font-size:10px;color:#f0c040;
+  word-break:break-all;letter-spacing:0.3px;
+}
+.footer{margin-top:20px;font-size:9px;color:#aaa;letter-spacing:1px;}
+.badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:#fff0f5;border:1px solid #f0c0d0;
+  border-radius:20px;padding:4px 12px;
+  font-size:10px;font-weight:700;color:#c02070;
+  margin-bottom:14px;
+}
+.dot{width:6px;height:6px;border-radius:50%;background:#ff4060;animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.2;}}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <img src="https://base44.app/api/apps/6a044032cecb45c0033adc72/files/mp/public/6a044032cecb45c0033adc72/a5e121e13_LOGO-MPKP-transparent.png"/>
+  </div>
+  <div class="kempen">Kempen Kesihatan Persekitaran 2026</div>
+  <div class="title">Program <span>Gotong-Royong</span><br>Medan Selera Changlun</div>
+  <div class="subtitle">📅 20 Mei 2026 &nbsp;·&nbsp; 📍 Medan Selera Changlun</div>
+  
+  <div class="badge"><div class="dot"></div> Siaran Langsung Cabutan</div>
+  
+  <div class="qr-wrap">
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=https://sitifazilah5692-jpg.github.io/program-mpkp/cabutan_viewer.html&bgcolor=f8f8f8&color=0a1f3d&margin=10" alt="QR Viewer"/>
+  </div>
+  
+  <div class="scan-txt">📱 Imbas QR untuk tengok siaran langsung</div>
+  <div class="scan-sub">Paparan dikemaskini setiap 10 saat secara automatik</div>
+  
+  <div class="link-box">sitifazilah5692-jpg.github.io/program-mpkp/cabutan_viewer.html</div>
+  
+  <div class="footer">MAJLIS PERBANDARAN KUBANG PASU · MPKP · 2026</div>
+</div>
+</body>
+</html>
