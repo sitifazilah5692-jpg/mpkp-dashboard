@@ -99,6 +99,57 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
   .drum-name{font-size:22px;}
   .hadiah-grid{gap:6px;}
 }
+
+/* ── LANDSCAPE iPad / Tablet ── */
+@media (orientation:landscape) and (min-width:600px){
+  body{padding:10px 16px;}
+  .wrapper{max-width:100%;display:grid;grid-template-columns:320px 1fr;gap:14px;align-items:start;}
+
+  /* Kolum kiri: header + stats */
+  .hdr-card{margin-bottom:0;padding:16px 20px 14px;}
+  .logo-wrap{width:52px;height:52px;margin-bottom:8px;}
+  .hdr-kempen{font-size:8px;}
+  .hdr-org{font-size:10px;}
+  .hdr-title{font-size:15px;}
+  .info-pills{gap:5px;margin-top:10px;}
+  .pill{font-size:10px;padding:4px 10px;}
+
+  .stats-bar{grid-template-columns:1fr 1fr;gap:8px;margin-bottom:0;}
+  .stat-num{font-size:24px;}
+  .stat-lbl{font-size:9px;}
+  .stat-box{padding:10px 8px;}
+
+  /* Kolum kanan: cabutan card */
+  .cabutan-card{padding:18px 20px 20px;}
+  .hadiah-grid{grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px;}
+  .hadiah-btn{padding:8px 4px;}
+  .hadiah-btn .trophy-icon{font-size:18px;}
+  .hadiah-btn .hadiah-nama{font-size:10px;}
+
+  .drum-wrap{min-height:100px;padding:18px 16px;margin-bottom:14px;}
+  .drum-name{font-size:22px;}
+  .drum-cb{font-size:12px;}
+
+  .btn-mula{padding:13px;font-size:13px;margin-bottom:8px;}
+  .btn-reset{padding:9px;font-size:11px;}
+
+  .pemenang-card{padding:12px 14px;}
+  .pemenang-trophy{font-size:24px;}
+  .pemenang-nama{font-size:15px;}
+
+  /* Letak stats + hdr dalam kolum kiri, cabutan dalam kanan */
+  .hdr-card{grid-column:1;grid-row:1;}
+  .stats-bar{grid-column:1;grid-row:2;}
+  .cabutan-card{grid-column:2;grid-row:1/span 3;}
+  .footer{grid-column:1/span 2;}
+}
+
+/* iPad Pro landscape khusus */
+@media (orientation:landscape) and (min-width:900px){
+  .wrapper{grid-template-columns:300px 1fr;gap:16px;}
+  .drum-name{font-size:26px;}
+  .hadiah-grid{grid-template-columns:repeat(4,1fr);}
+}
 </style>
 </head>
 <body>
