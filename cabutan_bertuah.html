@@ -229,19 +229,19 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
     <!-- PILIH KATEGORI -->
     <div class="sec-label">🏷️ Pilih Kategori Cabutan</div>
     <div class="hadiah-grid" style="grid-template-columns:1fr 1fr 1fr;">
-      <div class="hadiah-btn kat1-btn active" onclick="pilihHadiah(this,'Kat 1','🏛️','kat1')">
+      <div class="hadiah-btn kat1-btn active" onclick="pilihHadiah(this,'Kupon 1','🏛️','kat1')">
         <span class="trophy-icon">🏛️</span>
-        <div class="hadiah-nama">KAT 1</div>
+        <div class="hadiah-nama">KUPON 1</div>
         <div class="hadiah-sub">MPKP &amp; Ahli Majlis</div>
       </div>
-      <div class="hadiah-btn kat2-btn" onclick="pilihHadiah(this,'Kat 2','🏢','kat2')">
+      <div class="hadiah-btn kat2-btn" onclick="pilihHadiah(this,'Kupon 2','🏢','kat2')">
         <span class="trophy-icon">🏢</span>
-        <div class="hadiah-nama">KAT 2</div>
+        <div class="hadiah-nama">KUPON 2</div>
         <div class="hadiah-sub">Agensi / e-IDAMAN</div>
       </div>
-      <div class="hadiah-btn kat3-btn" onclick="pilihHadiah(this,'Kat 3','🏪','kat3')">
+      <div class="hadiah-btn kat3-btn" onclick="pilihHadiah(this,'Kupon 3','🏪','kat3')">
         <span class="trophy-icon">🏪</span>
-        <div class="hadiah-nama">KAT 3</div>
+        <div class="hadiah-nama">KUPON 3</div>
         <div class="hadiah-sub">Peniaga &amp; Penduduk</div>
       </div>
     </div>
@@ -279,7 +279,7 @@ const SHEETS_URL = `https://base44.app/api/apps/6a044032cecb45c0033adc72/functio
 
 let semuaPeserta = [];
 let sudahMenang = []; // track IC yang dah menang
-let hadiahAktif = { nama: 'Kat 1', trophy: '🏛️', kat: 'kat1' };
+let hadiahAktif = { nama: 'Kupon 1', trophy: '🏛️', kat: 'kat1' };
 let sedangCabut = false;
 let drumInterval = null;
 let pemenangList = [];
