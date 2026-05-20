@@ -81,6 +81,10 @@ canvas.konfeti{position:fixed;inset:0;pointer-events:none;z-index:999;}
   position:relative;overflow:hidden;
   box-shadow:0 4px 15px rgba(0,0,0,0.3);
   user-select:none;
+  z-index:10;
+  pointer-events:auto;
+  -webkit-tap-highlight-color:rgba(255,255,255,0.2);
+  touch-action:manipulation;
 }
 .kupon-btn:hover{transform:translateY(-3px);box-shadow:0 8px 25px rgba(0,0,0,0.4);}
 .kupon-btn.active{transform:translateY(-4px);}
@@ -115,6 +119,8 @@ canvas.konfeti{position:fixed;inset:0;pointer-events:none;z-index:999;}
   background:conic-gradient(from 0deg, #f0c040, #e06830, #f48ab8, #ffe55a, #f0c040);
   animation:spinRing 4s linear infinite;
   opacity:0.5;
+  pointer-events:none;
+  z-index:0;
 }
 @keyframes spinRing{to{transform:rotate(360deg);}}
 
@@ -128,6 +134,8 @@ canvas.konfeti{position:fixed;inset:0;pointer-events:none;z-index:999;}
   cursor:pointer;
   transition:all 0.2s;
   overflow:hidden;
+  z-index:1;
+  position:relative;
 }
 .circle-outer:hover{border-color:rgba(240,192,64,0.6);}
 
@@ -257,24 +265,24 @@ canvas.konfeti{position:fixed;inset:0;pointer-events:none;z-index:999;}
 
     <!-- 3 KUPON BUTTONS -->
     <div class="kupon-row">
-      <div class="kupon-btn kb-peach active" id="btnKat1" onclick="pilihDanCabut(this,'Kupon 1','kat1')">
+      <button class="kupon-btn kb-peach active" id="btnKat1" onclick="pilihDanCabut(this,'Kupon 1','kat1')">
         <span class="kb-icon">🏛️</span>
         <div class="kb-nama">KUPON 1</div>
         <div class="kb-sub">MPKP &amp; Ahli Majlis</div>
         <div class="kb-count" id="countKat1">—</div>
-      </div>
-      <div class="kupon-btn kb-kuning" id="btnKat2" onclick="pilihDanCabut(this,'Kupon 2','kat2')">
+      </button>
+      <button class="kupon-btn kb-kuning" id="btnKat2" onclick="pilihDanCabut(this,'Kupon 2','kat2')">
         <span class="kb-icon">🏢</span>
         <div class="kb-nama">KUPON 2</div>
         <div class="kb-sub">Agensi / e-IDAMAN</div>
         <div class="kb-count" id="countKat2">—</div>
-      </div>
-      <div class="kupon-btn kb-pink" id="btnKat3" onclick="pilihDanCabut(this,'Kupon 3','kat3')">
+      </button>
+      <button class="kupon-btn kb-pink" id="btnKat3" onclick="pilihDanCabut(this,'Kupon 3','kat3')">
         <span class="kb-icon">🏪</span>
         <div class="kb-nama">KUPON 3</div>
         <div class="kb-sub">Peniaga &amp; Penduduk</div>
         <div class="kb-count" id="countKat3">—</div>
-      </div>
+      </button>
     </div>
 
     <!-- BULATAN PREMIUM -->
