@@ -327,54 +327,27 @@ function updateKatInfo() {
 // ── LOAD DATA PESERTA ──
 async function loadPeserta() {
   try {
-    // Ambil terus dari Google Sheets CSV (public)
-    const SHEET_ID = '1UXxjo4uC8_4s5nsKEeTAMjPlFG9tc-6izmXhrAa0344';
-    const csvUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Pendaftaran`;
-    const res = await fetch(csvUrl);
-    const csvText = await res.text();
-    
-    // Parse CSV
-    const lines = csvText.trim().split('\n');
-    const rows = [];
-    for (let i = 1; i < lines.length; i++) {
-      // Parse CSV line (handle quoted fields)
-      const cols = lines[i].match(/(".*?"|[^",]+)(?=,|$)/g) || lines[i].split(',');
-      const clean = cols.map(c => c.replace(/^"|"$/g,'').trim());
-      if (!clean[1] || clean[1] === '') continue;
-      rows.push({
-        no:          clean[0] || '',
-        nama:        clean[1] || '',
-        noIc:        clean[2] || '',
-        noTelefon:   clean[3] || '',
-        jabatan:     clean[4] || '',
-        tarikhDaftar:clean[5] || '',
-        status:      clean[6] || '',
-        noCabutan:   clean[7] || '',
-        email:       clean[8] || ''
-      });
-    }
-    semuaPeserta = rows;
+    const res = await fetch(SHEETS_URL, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache'
+      },
+      body: JSON.stringify({})
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    const rows = data.data || data.peserta || [];
+    semuaPeserta = rows.filter(r => r.nama && r.nama.trim() !== '');
     document.getElementById('statPeserta').textContent = semuaPeserta.length;
     updateKatInfo();
-    console.log('Loaded dari Sheets CSV:', semuaPeserta.length, 'peserta');
+    console.log('✅ Loaded:', semuaPeserta.length, 'peserta');
   } catch(e) {
-    // Fallback ke backend
-    try {
-      const res2 = await fetch(SHEETS_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({})
-      });
-      const data = await res2.json();
-      const rows = data.data || data.peserta || [];
-      semuaPeserta = rows.filter(r => r.nama && r.nama.trim() !== '');
-      document.getElementById('statPeserta').textContent = semuaPeserta.length;
-      updateKatInfo();
-      console.log('Loaded dari backend:', semuaPeserta.length, 'peserta');
-    } catch(e2) {
-      console.error('loadPeserta error:', e2);
-      document.getElementById('statPeserta').textContent = '?';
-    }
+    console.error('❌ loadPeserta error:', e);
+    // Tunjuk error pada screen untuk debug
+    document.getElementById('statPeserta').textContent = 'ERR';
+    const errDiv = document.getElementById('errMsg');
+    if (errDiv) { errDiv.textContent = 'Load error: ' + e.message; errDiv.style.display='block'; }
   }
 }
 
@@ -802,7 +775,13 @@ function launchKonfeti() {
 }
 
 // ── INIT ──
-loadPeserta();
+document.addEventListener('DOMContentLoaded', function() {
+  loadPeserta();
+});
+// Juga cuba terus kalau DOM dah ready
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+  loadPeserta();
+}
 </script>
 <button class="btn-fullscreen" id="btnFs" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
 
