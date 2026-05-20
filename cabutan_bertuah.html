@@ -2,811 +2,540 @@
 <html lang="ms">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Cabutan Bertuah – Program Gotong-Royong Medan Selera Changlun</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no"/>
+<title>Cabutan Bertuah - MPKP 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Montserrat:wght@400;600;700;800;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Montserrat:wght@400;600;700;800&family=Lato:wght@400;700&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Lato',sans-serif;min-height:100vh;background:linear-gradient(160deg,#061428 0%,#0a2d5e 40%,#0e3d7a 70%,#0a2342 100%);padding:24px 14px;position:relative;overflow-x:hidden;}
-body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,0.012) 0px,rgba(255,255,255,0.012) 1px,transparent 1px,transparent 40px),repeating-linear-gradient(-45deg,rgba(255,255,255,0.012) 0px,rgba(255,255,255,0.012) 1px,transparent 1px,transparent 40px);pointer-events:none;z-index:0;}
+html,body{width:100%;height:100%;overflow:hidden;}
+body{
+  font-family:'Montserrat',sans-serif;
+  background:linear-gradient(145deg,#040d1a 0%,#0a1f3d 40%,#0d2850 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:100vh;
+  position:relative;
+}
 
-.wrapper{max-width:600px;margin:0 auto;position:relative;z-index:1;}
+/* BG watermark */
+body::before{
+  content:'';position:fixed;inset:0;
+  background:url('https://base44.app/api/apps/6a044032cecb45c0033adc72/files/mp/public/6a044032cecb45c0033adc72/a5e121e13_LOGO-MPKP-transparent.png') center/35% no-repeat;
+  opacity:0.04;pointer-events:none;z-index:0;
+}
 
-/* HEADER CARD */
-.hdr-card{background:linear-gradient(170deg,#f8f9fc,#eef2f8);border-radius:20px;padding:28px 32px 24px;box-shadow:0 20px 60px rgba(0,0,0,0.45),0 0 0 1px rgba(212,168,42,0.3);margin-bottom:16px;position:relative;overflow:hidden;text-align:center;}
-.hdr-card::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;height:300px;background:url('https://base44.app/api/apps/6a044032cecb45c0033adc72/files/mp/public/6a044032cecb45c0033adc72/a5e121e13_LOGO-MPKP-transparent.png') center/contain no-repeat;opacity:0.04;pointer-events:none;}
-.top-bar{position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,#b8962e,#f0c040,#d4a82a,#f0c040,#b8962e);}
-.logo-wrap{width:80px;height:80px;border-radius:50%;margin:0 auto 12px;filter:drop-shadow(0 4px 18px rgba(212,168,42,0.45)) drop-shadow(0 8px 22px rgba(0,0,0,0.4));}
-.logo-wrap img{width:100%;height:100%;object-fit:contain;}
-.hdr-kempen{font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;color:#b8962e;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:3px;}
-.hdr-org{font-family:'Montserrat',sans-serif;font-size:11px;font-weight:800;color:#0a2342;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
-.hdr-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:800;color:#0a2342;line-height:1.3;margin-bottom:4px;}
-.hdr-title span{color:#b8962e;}
-.info-pills{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin-top:14px;}
-.pill{background:white;border:1px solid rgba(212,168,42,0.4);border-radius:8px;padding:6px 12px;font-size:11.5px;color:#0a2342;font-weight:600;box-shadow:0 2px 6px rgba(0,0,0,0.05);}
+canvas.konfeti{position:fixed;inset:0;pointer-events:none;z-index:999;}
 
-/* STATS BAR */
-.stats-bar{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
-.stat-box{background:rgba(255,255,255,0.08);border:1px solid rgba(212,168,42,0.25);border-radius:14px;padding:14px 12px;text-align:center;backdrop-filter:blur(8px);}
-.stat-num{font-family:'Montserrat',sans-serif;font-size:30px;font-weight:800;color:#f0c040;line-height:1;}
-.stat-lbl{font-size:10px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1px;margin-top:4px;font-weight:700;}
+/* ── LAYOUT ── */
+.page{
+  position:relative;z-index:1;
+  width:100%;max-width:1100px;
+  height:100vh;
+  display:grid;
+  grid-template-rows:auto 1fr auto;
+  grid-template-columns:1fr;
+  padding:16px 20px 12px;
+  gap:10px;
+}
 
-/* MAIN CABUTAN CARD */
-.cabutan-card{background:linear-gradient(170deg,#f8f9fc,#eef2f8);border-radius:20px;padding:28px 32px 32px;box-shadow:0 20px 60px rgba(0,0,0,0.45),0 0 0 1px rgba(212,168,42,0.3);position:relative;overflow:hidden;}
-.cabutan-card::before{content:'';position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,#b8962e,#f0c040,#d4a82a,#f0c040,#b8962e);}
-
-.sec-label{font-family:'Montserrat',sans-serif;font-size:10px;font-weight:800;color:#0a2342;letter-spacing:2px;text-transform:uppercase;display:flex;align-items:center;gap:8px;margin-bottom:16px;}
-.sec-label::after{content:'';flex:1;height:1px;background:rgba(212,168,42,0.3);}
-
-/* HADIAH SELECTOR */
-.hadiah-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px;}
-.hadiah-btn{padding:12px 8px;border:3px solid rgba(10,35,66,0.12);border-radius:14px;background:white;cursor:pointer;text-align:center;transition:all 0.25s;font-family:'Montserrat',sans-serif;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
-.hadiah-btn:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,0.15);}
-.hadiah-btn .trophy-icon{font-size:26px;display:block;margin-bottom:6px;}
-.hadiah-btn .hadiah-nama{font-size:12px;font-weight:800;letter-spacing:0.5px;}
-.hadiah-btn .hadiah-sub{font-size:9px;color:#888;margin-top:3px;line-height:1.3;}
-
-/* KAT 1 - Peach */
-.hadiah-btn.kat1-btn{background:linear-gradient(135deg,#fff0e8,#ffe4d0);border-color:#e8a87c;}
-.hadiah-btn.kat1-btn .hadiah-nama{color:#a0522d;}
-.hadiah-btn.kat1-btn:hover{border-color:#c0663a;background:linear-gradient(135deg,#ffe4d0,#ffd0b0);}
-.hadiah-btn.kat1-btn.active{background:linear-gradient(135deg,#e8845a,#c0562a);border-color:#a0422a;box-shadow:0 6px 20px rgba(192,86,42,0.4);}
-.hadiah-btn.kat1-btn.active .hadiah-nama{color:#fff8f5;}
-.hadiah-btn.kat1-btn.active .hadiah-sub{color:rgba(255,240,230,0.8);}
-.hadiah-btn.kat1-btn.active .trophy-icon{filter:drop-shadow(0 2px 6px rgba(255,200,160,0.8));}
-
-/* KAT 2 - Kuning */
-.hadiah-btn.kat2-btn{background:linear-gradient(135deg,#fffde8,#fff8c0);border-color:#e8d44a;}
-.hadiah-btn.kat2-btn .hadiah-nama{color:#8a7000;}
-.hadiah-btn.kat2-btn:hover{border-color:#c0a800;background:linear-gradient(135deg,#fff8c0,#ffee80);}
-.hadiah-btn.kat2-btn.active{background:linear-gradient(135deg,#f0c800,#c8a000);border-color:#a08000;box-shadow:0 6px 20px rgba(200,160,0,0.45);}
-.hadiah-btn.kat2-btn.active .hadiah-nama{color:#3a2800;}
-.hadiah-btn.kat2-btn.active .hadiah-sub{color:rgba(60,40,0,0.7);}
-.hadiah-btn.kat2-btn.active .trophy-icon{filter:drop-shadow(0 2px 6px rgba(255,230,100,0.9));}
-
-/* KAT 3 - Pink */
-.hadiah-btn.kat3-btn{background:linear-gradient(135deg,#fff0f5,#ffd6e8);border-color:#e87aaa;}
-.hadiah-btn.kat3-btn .hadiah-nama{color:#8a1a4a;}
-.hadiah-btn.kat3-btn:hover{border-color:#c04080;background:linear-gradient(135deg,#ffd6e8,#ffb8d8);}
-.hadiah-btn.kat3-btn.active{background:linear-gradient(135deg,#e05090,#b82868);border-color:#901848;box-shadow:0 6px 20px rgba(180,40,100,0.4);}
-.hadiah-btn.kat3-btn.active .hadiah-nama{color:#fff0f5;}
-.hadiah-btn.kat3-btn.active .hadiah-sub{color:rgba(255,220,235,0.8);}
-.hadiah-btn.kat3-btn.active .trophy-icon{filter:drop-shadow(0 2px 6px rgba(255,150,200,0.8));}
-
-/* DRUM ROLL DISPLAY */
-.drum-wrap{background:linear-gradient(135deg,#0a2342,#0d3b6e);border-radius:16px;padding:28px 20px;text-align:center;margin-bottom:20px;border:2px solid rgba(212,168,42,0.3);box-shadow:0 8px 30px rgba(10,35,66,0.25);min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;}
-.drum-wrap::before{content:'';position:absolute;inset:0;background:url('https://base44.app/api/apps/6a044032cecb45c0033adc72/files/mp/public/6a044032cecb45c0033adc72/a5e121e13_LOGO-MPKP-transparent.png') center/contain no-repeat;opacity:0.05;pointer-events:none;}
-.drum-lbl{font-size:9px;font-weight:700;color:rgba(240,192,64,0.6);letter-spacing:3px;text-transform:uppercase;margin-bottom:10px;}
-.drum-name{font-family:'Playfair Display',serif;font-size:28px;font-weight:800;color:#f0c040;letter-spacing:2px;text-shadow:0 2px 20px rgba(240,192,64,0.4);min-height:40px;transition:all 0.1s;word-break:break-word;padding:0 10px;}
-.drum-cb{font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:rgba(240,192,64,0.65);letter-spacing:3px;margin-top:6px;}
-.drum-jabatan{font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px;}
-.drum-idle{font-family:'Montserrat',sans-serif;font-size:13px;color:rgba(240,192,64,0.4);letter-spacing:1px;}
-
-/* MULA BUTTON */
-.btn-mula{width:100%;padding:16px;background:linear-gradient(135deg,#0a2342,#0d3b6e);color:#f0c040;border:1.5px solid rgba(212,168,42,0.6);border-radius:14px;font-size:15px;font-weight:800;font-family:'Montserrat',sans-serif;letter-spacing:2px;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 24px rgba(10,35,66,0.35);transition:all 0.2s;margin-bottom:10px;}
-.btn-mula:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 32px rgba(10,35,66,0.45);}
-.btn-mula:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
-.btn-reset{width:100%;padding:11px;background:transparent;color:#b8962e;border:1.5px solid rgba(184,150,46,0.4);border-radius:12px;font-size:12px;font-weight:700;font-family:'Montserrat',sans-serif;letter-spacing:1px;cursor:pointer;transition:all 0.2s;}
-.btn-reset:hover{background:rgba(184,150,46,0.08);}
-
-/* ERROR BOX */
-.err-box{background:#fff3f3;color:#b71c1c;border:1px solid #ef9a9a;border-radius:10px;padding:12px 16px;font-size:13px;font-weight:600;text-align:center;margin-bottom:14px;display:none;}
-
-/* PEMENANG LIST */
-.pemenang-section{margin-top:24px;}
-.pemenang-title{font-family:'Montserrat',sans-serif;font-size:10px;font-weight:800;color:#0a2342;letter-spacing:2px;text-transform:uppercase;display:flex;align-items:center;gap:8px;margin-bottom:14px;}
-.pemenang-title::after{content:'';flex:1;height:1px;background:rgba(212,168,42,0.3);}
-
-.pemenang-card{background:linear-gradient(135deg,#fffbf0,#fff8e1);border:1.5px solid #d4a82a;border-radius:14px;padding:16px 18px;margin-bottom:10px;display:flex;align-items:center;gap:14px;box-shadow:0 4px 16px rgba(212,168,42,0.12);animation:slideIn 0.5s ease;position:relative;overflow:hidden;}
-.pemenang-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#f0c040,#b8962e);}
-@keyframes slideIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-.pemenang-trophy{font-size:32px;flex-shrink:0;}
-.pemenang-info{}
-.pemenang-hadiah{font-size:9px;font-weight:700;color:#b8962e;letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;}
-.pemenang-nama{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#0a2342;margin-bottom:2px;}
-.pemenang-meta{font-size:11px;color:#777;}
-.pemenang-cb{display:inline-block;background:linear-gradient(135deg,#0a2342,#0d3b6e);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;letter-spacing:1px;margin-top:4px;}
-
-/* KONFETI */
-.konfeti{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;display:none;}
-
-/* SPINNER */
-.spinner{display:inline-block;width:16px;height:16px;border:2.5px solid rgba(240,192,64,0.3);border-top-color:#f0c040;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:8px;}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* FOOTER */
-.footer{text-align:center;margin-top:20px;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:1px;}
-.btn-fullscreen{
-  position:fixed;bottom:16px;right:16px;z-index:999;
-  width:46px;height:46px;border-radius:50%;
-  background:linear-gradient(135deg,#0a2342,#0d3b6e);
-  border:2px solid rgba(240,192,64,0.6);
-  color:#f0c040;font-size:18px;cursor:pointer;
-  box-shadow:0 4px 16px rgba(0,0,0,0.4);
+/* ── TOP BAR ── */
+.top-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;
+}
+.top-left{display:flex;align-items:center;gap:12px;}
+.top-logo{width:52px;height:52px;border-radius:50%;
+  background:rgba(255,255,255,0.08);
+  border:2px solid rgba(240,192,64,0.5);
   display:flex;align-items:center;justify-content:center;
+  overflow:hidden;flex-shrink:0;
+}
+.top-logo img{width:100%;height:100%;object-fit:cover;}
+.top-info .prog-title{font-family:'Playfair Display',serif;font-size:15px;color:#fff;font-weight:700;line-height:1.2;}
+.top-info .prog-title span{color:#f0c040;}
+.top-info .prog-sub{font-size:10px;color:rgba(240,192,64,0.8);letter-spacing:1px;font-weight:600;margin-bottom:2px;}
+
+.top-stats{display:flex;gap:8px;}
+.stat-pill{
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(240,192,64,0.25);
+  border-radius:12px;padding:6px 14px;text-align:center;min-width:80px;
+}
+.stat-pill .sp-num{font-size:22px;font-weight:900;color:#f0c040;line-height:1;}
+.stat-pill .sp-lbl{font-size:8px;color:rgba(255,255,255,0.5);letter-spacing:0.8px;margin-top:2px;}
+
+/* ── MIDDLE: 3 BUTTONS + CIRCLE ── */
+.middle{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:16px;
+}
+
+/* Kupon buttons */
+.kupon-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+
+.kupon-btn{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  width:160px;min-height:72px;
+  border-radius:18px;border:3px solid transparent;
+  cursor:pointer;transition:all 0.25s;
+  font-family:'Montserrat',sans-serif;
+  position:relative;overflow:hidden;
+  box-shadow:0 4px 15px rgba(0,0,0,0.3);
+  user-select:none;
+}
+.kupon-btn:hover{transform:translateY(-3px);box-shadow:0 8px 25px rgba(0,0,0,0.4);}
+.kupon-btn.active{transform:translateY(-4px);}
+.kupon-btn .kb-icon{font-size:24px;margin-bottom:4px;}
+.kupon-btn .kb-nama{font-size:13px;font-weight:900;letter-spacing:0.5px;}
+.kupon-btn .kb-sub{font-size:9px;opacity:0.85;margin-top:2px;text-align:center;line-height:1.3;}
+.kupon-btn .kb-count{
+  position:absolute;top:6px;right:8px;
+  font-size:9px;font-weight:800;
+  background:rgba(0,0,0,0.25);border-radius:20px;padding:1px 6px;
+}
+
+/* Kupon 1 — Peach */
+.kb-peach{background:linear-gradient(135deg,#f4a06a,#e06830);border-color:#e06830;color:#fff;}
+.kb-peach.active{background:linear-gradient(135deg,#f4a06a,#c85020);border-color:#fff8f0;box-shadow:0 0 25px rgba(240,120,60,0.6);}
+/* Kupon 2 — Kuning */
+.kb-kuning{background:linear-gradient(135deg,#ffe55a,#e8c000);border-color:#e8c000;color:#3a2800;}
+.kb-kuning.active{background:linear-gradient(135deg,#ffe55a,#c8a000);border-color:#fffde0;box-shadow:0 0 25px rgba(240,200,0,0.6);}
+/* Kupon 3 — Pink */
+.kb-pink{background:linear-gradient(135deg,#f48ab8,#d83880);border-color:#d83880;color:#fff;}
+.kb-pink.active{background:linear-gradient(135deg,#f48ab8,#b82068);border-color:#ffe0f0;box-shadow:0 0 25px rgba(220,60,130,0.6);}
+
+/* ── BULATAN PREMIUM ── */
+.circle-wrap{
+  position:relative;
+  width:320px;height:320px;
+  flex-shrink:0;
+}
+/* Glow ring luar */
+.circle-wrap::before{
+  content:'';position:absolute;inset:-8px;border-radius:50%;
+  background:conic-gradient(from 0deg, #f0c040, #e06830, #f48ab8, #ffe55a, #f0c040);
+  animation:spinRing 4s linear infinite;
+  opacity:0.5;
+}
+@keyframes spinRing{to{transform:rotate(360deg);}}
+
+.circle-outer{
+  position:absolute;inset:4px;border-radius:50%;
+  background:linear-gradient(145deg,#0d2850,#071428);
+  border:3px solid rgba(240,192,64,0.3);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:28px;
+  box-shadow:inset 0 0 40px rgba(0,0,0,0.5);
+  cursor:pointer;
   transition:all 0.2s;
+  overflow:hidden;
 }
-.btn-fullscreen:hover{transform:scale(1.1);box-shadow:0 6px 22px rgba(0,0,0,0.5);}
-:fullscreen body,:fullscreen .wrapper{background:linear-gradient(160deg,#061428 0%,#0a2d5e 40%,#0e3d7a 70%,#0a2342 100%)!important;}
+.circle-outer:hover{border-color:rgba(240,192,64,0.6);}
 
-@media(max-width:480px){
-  .hdr-card{padding:22px 18px 20px;}
-  .cabutan-card{padding:22px 18px 26px;}
-  .drum-name{font-size:22px;}
-  .hadiah-grid{gap:6px;}
+.circ-lbl{
+  font-size:10px;font-weight:700;letter-spacing:2px;
+  color:rgba(240,192,64,0.7);margin-bottom:10px;
 }
+.circ-name{
+  font-family:'Playfair Display',serif;
+  font-size:28px;font-weight:800;
+  color:#fff;line-height:1.15;
+  word-break:break-word;
+  transition:all 0.1s;
+  min-height:70px;display:flex;align-items:center;justify-content:center;
+}
+.circ-name.idle{
+  font-family:'Montserrat',sans-serif;
+  font-size:14px;font-weight:600;
+  color:rgba(255,255,255,0.4);
+  min-height:70px;
+}
+.circ-name.rolling{
+  font-size:22px;
+  color:#f0c040;
+  animation:flicker 0.08s infinite;
+}
+@keyframes flicker{0%{opacity:1;}50%{opacity:0.7;}100%{opacity:1;}}
 
-/* ── LANDSCAPE iPad / Tablet ── */
-@media (orientation:landscape) and (min-width:600px){
-  body{padding:10px 16px;}
-  .wrapper{max-width:100%;display:grid;grid-template-columns:320px 1fr;gap:14px;align-items:start;}
+.circ-cb{font-size:13px;font-weight:700;color:#f0c040;margin-top:8px;letter-spacing:1px;}
+.circ-jab{font-size:10px;color:rgba(255,255,255,0.5);margin-top:4px;line-height:1.3;}
 
-  /* Kolum kiri: header + stats */
-  .hdr-card{margin-bottom:0;padding:16px 20px 14px;}
-  .logo-wrap{width:52px;height:52px;margin-bottom:8px;}
-  .hdr-kempen{font-size:8px;}
-  .hdr-org{font-size:10px;}
-  .hdr-title{font-size:15px;}
-  .info-pills{gap:5px;margin-top:10px;}
-  .pill{font-size:10px;padding:4px 10px;}
-
-  .stats-bar{grid-template-columns:1fr 1fr;gap:8px;margin-bottom:0;}
-  .stat-num{font-size:24px;}
-  .stat-lbl{font-size:9px;}
-  .stat-box{padding:10px 8px;}
-
-  /* Kolum kanan: cabutan card */
-  .cabutan-card{padding:18px 20px 20px;}
-  .hadiah-grid{grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px;}
-  .hadiah-btn{padding:8px 4px;}
-  .hadiah-btn .trophy-icon{font-size:18px;}
-  .hadiah-btn .hadiah-nama{font-size:10px;}
-
-  .drum-wrap{min-height:100px;padding:18px 16px;margin-bottom:14px;}
-  .drum-name{font-size:22px;}
-  .drum-cb{font-size:12px;}
-
-  .btn-mula{padding:13px;font-size:13px;margin-bottom:8px;}
-  .btn-reset{padding:9px;font-size:11px;}
-
-  .pemenang-card{padding:12px 14px;}
-  .pemenang-trophy{font-size:24px;}
-  .pemenang-nama{font-size:15px;}
-
-  /* Letak stats + hdr dalam kolum kiri, cabutan dalam kanan */
-  .hdr-card{grid-column:1;grid-row:1;}
-  .stats-bar{grid-column:1;grid-row:2;}
-  .cabutan-card{grid-column:2;grid-row:1/span 3;}
-  .footer{grid-column:1/span 2;}
+/* Instruction text bawah bulatan */
+.circ-hint{
+  font-size:11px;color:rgba(255,255,255,0.35);
+  letter-spacing:1px;margin-top:10px;text-align:center;
 }
 
-/* iPad Pro landscape khusus */
-@media (orientation:landscape) and (min-width:900px){
-  .wrapper{grid-template-columns:300px 1fr;gap:16px;}
-  .drum-name{font-size:26px;}
-  .hadiah-grid{grid-template-columns:repeat(4,1fr);}
+/* ── SENARAI PEMENANG ── */
+.pemenang-row{
+  display:flex;gap:8px;flex-wrap:wrap;justify-content:center;
+  max-height:80px;overflow-y:auto;
+  padding:0 10px;
+}
+.pemenang-chip{
+  display:flex;align-items:center;gap:6px;
+  border-radius:20px;padding:4px 12px 4px 8px;
+  font-size:11px;font-weight:700;color:#fff;
+  box-shadow:0 2px 8px rgba(0,0,0,0.3);
+}
+.pemenang-chip.kat1{background:linear-gradient(90deg,#e06830,#f4a06a);}
+.pemenang-chip.kat2{background:linear-gradient(90deg,#c8a000,#ffe55a);color:#3a2800;}
+.pemenang-chip.kat3{background:linear-gradient(90deg,#d83880,#f48ab8);}
+
+/* ── BOTTOM BAR ── */
+.bottom-bar{
+  text-align:center;
+  font-size:9px;color:rgba(255,255,255,0.2);
+  letter-spacing:1.5px;
+}
+
+/* ── RESET BUTTON ── */
+.btn-reset-small{
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.15);
+  color:rgba(255,255,255,0.4);
+  border-radius:8px;padding:5px 14px;
+  font-size:10px;font-family:'Montserrat',sans-serif;
+  cursor:pointer;display:none;margin-top:4px;
+}
+.btn-reset-small:hover{background:rgba(255,255,255,0.12);color:#fff;}
+
+/* FULLSCREEN BTN */
+.btn-fs{
+  position:fixed;bottom:16px;right:16px;z-index:100;
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(240,192,64,0.15);border:1px solid rgba(240,192,64,0.4);
+  color:#f0c040;font-size:18px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* Landscape tablet */
+@media (orientation:landscape) and (min-width:700px){
+  .page{
+    grid-template-rows:auto 1fr auto;
+    padding:12px 24px 8px;
+  }
+  .circle-wrap{width:280px;height:280px;}
+  .circ-name{font-size:24px;}
+  .kupon-btn{width:140px;min-height:64px;}
+}
+@media (orientation:landscape) and (min-width:1000px){
+  .circle-wrap{width:320px;height:320px;}
+  .circ-name{font-size:30px;}
 }
 </style>
 </head>
 <body>
-
 <canvas class="konfeti" id="konfeti"></canvas>
 
-<div class="wrapper">
+<div class="page">
 
-  <!-- HEADER -->
-  <div class="hdr-card">
-    <div class="top-bar"></div>
-    <div class="logo-wrap"><img src="https://base44.app/api/apps/6a044032cecb45c0033adc72/files/mp/public/6a044032cecb45c0033adc72/a5e121e13_LOGO-MPKP-transparent.png" alt="MPKP"></div>
-    <div class="hdr-kempen">Kempen Kesihatan Persekitaran 2026</div>
-    <div class="hdr-org">Majlis Perbandaran Kubang Pasu</div>
-    <div class="hdr-title">Program <span>Gotong-Royong</span><br>Medan Selera Changlun</div>
-    <div class="info-pills">
-      <span class="pill">📅 20 Mei 2026</span>
-      <span class="pill">🕗 8.00 Pagi</span>
-      <span class="pill">📍 Medan Selera Changlun</span>
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="top-left">
+      <div class="top-logo">
+        <img src="https://base44.app/api/apps/6a044032cecb45c0033adc72/files/mp/public/6a044032cecb45c0033adc72/a5e121e13_LOGO-MPKP-transparent.png" alt="MPKP"/>
+      </div>
+      <div class="top-info">
+        <div class="prog-sub">KEMPEN KESIHATAN PERSEKITARAN 2026</div>
+        <div class="prog-title">Program <span>Gotong-Royong</span> Medan Selera Changlun</div>
+      </div>
+    </div>
+    <div class="top-stats">
+      <div class="stat-pill">
+        <div class="sp-num" id="statPeserta">—</div>
+        <div class="sp-lbl">PESERTA</div>
+      </div>
+      <div class="stat-pill">
+        <div class="sp-num" id="statPemenang">0</div>
+        <div class="sp-lbl">PEMENANG</div>
+      </div>
     </div>
   </div>
 
-  <!-- STATS -->
-  <div class="stats-bar">
-    <div class="stat-box">
-      <div class="stat-num" id="statPeserta">—</div>
-      <div class="stat-lbl">Peserta Hadir</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-num" id="statPemenang">0</div>
-      <div class="stat-lbl">Pemenang Dipilih</div>
-    </div>
-  </div>
+  <!-- MIDDLE -->
+  <div class="middle">
 
-  <!-- CABUTAN CARD -->
-  <div class="cabutan-card">
-
-    <!-- ERROR -->
-    <div class="err-box" id="errBox"></div>
-
-    <!-- PILIH KATEGORI -->
-    <div class="sec-label">🏷️ Pilih Kategori Cabutan</div>
-    <div class="hadiah-grid" style="grid-template-columns:1fr 1fr 1fr;">
-      <div class="hadiah-btn kat1-btn active" onclick="pilihHadiah(this,'Kupon 1','🏛️','kat1')">
-        <span class="trophy-icon">🏛️</span>
-        <div class="hadiah-nama">KUPON 1</div>
-        <div class="hadiah-sub">MPKP &amp; Ahli Majlis</div>
+    <!-- 3 KUPON BUTTONS -->
+    <div class="kupon-row">
+      <div class="kupon-btn kb-peach active" id="btnKat1" onclick="pilihDanCabut(this,'Kupon 1','kat1')">
+        <span class="kb-icon">🏛️</span>
+        <div class="kb-nama">KUPON 1</div>
+        <div class="kb-sub">MPKP &amp; Ahli Majlis</div>
+        <div class="kb-count" id="countKat1">—</div>
       </div>
-      <div class="hadiah-btn kat2-btn" onclick="pilihHadiah(this,'Kupon 2','🏢','kat2')">
-        <span class="trophy-icon">🏢</span>
-        <div class="hadiah-nama">KUPON 2</div>
-        <div class="hadiah-sub">Agensi / e-IDAMAN</div>
+      <div class="kupon-btn kb-kuning" id="btnKat2" onclick="pilihDanCabut(this,'Kupon 2','kat2')">
+        <span class="kb-icon">🏢</span>
+        <div class="kb-nama">KUPON 2</div>
+        <div class="kb-sub">Agensi / e-IDAMAN</div>
+        <div class="kb-count" id="countKat2">—</div>
       </div>
-      <div class="hadiah-btn kat3-btn" onclick="pilihHadiah(this,'Kupon 3','🏪','kat3')">
-        <span class="trophy-icon">🏪</span>
-        <div class="hadiah-nama">KUPON 3</div>
-        <div class="hadiah-sub">Peniaga &amp; Penduduk</div>
+      <div class="kupon-btn kb-pink" id="btnKat3" onclick="pilihDanCabut(this,'Kupon 3','kat3')">
+        <span class="kb-icon">🏪</span>
+        <div class="kb-nama">KUPON 3</div>
+        <div class="kb-sub">Peniaga &amp; Penduduk</div>
+        <div class="kb-count" id="countKat3">—</div>
       </div>
     </div>
-    <!-- Info kiraan kategori -->
-    <div id="katInfo" style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;"></div>
 
-    <!-- DRUM ROLL DISPLAY -->
-    <div class="sec-label">🎰 Cabutan</div>
-    <div class="drum-wrap">
-      <div class="drum-lbl" id="drumLbl">SEDIA UNTUK CABUTAN</div>
-      <div class="drum-name" id="drumName"><span class="drum-idle">Tekan butang untuk mula</span></div>
-      <div class="drum-cb" id="drumCb"></div>
-      <div class="drum-jabatan" id="drumJabatan"></div>
+    <!-- BULATAN PREMIUM -->
+    <div class="circle-wrap" id="circleWrap">
+      <div class="circle-outer" id="circleOuter">
+        <div class="circ-lbl" id="circLbl">SEDIA UNTUK CABUTAN</div>
+        <div class="circ-name idle" id="circName">Tekan butang untuk mula</div>
+        <div class="circ-cb" id="circCb"></div>
+        <div class="circ-jab" id="circJab"></div>
+      </div>
     </div>
 
-    <!-- BUTTONS -->
-    <button class="btn-mula" id="btnMula" onclick="mulaCabutan()">🎯 MULA CABUTAN</button>
-    <button class="btn-reset" id="btnReset" onclick="resetCabutan()" style="display:none">↺ Cabutan Baharu</button>
+    <button class="btn-reset-small" id="btnReset" onclick="resetCabutan()">↺ Cabutan Baharu</button>
 
     <!-- SENARAI PEMENANG -->
-    <div class="pemenang-section" id="pemenangSection" style="display:none">
-      <div class="pemenang-title">🏆 Senarai Pemenang</div>
-      <div id="pemenangList"></div>
-    </div>
-
+    <div class="pemenang-row" id="pemenangRow"></div>
   </div>
 
-  <div class="footer">MAJLIS PERBANDARAN KUBANG PASU · MPKP · 2026</div>
+  <!-- BOTTOM -->
+  <div class="bottom-bar">MAJLIS PERBANDARAN KUBANG PASU · MPKP · 2026</div>
 </div>
+
+<button class="btn-fs" onclick="toggleFs()" title="Fullscreen">⛶</button>
 
 <script>
 const BACKEND = 'https://base44.app/api/apps/6a044032cecb45c0033adc72/functions/cabutanBertuah';
-const SHEETS_ID = '1UXxjo4uC8_4s5nsKEeTAMjPlFG9tc-6izmXhrAa0344';
-const SHEETS_URL = `https://base44.app/api/apps/6a044032cecb45c0033adc72/functions/getLaporanPeserta`;
+const SHEETS_URL = 'https://base44.app/api/apps/6a044032cecb45c0033adc72/functions/getLaporanPeserta';
 
 let semuaPeserta = [];
-let sudahMenang = []; // track IC yang dah menang
-let hadiahAktif = { nama: 'Kupon 1', trophy: '🏛️', kat: 'kat1' };
+let sudahMenang = [];
+let hadiahAktif = { nama:'Kupon 1', kat:'kat1' };
 let sedangCabut = false;
 let drumInterval = null;
 let pemenangList = [];
 
-// ── DEFINISI KATEGORI ──
 const KATEGORI_MAP = {
-  kat1: {
-    label: 'MPKP & Ahli Majlis',
-    jabatan: ['Majlis Perbandaran Kubang Pasu', 'Ahli Majlis, MPKP', 'MPKP']
-  },
-  kat2: {
-    label: 'Agensi',
-    jabatan: ['e-IDAMAN', 'SWCORP', 'Jabatan Pengairan dan Saliran', 'JPS', 'e-Idaman']
-  },
-  kat3: {
-    label: 'Peniaga & Penduduk',
-    jabatan: ['Peniaga / Wakil Medan Selera Changlun', 'Peniaga', 'Wakil Peniaga', 'Penduduk Changlun', 'Penduduk', 'Lain-lain']
-  }
+  kat1:{ label:'MPKP & Ahli Majlis', jabatan:['Majlis Perbandaran Kubang Pasu','Ahli Majlis, MPKP','MPKP'] },
+  kat2:{ label:'Agensi', jabatan:['e-IDAMAN','SWCORP','Jabatan Pengairan dan Saliran','JPS','e-Idaman','SWCorp'] },
+  kat3:{ label:'Peniaga & Penduduk', jabatan:['Peniaga / Wakil Medan Selera Changlun','Peniaga','Wakil Peniaga','Penduduk Changlun','Penduduk','Lain-lain'] }
 };
 
-function getPesertaKategori(kat) {
-  const katDef = KATEGORI_MAP[kat];
-  if (!katDef) return semuaPeserta;
-  return semuaPeserta.filter(p => {
-    const jab = (p.jabatan || p.Jabatan || '').trim();
-    return katDef.jabatan.some(k => jab.toLowerCase().includes(k.toLowerCase()));
+function getPesertaKategori(kat){
+  const k = KATEGORI_MAP[kat];
+  if(!k) return semuaPeserta;
+  return semuaPeserta.filter(p=>{
+    const jab=(p.jabatan||'').trim();
+    return k.jabatan.some(kj=>jab.toLowerCase().includes(kj.toLowerCase()));
   });
 }
 
-function updateKatInfo() {
-  const div = document.getElementById('katInfo');
-  if (!div) return;
-  const colors = {kat1:'#0a2342', kat2:'#1a6b3a', kat3:'#8a4000'};
-  div.innerHTML = Object.entries(KATEGORI_MAP).map(([k,v]) => {
-    const total = getPesertaKategori(k).length;
-    const menang = pemenangList.filter(p => p.kat === k).length;
-    const bg = k === hadiahAktif.kat ? colors[k] : 'rgba(0,0,0,0.06)';
-    const clr = k === hadiahAktif.kat ? '#f0c040' : '#555';
-    return \`<div style="background:\${bg};color:\${clr};border-radius:8px;padding:5px 10px;font-size:10px;font-weight:700;font-family:'Montserrat',sans-serif;">
-      \${v.label}: \${total - menang} layak
-    </div>\`;
-  }).join('');
+function updateCounts(){
+  ['kat1','kat2','kat3'].forEach((k,i)=>{
+    const total=getPesertaKategori(k).length;
+    const menang=pemenangList.filter(p=>p.kat===k).length;
+    const el=document.getElementById('countKat'+(i+1));
+    if(el) el.textContent=(total-menang)+' layak';
+  });
 }
 
-// ── LOAD DATA PESERTA ──
-async function loadPeserta() {
-  try {
-    const res = await fetch(SHEETS_URL, {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Cache-Control': 'no-cache'
-      },
-      body: JSON.stringify({})
+// ── LOAD PESERTA ──
+async function loadPeserta(){
+  try{
+    const res=await fetch(SHEETS_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({})
     });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    const rows = data.data || data.peserta || [];
-    semuaPeserta = rows.filter(r => r.nama && r.nama.trim() !== '');
-    document.getElementById('statPeserta').textContent = semuaPeserta.length;
-    updateKatInfo();
-    console.log('✅ Loaded:', semuaPeserta.length, 'peserta');
-  } catch(e) {
-    console.error('❌ loadPeserta error:', e);
-    // Tunjuk error pada screen untuk debug
-    document.getElementById('statPeserta').textContent = 'ERR';
-    const errDiv = document.getElementById('errMsg');
-    if (errDiv) { errDiv.textContent = 'Load error: ' + e.message; errDiv.style.display='block'; }
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const data=await res.json();
+    const rows=data.data||data.peserta||[];
+    semuaPeserta=rows.filter(r=>r.nama&&r.nama.trim()!=='');
+    document.getElementById('statPeserta').textContent=semuaPeserta.length;
+    updateCounts();
+    console.log('✅ Loaded:',semuaPeserta.length,'peserta');
+  }catch(e){
+    console.error('❌',e);
+    document.getElementById('statPeserta').textContent='!';
   }
 }
 
-// ── PILIH KATEGORI ──
-function pilihHadiah(el, nama, trophy, kat) {
-  document.querySelectorAll('.hadiah-btn').forEach(b => b.classList.remove('active'));
+// ── PILIH KATEGORI & TERUS CABUT ──
+function pilihDanCabut(el, nama, kat){
+  // Set aktif
+  document.querySelectorAll('.kupon-btn').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
-  hadiahAktif = { nama, trophy, kat };
-  // Warna drum-wrap ikut kategori
-  const drumWrap = document.querySelector('.drum-wrap');
-  const katGrad = {
-    kat1: 'linear-gradient(135deg,#8a3018,#c0562a)',
-    kat2: 'linear-gradient(135deg,#7a6000,#c0a000)',
-    kat3: 'linear-gradient(135deg,#7a1040,#b82868)'
-  };
-  const katBorder = { kat1:'rgba(232,132,90,0.5)', kat2:'rgba(240,200,0,0.5)', kat3:'rgba(224,80,144,0.5)' };
-  if (drumWrap) {
-    drumWrap.style.background = katGrad[kat] || 'linear-gradient(135deg,#0a2342,#0d3b6e)';
-    drumWrap.style.borderColor = katBorder[kat] || 'rgba(212,168,42,0.3)';
-  }
-  // Reset drum display
-  document.getElementById('drumName').innerHTML = '<span class="drum-idle">Tekan butang untuk mula</span>';
-  document.getElementById('drumCb').textContent = '';
-  document.getElementById('drumJabatan').textContent = '';
-  document.getElementById('drumLbl').textContent = 'SEDIA UNTUK CABUTAN';
-  updateKatInfo();
-  // Update stat peserta ikut kategori
-  const katPeserta = getPesertaKategori(kat);
-  const sudahKat = pemenangList.filter(p => p.kat === kat).map(p => p.noIc);
-  const layak = katPeserta.filter(p => !sudahKat.includes(p.noIc || p.ic || p.no_ic)).length;
-  document.getElementById('statPeserta').textContent = layak;
+  hadiahAktif={nama, kat};
+  // Terus mula cabutan
+  mulaCabutan();
 }
 
-// ── DRUM ROLL ANIMATION ──
-function mulaDrum() {
-  const katPeserta = getPesertaKategori(hadiahAktif.kat);
-  const names = katPeserta.length > 0
-    ? katPeserta.filter(p => !sudahMenang.includes(p.noIc || p.ic || p.no_ic))
-    : ['AHMAD BIN ALI','SITI BINTI OMAR','HASSAN BIN KASSIM','FATIMAH BINTI RAHIM'];
-
-  let i = 0;
-  drumInterval = setInterval(() => {
-    const r = names[Math.floor(Math.random() * names.length)];
-    const nama = typeof r === 'string' ? r : (r.nama || r.name || '???');
-    document.getElementById('drumName').textContent = nama;
-    document.getElementById('drumCb').textContent = '';
-    document.getElementById('drumLbl').textContent = '🎰 MEMILIH PEMENANG...';
-    i++;
-  }, 80);
+// ── DRUM ROLL ──
+function mulaDrum(){
+  const katPeserta=getPesertaKategori(hadiahAktif.kat);
+  const nameEl=document.getElementById('circName');
+  nameEl.className='circ-name rolling';
+  document.getElementById('circLbl').textContent='🎰 SEDANG MENCABUT...';
+  document.getElementById('circCb').textContent='';
+  document.getElementById('circJab').textContent='';
+  drumInterval=setInterval(()=>{
+    const idx=Math.floor(Math.random()*katPeserta.length);
+    nameEl.textContent=katPeserta[idx]?.nama||'...';
+  },80);
 }
 
 // ── MULA CABUTAN ──
-async function mulaCabutan() {
-  if (sedangCabut) return;
+async function mulaCabutan(){
+  if(sedangCabut) return;
 
-  const errBox = document.getElementById('errBox');
-  errBox.style.display = 'none';
-
-  // Semak ada peserta
-  const katPeserta = getPesertaKategori(hadiahAktif.kat);
-  const layak = katPeserta.filter(p => !sudahMenang.includes(p.noIc || p.ic || p.no_ic));
-  if (katPeserta.length > 0 && layak.length === 0) {
-    errBox.textContent = '⚠️ Semua peserta dalam ' + (KATEGORI_MAP[hadiahAktif.kat]?.label || hadiahAktif.nama) + ' sudah dipilih!';
-    errBox.style.display = 'block';
+  const katPeserta=getPesertaKategori(hadiahAktif.kat);
+  const layak=katPeserta.filter(p=>!sudahMenang.includes(p.noIc||p.ic||p.no_ic));
+  if(katPeserta.length>0 && layak.length===0){
+    const nameEl=document.getElementById('circName');
+    nameEl.className='circ-name';
+    nameEl.textContent='Tiada peserta layak!';
+    document.getElementById('circLbl').textContent='⚠️ HABIS';
     return;
   }
 
-  sedangCabut = true;
-  const btn = document.getElementById('btnMula');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span>SEDANG MENCABUT...';
-  document.getElementById('btnReset').style.display = 'none';
-
-  // Mula animasi drum roll
+  sedangCabut=true;
+  // Disable semua button
+  document.querySelectorAll('.kupon-btn').forEach(b=>b.style.pointerEvents='none');
+  document.getElementById('btnReset').style.display='none';
   mulaDrum();
 
-  try {
-    // Panggil backend untuk pilih pemenang SEBENAR
-    const res = await fetch(BACKEND, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ jumlahPemenang: 1 })
+  try{
+    const res=await fetch(BACKEND,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({jumlahPemenang:1, kategori: hadiahAktif.kat, sudahMenang})
     });
-    const data = await res.json();
+    const data=await res.json();
 
-    // Biar drum roll jalan sekurang-kurangnya 3 saat
-    await new Promise(r => setTimeout(r, 3000));
-
-    // Stop drum roll
+    await new Promise(r=>setTimeout(r,3000));
     clearInterval(drumInterval);
 
-    if (data.error) {
-      throw new Error(data.error);
-    }
+    if(data.error) throw new Error(data.error);
 
-    const pemenang = data.pemenang[0];
+    const pemenang=data.pemenang?.[0];
+    if(!pemenang) throw new Error('Tiada pemenang dikembalikan');
 
-    // Slow down animation ke nama pemenang sebenar
-    let count = 0;
-    const slowDown = setInterval(() => {
-      const layakArr = semuaPeserta.filter(p => !sudahMenang.includes(p.noIc || p.ic));
-      const randIdx = Math.floor(Math.random() * Math.max(layakArr.length, 1));
-      const randNama = layakArr[randIdx]?.nama || pemenang.nama;
-      document.getElementById('drumName').textContent = randNama;
+    // Slow down
+    let count=0;
+    const slow=setInterval(()=>{
+      const arr=layak.length>0?layak:katPeserta;
+      document.getElementById('circName').textContent=arr[Math.floor(Math.random()*arr.length)]?.nama||'...';
       count++;
-      if (count > 8) {
-        clearInterval(slowDown);
-        paparPemenang(pemenang);
-      }
-    }, 200);
+      if(count>8){ clearInterval(slow); paparPemenang(pemenang); }
+    },200);
 
-  } catch(err) {
+  }catch(err){
     clearInterval(drumInterval);
-    errBox.textContent = '❌ ' + err.message;
-    errBox.style.display = 'block';
-    btn.disabled = false;
-    btn.innerHTML = '🎯 MULA CABUTAN';
-    sedangCabut = false;
+    const nameEl=document.getElementById('circName');
+    // Pilih secara lokal jika backend gagal
+    if(layak.length>0){
+      const winner=layak[Math.floor(Math.random()*layak.length)];
+      let count=0;
+      const slow=setInterval(()=>{
+        document.getElementById('circName').textContent=layak[Math.floor(Math.random()*layak.length)]?.nama||'...';
+        count++;
+        if(count>8){ clearInterval(slow); paparPemenang(winner); }
+      },200);
+    } else {
+      nameEl.className='circ-name';
+      nameEl.textContent='Ralat: '+err.message;
+      sedangCabut=false;
+      document.querySelectorAll('.kupon-btn').forEach(b=>b.style.pointerEvents='');
+    }
   }
 }
 
 // ── PAPAR PEMENANG ──
-function paparPemenang(pemenang) {
-  const nama = pemenang.nama || pemenang.name || '???';
-  const jabatan = pemenang.jabatan || '';
-  const noCabutan = pemenang.noCabutan || pemenang.no_cabutan || '';
-  const noTel = pemenang.noTelefon || pemenang.tel || '';
+function paparPemenang(p){
+  const nama=p.nama||p.name||'???';
+  const jabatan=p.jabatan||'';
+  const noCabutan=p.noCabutan||p.no_cabutan||'';
 
-  // Update drum display — tunjuk pemenang
-  document.getElementById('drumLbl').textContent = '🎊 PEMENANG ' + hadiahAktif.nama.toUpperCase();
-  document.getElementById('drumName').textContent = nama;
-  document.getElementById('drumCb').textContent = noCabutan ? '🎫 ' + noCabutan : '';
-  document.getElementById('drumJabatan').textContent = jabatan;
+  const nameEl=document.getElementById('circName');
+  nameEl.className='circ-name';
+  nameEl.textContent=nama;
+  document.getElementById('circLbl').textContent='🎊 PEMENANG '+hadiahAktif.nama.toUpperCase();
+  document.getElementById('circCb').textContent=noCabutan?'🎫 '+noCabutan:'';
+  document.getElementById('circJab').textContent=jabatan;
 
-  // Track IC supaya tak menang 2 kali
-  if (pemenang.noIc || pemenang.ic) {
-    sudahMenang.push(pemenang.noIc || pemenang.ic);
-  }
-
-  // Tambah ke senarai pemenang
-  pemenangList.push({ ...pemenang, hadiah: hadiahAktif.nama, trophy: hadiahAktif.trophy, kat: hadiahAktif.kat });
-  updateKatInfo();
-  renderPemenangList();
-
-  // Update counter
-  document.getElementById('statPemenang').textContent = pemenangList.length;
-
-  // Konfeti!
+  if(p.noIc||p.ic) sudahMenang.push(p.noIc||p.ic);
+  pemenangList.push({...p,hadiah:hadiahAktif.nama,kat:hadiahAktif.kat});
+  document.getElementById('statPemenang').textContent=pemenangList.length;
+  updateCounts();
+  renderPemenang();
   launchKonfeti();
 
-  // Reset button state
-  const btn = document.getElementById('btnMula');
-  btn.disabled = false;
-  btn.innerHTML = '🎯 CABUT HADIAH SETERUSNYA';
-  document.getElementById('btnReset').style.display = 'block';
-  sedangCabut = false;
+  // Sebut nama
+  try{
+    const u=new SpeechSynthesisUtterance('Tahniah kepada '+nama);
+    u.lang='ms-MY';u.rate=0.85;
+    speechSynthesis.speak(u);
+  }catch(e){}
+
+  sedangCabut=false;
+  document.querySelectorAll('.kupon-btn').forEach(b=>b.style.pointerEvents='');
+  document.getElementById('btnReset').style.display='inline-block';
 }
 
-// ── RENDER SENARAI PEMENANG ──
-function renderPemenangList() {
-  const section = document.getElementById('pemenangSection');
-  const list = document.getElementById('pemenangList');
-  section.style.display = 'block';
-
-  list.innerHTML = pemenangList.map((p, i) => `
-    <div class="pemenang-card">
-      <div class="pemenang-trophy">${p.trophy}</div>
-      <div class="pemenang-info">
-        <div class="pemenang-hadiah">${p.hadiah}</div>
-        <div class="pemenang-nama">${p.nama || '—'}</div>
-        <div class="pemenang-meta">${p.jabatan || ''} ${p.noTelefon ? '· ' + p.noTelefon : ''}</div>
-        ${p.noCabutan || p.no_cabutan ? `<div class="pemenang-cb">🎫 ${p.noCabutan || p.no_cabutan}</div>` : ''}
-      </div>
-    </div>
-  `).join('');
+function renderPemenang(){
+  const row=document.getElementById('pemenangRow');
+  row.innerHTML=pemenangList.map(p=>`
+    <div class="pemenang-chip ${p.kat}">
+      ${p.hadiah}: ${p.nama}
+    </div>`).join('');
 }
 
-// ── RESET ──
-function resetCabutan() {
-  document.getElementById('drumLbl').textContent = 'SEDIA UNTUK CABUTAN';
-  document.getElementById('drumName').innerHTML = '<span class="drum-idle">Tekan butang untuk mula</span>';
-  document.getElementById('drumCb').textContent = '';
-  document.getElementById('drumJabatan').textContent = '';
-  document.getElementById('btnMula').innerHTML = '🎯 MULA CABUTAN';
-  document.getElementById('btnMula').disabled = false;
-  document.getElementById('btnReset').style.display = 'none';
-  sedangCabut = false;
+function resetCabutan(){
+  document.getElementById('circName').className='circ-name idle';
+  document.getElementById('circName').textContent='Tekan butang untuk mula';
+  document.getElementById('circLbl').textContent='SEDIA UNTUK CABUTAN';
+  document.getElementById('circCb').textContent='';
+  document.getElementById('circJab').textContent='';
+  document.getElementById('btnReset').style.display='none';
+  sedangCabut=false;
 }
 
-// ── FIREWORKS + KONFETI ──
-function launchKonfeti() {
-  const canvas = document.getElementById('konfeti');
-  canvas.style.display = 'block';
-  const ctx = canvas.getContext('2d');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-
-  const FW_COLORS = [
-    '#f0c040','#ffd700','#ff6b6b','#ff4444','#ffffff',
-    '#00e5ff','#76ff03','#ff1744','#e040fb','#ff9100',
-    '#b8962e','#40c4ff','#69f0ae','#f50057','#aeea00'
-  ];
-
-  // ── Particle class (sparks after explosion)
-  class Spark {
-    constructor(x, y, color) {
-      this.x = x; this.y = y; this.color = color;
-      const angle = Math.random() * Math.PI * 2;
-      const speed = Math.random() * 6 + 2;
-      this.vx = Math.cos(angle) * speed;
-      this.vy = Math.sin(angle) * speed;
-      this.alpha = 1;
-      this.r = Math.random() * 3 + 1;
-      this.gravity = 0.12;
-      this.decay = Math.random() * 0.018 + 0.012;
-    }
-    update() {
-      this.vx *= 0.97;
-      this.vy *= 0.97;
-      this.vy += this.gravity;
-      this.x += this.vx;
-      this.y += this.vy;
-      this.alpha -= this.decay;
-    }
-    draw(ctx) {
-      ctx.save();
-      ctx.globalAlpha = Math.max(0, this.alpha);
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-      ctx.fillStyle = this.color;
-      ctx.shadowBlur = 8;
-      ctx.shadowColor = this.color;
-      ctx.fill();
+// ── KONFETI ──
+function launchKonfeti(){
+  const canvas=document.getElementById('konfeti');
+  const ctx=canvas.getContext('2d');
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+  const colors=['#f0c040','#e06830','#f48ab8','#fff','#ffe55a','#7cf0c0'];
+  let particles=Array.from({length:120},()=>({
+    x:Math.random()*canvas.width,y:-20,
+    vx:(Math.random()-0.5)*4,vy:Math.random()*5+2,
+    color:colors[Math.floor(Math.random()*colors.length)],
+    size:Math.random()*8+3,rot:Math.random()*360,
+    rotV:(Math.random()-0.5)*6,alpha:1
+  }));
+  let frame=0;
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p=>{
+      ctx.save();ctx.globalAlpha=p.alpha;ctx.fillStyle=p.color;
+      ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);
+      ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size/2);
       ctx.restore();
-    }
-  }
-
-  // ── Trail rocket going up
-  class Rocket {
-    constructor() {
-      this.x = canvas.width * (0.15 + Math.random() * 0.7);
-      this.y = canvas.height + 10;
-      this.vy = -(Math.random() * 8 + 10);
-      this.targetY = canvas.height * (0.1 + Math.random() * 0.45);
-      this.color = FW_COLORS[Math.floor(Math.random() * FW_COLORS.length)];
-      this.exploded = false;
-      this.trail = [];
-    }
-    update() {
-      this.trail.push({x: this.x, y: this.y, alpha: 0.7});
-      if (this.trail.length > 12) this.trail.shift();
-      this.y += this.vy;
-    }
-    drawTrail(ctx) {
-      this.trail.forEach((t, i) => {
-        ctx.save();
-        ctx.globalAlpha = t.alpha * (i / this.trail.length) * 0.5;
-        ctx.beginPath();
-        ctx.arc(t.x, t.y, 2, 0, Math.PI * 2);
-        ctx.fillStyle = this.color;
-        ctx.shadowBlur = 6;
-        ctx.shadowColor = this.color;
-        ctx.fill();
-        ctx.restore();
-      });
-    }
-    shouldExplode() { return this.y <= this.targetY; }
-  }
-
-  // ── Confetti pieces (fall from top)
-  class Confetti {
-    constructor() {
-      this.reset(true);
-    }
-    reset(init=false) {
-      this.x = Math.random() * canvas.width;
-      this.y = init ? Math.random() * canvas.height : -10;
-      this.w = Math.random() * 10 + 4;
-      this.h = Math.random() * 5 + 3;
-      this.color = FW_COLORS[Math.floor(Math.random() * FW_COLORS.length)];
-      this.vy = Math.random() * 3 + 1.5;
-      this.vx = Math.random() * 2 - 1;
-      this.angle = Math.random() * Math.PI * 2;
-      this.spin = (Math.random() - 0.5) * 0.15;
-      this.alpha = 1;
-    }
-    update() {
-      this.y += this.vy;
-      this.x += this.vx;
-      this.angle += this.spin;
-      if (this.y > canvas.height + 20) this.reset();
-    }
-    draw(ctx) {
-      ctx.save();
-      ctx.globalAlpha = this.alpha;
-      ctx.translate(this.x, this.y);
-      ctx.rotate(this.angle);
-      ctx.fillStyle = this.color;
-      ctx.fillRect(-this.w/2, -this.h/2, this.w, this.h);
-      ctx.restore();
-    }
-  }
-
-  // ── Flash on explosion
-  function drawFlash(ctx, x, y, radius, alpha) {
-    const grad = ctx.createRadialGradient(x, y, 0, x, y, radius);
-    grad.addColorStop(0, `rgba(255,255,220,${alpha})`);
-    grad.addColorStop(1, 'rgba(255,255,0,0)');
-    ctx.save();
-    ctx.globalAlpha = alpha;
-    ctx.beginPath();
-    ctx.arc(x, y, radius, 0, Math.PI * 2);
-    ctx.fillStyle = grad;
-    ctx.fill();
-    ctx.restore();
-  }
-
-  let rockets = [];
-  let sparks = [];
-  let confettis = Array.from({length: 80}, () => new Confetti());
-  let flashes = [];
-  let totalFrames = 0;
-  const DURATION = 420; // ~7 saat pada 60fps
-
-  // Launch rockets berperingkat
-  function launchRocket() {
-    rockets.push(new Rocket());
-  }
-
-  // Launch beberapa rocket awal
-  for (let i = 0; i < 3; i++) {
-    setTimeout(() => launchRocket(), i * 400);
-  }
-  // Tambah lagi setiap 800ms
-  const rocketTimer = setInterval(() => {
-    launchRocket();
-    if (Math.random() > 0.5) launchRocket();
-  }, 700);
-
-  function animate() {
-    ctx.fillStyle = 'rgba(0,0,0,0.18)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Rockets
-    rockets = rockets.filter(r => {
-      if (!r.exploded) {
-        r.update();
-        r.drawTrail(ctx);
-        // Draw rocket head
-        ctx.save();
-        ctx.globalAlpha = 0.9;
-        ctx.beginPath();
-        ctx.arc(r.x, r.y, 3, 0, Math.PI * 2);
-        ctx.fillStyle = r.color;
-        ctx.shadowBlur = 12;
-        ctx.shadowColor = r.color;
-        ctx.fill();
-        ctx.restore();
-
-        if (r.shouldExplode()) {
-          r.exploded = true;
-          // Flash
-          flashes.push({x: r.x, y: r.y, r: 0, maxR: 80, alpha: 0.8});
-          // Sparks (banyak!)
-          const sparkCount = 80 + Math.floor(Math.random() * 60);
-          const mainColor = r.color;
-          const altColor = FW_COLORS[Math.floor(Math.random() * FW_COLORS.length)];
-          for (let i = 0; i < sparkCount; i++) {
-            sparks.push(new Spark(r.x, r.y, i % 3 === 0 ? altColor : mainColor));
-          }
-          // Tambah konfeti burst
-          for (let i = 0; i < 15; i++) {
-            const c = new Confetti();
-            c.x = r.x + (Math.random()-0.5)*40;
-            c.y = r.y + (Math.random()-0.5)*20;
-            c.vy = Math.random() * 4 + 1;
-            confettis.push(c);
-          }
-        }
-        return true;
-      }
-      return false;
+      p.x+=p.vx;p.y+=p.vy;p.rot+=p.rotV;
+      if(frame>60) p.alpha-=0.012;
     });
-
-    // Flash effects
-    flashes = flashes.filter(f => {
-      f.r += 8;
-      f.alpha -= 0.05;
-      if (f.alpha > 0) { drawFlash(ctx, f.x, f.y, f.r, f.alpha); return true; }
-      return false;
-    });
-
-    // Sparks
-    sparks = sparks.filter(s => {
-      s.update();
-      if (s.alpha > 0) { s.draw(ctx); return true; }
-      return false;
-    });
-
-    // Confetti
-    confettis.forEach(c => { c.update(); c.draw(ctx); });
-
-    totalFrames++;
-    if (totalFrames < DURATION) {
-      requestAnimationFrame(animate);
-    } else {
-      clearInterval(rocketTimer);
-      // Fade out
-      let fadeFrames = 0;
-      function fadeOut() {
-        ctx.fillStyle = 'rgba(0,0,0,0.1)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        fadeFrames++;
-        if (fadeFrames < 30) requestAnimationFrame(fadeOut);
-        else {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          canvas.style.display = 'none';
-        }
-      }
-      requestAnimationFrame(fadeOut);
-    }
+    particles=particles.filter(p=>p.alpha>0);
+    frame++;
+    if(particles.length>0) requestAnimationFrame(draw);
+    else ctx.clearRect(0,0,canvas.width,canvas.height);
   }
+  draw();
+}
 
-  requestAnimationFrame(animate);
+function toggleFs(){
+  if(!document.fullscreenElement) document.documentElement.requestFullscreen();
+  else document.exitFullscreen();
 }
 
 // ── INIT ──
-document.addEventListener('DOMContentLoaded', function() {
-  loadPeserta();
-});
-// Juga cuba terus kalau DOM dah ready
-if (document.readyState === 'complete' || document.readyState === 'interactive') {
-  loadPeserta();
-}
-</script>
-<button class="btn-fullscreen" id="btnFs" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
-
-<script>
-function toggleFullscreen() {
-  const btn = document.getElementById('btnFs');
-  if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen().then(() => {
-      btn.textContent = '✕';
-      btn.title = 'Keluar Fullscreen';
-    }).catch(()=>{});
-  } else {
-    document.exitFullscreen().then(() => {
-      btn.textContent = '⛶';
-      btn.title = 'Fullscreen';
-    }).catch(()=>{});
-  }
-}
-document.addEventListener('fullscreenchange', () => {
-  const btn = document.getElementById('btnFs');
-  if (!document.fullscreenElement) {
-    btn.textContent = '⛶';
-    btn.title = 'Fullscreen';
-  }
-});
+document.addEventListener('DOMContentLoaded', loadPeserta);
+if(document.readyState==='complete'||document.readyState==='interactive') loadPeserta();
 </script>
 </body>
 </html>
