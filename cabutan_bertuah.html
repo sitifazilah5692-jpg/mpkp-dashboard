@@ -92,6 +92,18 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 
 /* FOOTER */
 .footer{text-align:center;margin-top:20px;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:1px;}
+.btn-fullscreen{
+  position:fixed;bottom:16px;right:16px;z-index:999;
+  width:46px;height:46px;border-radius:50%;
+  background:linear-gradient(135deg,#0a2342,#0d3b6e);
+  border:2px solid rgba(240,192,64,0.6);
+  color:#f0c040;font-size:18px;cursor:pointer;
+  box-shadow:0 4px 16px rgba(0,0,0,0.4);
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.2s;
+}
+.btn-fullscreen:hover{transform:scale(1.1);box-shadow:0 6px 22px rgba(0,0,0,0.5);}
+:fullscreen body,:fullscreen .wrapper{background:linear-gradient(160deg,#061428 0%,#0a2d5e 40%,#0e3d7a 70%,#0a2342 100%)!important;}
 
 @media(max-width:480px){
   .hdr-card{padding:22px 18px 20px;}
@@ -660,6 +672,31 @@ function launchKonfeti() {
 
 // ── INIT ──
 loadPeserta();
+</script>
+<button class="btn-fullscreen" id="btnFs" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+
+<script>
+function toggleFullscreen() {
+  const btn = document.getElementById('btnFs');
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().then(() => {
+      btn.textContent = '✕';
+      btn.title = 'Keluar Fullscreen';
+    }).catch(()=>{});
+  } else {
+    document.exitFullscreen().then(() => {
+      btn.textContent = '⛶';
+      btn.title = 'Fullscreen';
+    }).catch(()=>{});
+  }
+}
+document.addEventListener('fullscreenchange', () => {
+  const btn = document.getElementById('btnFs');
+  if (!document.fullscreenElement) {
+    btn.textContent = '⛶';
+    btn.title = 'Fullscreen';
+  }
+});
 </script>
 </body>
 </html>
